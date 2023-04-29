@@ -1,4 +1,4 @@
-import { Button, CssBaseline } from "@mui/material";
+import { CssBaseline } from "@mui/material";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
@@ -8,11 +8,9 @@ import router from "./router";
 
 function App() {
   return (
-    <div>
-      <CssBaseline>
-        <RouterProvider router={router} />
-      </CssBaseline>
-    </div>
+    <CssBaseline>
+      <RouterProvider router={router} />
+    </CssBaseline>
   );
 }
 
