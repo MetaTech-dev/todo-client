@@ -16,20 +16,20 @@ const Dashboard = () => {
           overflowX: "auto",
         }}
       >
-        <Stack sx={{ height: "100%", width: "100%" }}>
+        <Stack sx={{ height: "100%", width: "100%", alignItems: "center" }}>
           <Typography>New</Typography>
           <ToDoCard />
         </Stack>
-        <Stack sx={{ height: "100%", width: "100%" }}>
+        <Stack sx={{ height: "100%", width: "100%", alignItems: "center" }}>
           <Typography>Ready</Typography>
         </Stack>
-        <Stack sx={{ height: "100%", width: "100%" }}>
+        <Stack sx={{ height: "100%", width: "100%", alignItems: "center" }}>
           <Typography>In Progress</Typography>
         </Stack>
-        <Stack sx={{ height: "100%", width: "100%" }}>
+        <Stack sx={{ height: "100%", width: "100%", alignItems: "center" }}>
           <Typography>In Review</Typography>
         </Stack>
-        <Stack sx={{ height: "100%", width: "100%" }}>
+        <Stack sx={{ height: "100%", width: "100%", alignItems: "center" }}>
           <Typography>Done</Typography>
         </Stack>
       </Box>
