@@ -12,7 +12,7 @@ import { useState } from "react";
 
 const ToDoCard = () => {
   const [toDoStatus, setToDoStatus] = useState("new");
-  const [priority, setPriority] = useState("low");
+  const [priority, setPriority] = useState("");
 
   const handleToDoStatusChange = (e) => {
     setToDoStatus(e.target.value);
@@ -22,33 +22,35 @@ const ToDoCard = () => {
   };
 
   return (
-    <Card variant="outlined" style={{ width: "90%" }}>
+    <Card
+      variant="outlined"
+      sx={{ m: 1, minWidth: 120 }}
+      style={{ width: "90%" }}
+    >
       <CardContent>
         <Typography variant="h5">Title</Typography>
         <Typography>Created By:</Typography>
         <Typography>Description:</Typography>
-        <Box style={{ display: "flex" }}>
-          <InputLabel id="priority-select-label" style={{ color: "black" }}>
-            Priority:
-          </InputLabel>
-          <Box sx={{ flexGrow: 1 }} />
+
+        <Typography>Created at:</Typography>
+        <Typography>Due Date:</Typography>
+        <Typography>Assignee:</Typography>
+        <FormControl size="small">
+          <InputLabel id="priority-select-small-label">Priority</InputLabel>
           <Select
-            labelId="priority-select-label"
+            labelId="priority-select-small-label"
             id="priority-select"
             value={priority}
             onChange={handlePriorityChange}
             label="Priority"
             size="small"
+            sx={{ width: "7rem" }}
           >
             <MenuItem value="low">Low</MenuItem>
             <MenuItem value="medium">Medium</MenuItem>
             <MenuItem value="high">High</MenuItem>
           </Select>
-          <Box sx={{ flexGrow: 1 }} />
-        </Box>
-        <Typography>Created at:</Typography>
-        <Typography>Due Date:</Typography>
-        <Typography>Assignee:</Typography>
+        </FormControl>
       </CardContent>
     </Card>
   );
