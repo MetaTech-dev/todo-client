@@ -3,6 +3,9 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
+import { ToDoProvider } from "./ToDoContext";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { RouterProvider } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { blueGrey, orange } from "@mui/material/colors";
@@ -13,7 +16,7 @@ const theme = createTheme({
     mode: "light",
     primary: blueGrey,
     text: {
-      // primary: "#ffa720",
+      // primary: orange[500],
     },
   },
 });
@@ -22,7 +25,11 @@ function App() {
   return (
     <CssBaseline>
       <ThemeProvider theme={theme}>
-        <RouterProvider router={router} />
+        <ToDoProvider>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <RouterProvider router={router} />
+          </LocalizationProvider>
+        </ToDoProvider>
       </ThemeProvider>
     </CssBaseline>
   );
