@@ -5,7 +5,7 @@ export default ToDoContext;
 
 export const ToDoProvider = ({ children }) => {
   const [toDoList, setToDoList] = useState([]);
-
+  console.log("this is here", toDoList);
   const createToDo = (newToDo) => {
     setToDoList((prev) => [...prev, newToDo]);
   };

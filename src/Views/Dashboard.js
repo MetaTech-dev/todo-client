@@ -18,6 +18,7 @@ import {
 import ToDoCard from "../ToDoCard";
 import { DatePicker } from "@mui/x-date-pickers";
 import ToDoContext from "../ToDoContext";
+import { v4 as uuidv4 } from "uuid";
 
 const defaultNewToDo = {
   title: "",
@@ -27,7 +28,7 @@ const defaultNewToDo = {
   dueDate: null,
   assignee: "",
   priority: "low",
-  id: "",
+  id: uuidv4(),
 };
 
 const Dashboard = () => {
@@ -106,7 +107,7 @@ const Dashboard = () => {
             onChange={(newDate) =>
               setNewToDo((prev) => ({
                 ...prev,
-                dueDate: newDate,
+                dueDate: newDate instanceof Date ? newDate : new Date(newDate),
               }))
             }
           />
@@ -140,19 +141,17 @@ const Dashboard = () => {
       >
         <Stack sx={{ height: "100%", width: "100%", alignItems: "center" }}>
           <Typography>New</Typography>
-          {/* <Paper>
-            <ul>
-              {tasks.map((tasks) => {
+          <Paper elevation={2}>
+            <ul style={{ listStyle: "none", padding: 0 }}>
+              {toDoList.map((toDo) => {
                 return (
-                  <ul key={toDo.id}
-                  >
-                    <ToDoCard/>
-                  </ul>
-                )
+                  <li key={toDo.id}>
+                    <ToDoCard toDo={toDo} />
+                  </li>
+                );
               })}
             </ul>
-          </Paper> */}
-          <ToDoCard />
+          </Paper>
         </Stack>
         <Stack sx={{ height: "100%", width: "100%", alignItems: "center" }}>
           <Typography>Ready</Typography>
