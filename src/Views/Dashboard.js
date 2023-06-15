@@ -28,6 +28,7 @@ const defaultNewToDo = {
   dueDate: null,
   assignee: "",
   priority: "low",
+  status: "new",
   id: uuidv4(),
 };
 
@@ -57,23 +58,25 @@ const Dashboard = () => {
       priority: event.target.value,
     }));
   };
+  const handleStatusChange = (event) => {
+    setNewToDo((prev) => ({
+      ...prev,
+      status: event.target.value,
+    }));
+  };
   const handleSubmit = () => {
     createToDo(newToDo);
     setNewToDo(defaultNewToDo);
     setOpen(false);
   };
 
-  useEffect(() => {
-    console.log("Task List:", toDoList);
-  }, [toDoList]);
-
   return (
     <Box>
       <Button color="inherit" variant="contained" onClick={handleOpen}>
-        New Task:
+        New ToDo:
       </Button>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>New Task:</DialogTitle>
+        <DialogTitle>New ToDo:</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
@@ -111,12 +114,12 @@ const Dashboard = () => {
               }))
             }
           />
-          <FormControl fullWidth size="small">
-            <InputLabel id="task-priority-label">Priority</InputLabel>
+          <FormControl fullWidth size="small" sx={{ paddingBottom: "1rem" }}>
+            <InputLabel id="toDo-priority-label">Priority</InputLabel>
             <Select
-              labelId="task-priority-label"
-              id="task-priority-select"
-              name="taskPriority"
+              labelId="toDo-priority-label"
+              id="toDo-priority-select"
+              name="toDoPriority"
               value={newToDo.priority}
               onChange={handlePriorityChange}
               label="priority"
@@ -124,6 +127,23 @@ const Dashboard = () => {
               <MenuItem value="low">Low</MenuItem>
               <MenuItem value="medium">Medium</MenuItem>
               <MenuItem value="high">High</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl fullWidth size="small">
+            <InputLabel id="toDo-status-label">Status</InputLabel>
+            <Select
+              labelId="toDo-status-label"
+              id="toDo-status-select"
+              name="toDoStatus"
+              value={newToDo.status}
+              onChange={handleStatusChange}
+              label="status"
+            >
+              <MenuItem value="new">New</MenuItem>
+              <MenuItem value="ready">Ready</MenuItem>
+              <MenuItem value="in progress">In Progress</MenuItem>
+              <MenuItem value="in review">In Review</MenuItem>
+              <MenuItem value="done">Done</MenuItem>
             </Select>
           </FormControl>
         </DialogContent>
