@@ -1,13 +1,18 @@
 import { Box, Card, CardContent, Typography } from "@mui/material";
 import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
-import format from "date-fns/format";
+import dayjs from "dayjs";
+import ToDoContext from "./ToDoContext";
+import { useContext } from "react";
 
 const ToDoCard = ({ toDo }) => {
-  const formattedDueDate = format(
-    new Date(toDo.dueDate),
-    "EEEE, MMMM dd, yyyy"
-  );
+  const { deleteToDo } = useContext(ToDoContext);
+
+  const formattedDueDate = dayjs(toDo.dueDate).format("dddd, MMMM, DD, YYYY");
+
+  const handleDelete = () => {
+    deleteToDo(toDo.id);
+  };
 
   return (
     <Card
@@ -29,7 +34,7 @@ const ToDoCard = ({ toDo }) => {
           <Button size="small" variant="outlined">
             Edit
           </Button>
-          <Button size="small" variant="outlined">
+          <Button size="small" variant="outlined" onClick={handleDelete}>
             Delete
           </Button>
         </CardActions>

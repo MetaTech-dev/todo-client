@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import {
   Box,
   Button,
@@ -18,7 +18,6 @@ import {
 import ToDoCard from "../ToDoCard";
 import { DatePicker } from "@mui/x-date-pickers";
 import ToDoContext from "../ToDoContext";
-import { v4 as uuidv4 } from "uuid";
 
 const defaultNewToDo = {
   title: "",
@@ -29,7 +28,7 @@ const defaultNewToDo = {
   assignee: "",
   priority: "low",
   status: "new",
-  id: uuidv4(),
+  id: "",
 };
 
 const Dashboard = () => {
@@ -89,6 +88,7 @@ const Dashboard = () => {
             variant="standard"
             value={newToDo.title}
             onChange={handleInputChange}
+            required
           />
           <TextField
             autoFocus
@@ -102,6 +102,7 @@ const Dashboard = () => {
             value={newToDo.description}
             onChange={handleInputChange}
             sx={{ paddingBottom: "1rem" }}
+            required
           />
           <DatePicker
             sx={{ paddingBottom: "1rem" }}
@@ -110,10 +111,13 @@ const Dashboard = () => {
             onChange={(newDate) =>
               setNewToDo((prev) => ({
                 ...prev,
-                dueDate: newDate instanceof Date ? newDate : new Date(newDate),
+                dueDate: newDate,
+                // instanceof Date ? newDate : new Date(newDate)
               }))
             }
+            disablePast
           />
+          {/* TODO: look into double labels */}
           <FormControl fullWidth size="small" sx={{ paddingBottom: "1rem" }}>
             <InputLabel id="toDo-priority-label">Priority</InputLabel>
             <Select
