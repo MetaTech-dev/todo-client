@@ -1,56 +1,43 @@
-import {
-  Box,
-  Card,
-  CardContent,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Typography,
-} from "@mui/material";
-import Select from "@mui/material/Select";
-import { useState } from "react";
+import { Box, Card, CardContent, Typography } from "@mui/material";
+import CardActions from "@mui/material/CardActions";
+import Button from "@mui/material/Button";
+import dayjs from "dayjs";
+import ToDoContext from "./ToDoContext";
+import { useContext } from "react";
 
-const ToDoCard = () => {
-  const [toDoStatus, setToDoStatus] = useState("new");
-  const [priority, setPriority] = useState("");
+const ToDoCard = ({ toDo }) => {
+  const { deleteToDo } = useContext(ToDoContext);
 
-  const handleToDoStatusChange = (e) => {
-    setToDoStatus(e.target.value);
-  };
-  const handlePriorityChange = (e) => {
-    setPriority(e.target.value);
+  const formattedDueDate = dayjs(toDo.dueDate).format("dddd, MMMM, DD, YYYY");
+
+  const handleDelete = () => {
+    deleteToDo(toDo.id);
   };
 
   return (
     <Card
-      variant="outlined"
-      sx={{ m: 1, minWidth: 120 }}
-      style={{ width: "90%" }}
+      elevation={3}
+      // variant="outlined"
+      sx={{ m: 1, minWidth: 120, width: "90%" }}
     >
       <CardContent>
-        <Typography variant="h5">Title</Typography>
-        <Typography>Created By:</Typography>
-        <Typography>Description:</Typography>
+        <Typography variant="h5">{toDo.title}</Typography>
+        {/* <Typography>Created By:{toDo.author}</Typography> */}
+        <Typography>{toDo.description}</Typography>
 
-        <Typography>Created at:</Typography>
-        <Typography>Due Date:</Typography>
-        <Typography>Assignee:</Typography>
-        <FormControl size="small">
-          <InputLabel id="priority-select-small-label">Priority</InputLabel>
-          <Select
-            labelId="priority-select-small-label"
-            id="priority-select"
-            value={priority}
-            onChange={handlePriorityChange}
-            label="Priority"
-            size="small"
-            sx={{ width: "7rem" }}
-          >
-            <MenuItem value="low">Low</MenuItem>
-            <MenuItem value="medium">Medium</MenuItem>
-            <MenuItem value="high">High</MenuItem>
-          </Select>
-        </FormControl>
+        {/* <Typography>Created at:</Typography> */}
+        <Typography>Due Date: {formattedDueDate}</Typography>
+        {/* <Typography>Assignee:</Typography> */}
+        <Typography>Priority: {toDo.priority}</Typography>
+        <CardActions>
+          <Box sx={{ flexGrow: 1 }} />
+          <Button size="small" variant="outlined">
+            Edit
+          </Button>
+          <Button size="small" variant="outlined" onClick={handleDelete}>
+            Delete
+          </Button>
+        </CardActions>
       </CardContent>
     </Card>
   );
