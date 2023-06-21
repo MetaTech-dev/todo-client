@@ -61,11 +61,6 @@ const ToDoForm = ({ isOpen, setIsOpen }) => {
       setIsOpen(false);
     } else {
       setShowWarning(true);
-      // return (
-      //   <Alert severity="warning">
-      //     Title and Description must be filled out
-      //   </Alert>
-      // );
     }
   };
 
