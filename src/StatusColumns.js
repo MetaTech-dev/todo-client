@@ -4,7 +4,11 @@ import ToDoCard from "./ToDoCard";
 import ToDoContext from "./ToDoContext";
 
 const StatusColumns = () => {
-  const { toDoList } = useContext(ToDoContext);
+  const { toDoList, statusList } = useContext(ToDoContext);
+
+  const filterToDosByStatus = (status) => {
+    return toDoList.filter((toDo) => toDo.status === status);
+  };
 
   return (
     <Box
@@ -15,32 +19,24 @@ const StatusColumns = () => {
         overflowX: "auto",
       }}
     >
-      <Stack sx={{ height: "100%", width: "100%", alignItems: "center" }}>
-        <Typography>New</Typography>
-        <Paper elevation={2}>
-          <ul style={{ listStyle: "none", padding: 0 }}>
-            {toDoList.map((toDo) => {
-              return (
-                <li key={toDo.id}>
-                  <ToDoCard toDo={toDo} />
-                </li>
-              );
-            })}
-          </ul>
-        </Paper>
-      </Stack>
-      <Stack sx={{ height: "100%", width: "100%", alignItems: "center" }}>
-        <Typography>Ready</Typography>
-      </Stack>
-      <Stack sx={{ height: "100%", width: "100%", alignItems: "center" }}>
-        <Typography>In Progress</Typography>
-      </Stack>
-      <Stack sx={{ height: "100%", width: "100%", alignItems: "center" }}>
-        <Typography>In Review</Typography>
-      </Stack>
-      <Stack sx={{ height: "100%", width: "100%", alignItems: "center" }}>
-        <Typography>Done</Typography>
-      </Stack>
+      {statusList.map((status) => {
+        return (
+          <Stack sx={{ height: "100%", width: "100%", alignItems: "center" }}>
+            <Typography>{status}</Typography>
+            <Paper elevation={2}>
+              <ul style={{ listStyle: "none", padding: 0 }}>
+                {filterToDosByStatus(status).map((toDo) => {
+                  return (
+                    <li key={toDo.id}>
+                      <ToDoCard toDo={toDo} />
+                    </li>
+                  );
+                })}
+              </ul>
+            </Paper>
+          </Stack>
+        );
+      })}
     </Box>
   );
 };

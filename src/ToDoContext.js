@@ -6,6 +6,12 @@ export default ToDoContext;
 
 export const ToDoProvider = ({ children }) => {
   const [toDoList, setToDoList] = useState([]);
+  const [statusList, setStatusList] = useState([
+    "new",
+    "old",
+    "stop",
+    "one more",
+  ]);
   console.log("this is here", toDoList);
 
   const createToDo = (newToDo) => {
@@ -23,6 +29,7 @@ export const ToDoProvider = ({ children }) => {
 
   const providerValue = {
     toDoList,
+    statusList,
     createToDo,
     updateToDo,
     deleteToDo,
