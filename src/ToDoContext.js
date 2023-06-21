@@ -6,17 +6,16 @@ export default ToDoContext;
 
 export const ToDoProvider = ({ children }) => {
   const [toDoList, setToDoList] = useState([]);
-  const [statusList, setStatusList] = useState([
-    "new",
-    "old",
-    "stop",
-    "one more",
-  ]);
+  const [statusList, setStatusList] = useState([]);
   console.log("this is here", toDoList);
 
   const createToDo = (newToDo) => {
     newToDo.id = uuidv4();
     setToDoList((prev) => [...prev, newToDo]);
+  };
+
+  const addToStatusList = (newStatus) => {
+    setStatusList((prev) => [...prev, newStatus]);
   };
 
   const updateToDo = (id) => {};
@@ -30,6 +29,7 @@ export const ToDoProvider = ({ children }) => {
   const providerValue = {
     toDoList,
     statusList,
+    addToStatusList,
     createToDo,
     updateToDo,
     deleteToDo,
