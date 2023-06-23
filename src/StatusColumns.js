@@ -1,9 +1,11 @@
 import { useContext } from "react";
-import { Box, Paper, Stack, Typography } from "@mui/material";
+import { Box, Card, Paper, Stack, Typography } from "@mui/material";
+import { alpha, useTheme } from "@mui/material/styles";
 import ToDoCard from "./ToDoCard";
 import ToDoContext from "./ToDoContext";
 
 const StatusColumns = () => {
+  const theme = useTheme();
   const { toDoList, statusList } = useContext(ToDoContext);
 
   const filterToDosByStatus = (status) => {
@@ -21,14 +23,56 @@ const StatusColumns = () => {
     >
       {statusList.map((status) => {
         return (
-          <Stack sx={{ height: "100%", width: "100%", alignItems: "center" }}>
-            <Typography>{status}</Typography>
-            <Paper elevation={2}>
-              <ul style={{ listStyle: "none", padding: 0 }}>
+          <Stack
+            sx={{
+              height: "100%",
+              width: "100%",
+              margin: "1rem",
+              alignItems: "center",
+              display: "flex",
+            }}
+          >
+            <Card
+              className="statusTitle"
+              elevation={5}
+              sx={{
+                minWidth: "10rem",
+                alignItems: "center",
+                maxWidth: "30%",
+                marginBottom: "1rem",
+                marginLeft: "auto",
+                marginRight: "auto",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontWeight: "450",
+                  fontSize: "22px",
+                  opacity: ".8",
+                  textAlign: "center",
+                }}
+              >
+                {status}
+              </Typography>
+            </Card>
+            <Paper
+              elevation={10}
+              sx={{
+                backgroundColor: alpha(theme.palette.primary.light, 0.5),
+              }}
+            >
+              <ul
+                style={{
+                  listStyle: "none",
+                  padding: "0.3rem",
+                }}
+              >
                 {filterToDosByStatus(status).map((toDo) => {
                   return (
-                    <li key={toDo.id}>
+                    <li key={toDo.id} style={{ display: "flex" }}>
+                      <Box sx={{ flexGrow: 1 }} />
                       <ToDoCard toDo={toDo} />
+                      <Box sx={{ flexGrow: 1 }} />
                     </li>
                   );
                 })}

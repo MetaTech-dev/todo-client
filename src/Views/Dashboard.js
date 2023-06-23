@@ -23,14 +23,14 @@ const Dashboard = () => {
         onClick={handleToDoFormOpen}
         sx={{ marginRight: "1rem" }}
       >
-        New ToDo:
+        New ToDo
       </Button>
       <Button
         color="inherit"
         variant="contained"
         onClick={handleNewStatusDialogOpen}
       >
-        Create ToDo Status's
+        Create ToDo Status
       </Button>
       <ToDoFormDialog isOpen={showToDoForm} setIsOpen={setShowToDoForm} />
       <StatusDialog isOpen={showStatusDialog} setIsOpen={setShowStatusDialog} />

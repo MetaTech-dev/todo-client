@@ -23,13 +23,16 @@ const defaultNewToDo = {
   dueDate: null,
   assignee: "",
   priority: "low",
-  status: "new",
+  status: "",
   id: "",
 };
 
 const ToDoForm = ({ isOpen, setIsOpen }) => {
   const { createToDo, statusList } = useContext(ToDoContext);
-  const [newToDo, setNewToDo] = useState(defaultNewToDo);
+  const [newToDo, setNewToDo] = useState({
+    ...defaultNewToDo,
+    status: statusList[0] || "",
+  });
   const [showWarning, setShowWarning] = useState(false);
 
   const handleClose = () => {

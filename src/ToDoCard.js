@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, Typography } from "@mui/material";
+import { Box, Card, CardContent, Divider, Typography } from "@mui/material";
 import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
 import dayjs from "dayjs";
@@ -22,13 +22,19 @@ const ToDoCard = ({ toDo }) => {
     >
       <CardContent>
         <Typography variant="h5">{toDo.title}</Typography>
+        <Divider />
         {/* <Typography>Created By:{toDo.author}</Typography> */}
         <Typography>{toDo.description}</Typography>
 
         {/* <Typography>Created at:</Typography> */}
-        <Typography>Due Date: {formattedDueDate}</Typography>
+        <Divider sx={{ padding: ".5rem" }} />
+        <Typography>
+          <b>Due Date:</b> {formattedDueDate}
+        </Typography>
         {/* <Typography>Assignee:</Typography> */}
-        <Typography>Priority: {toDo.priority}</Typography>
+        <Typography>
+          <b>Priority:</b> {toDo.priority}
+        </Typography>
         <CardActions>
           <Box sx={{ flexGrow: 1 }} />
           <Button size="small" variant="outlined">

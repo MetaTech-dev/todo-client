@@ -17,7 +17,7 @@ const Header = () => {
           <MenuIcon />
         </IconButton>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          toDo
+          ToDo
         </Typography>
         <Box sx={{ flexGrow: 1 }} />
         <Button color="inherit">Login</Button>
