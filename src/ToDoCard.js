@@ -15,11 +15,7 @@ const ToDoCard = ({ toDo }) => {
   };
 
   return (
-    <Card
-      elevation={3}
-      // variant="outlined"
-      sx={{ m: 1, minWidth: 120, width: "90%" }}
-    >
+    <Card elevation={3} sx={{ m: 1, width: "90%" }}>
       <CardContent>
         <Typography variant="h5">{toDo.title}</Typography>
         <Divider />

@@ -31,6 +31,7 @@ const StatusColumns = () => {
               alignItems: "center",
               display: "flex",
             }}
+            key={status}
           >
             <Card
               className="statusTitle"
@@ -58,7 +59,9 @@ const StatusColumns = () => {
             <Paper
               elevation={10}
               sx={{
-                backgroundColor: alpha(theme.palette.primary.light, 0.5),
+                backgroundColor: alpha(theme.palette.primary.light, 0.35),
+                minWidth: theme.spacing(40),
+                minHeight: theme.spacing(10),
               }}
             >
               <ul

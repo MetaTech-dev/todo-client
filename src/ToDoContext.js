@@ -4,9 +4,11 @@ import { v4 as uuidv4 } from "uuid";
 const ToDoContext = createContext();
 export default ToDoContext;
 
+const defaultStatusList = ["Ready", "In Progress", "Done"];
+
 export const ToDoProvider = ({ children }) => {
   const [toDoList, setToDoList] = useState([]);
-  const [statusList, setStatusList] = useState([]);
+  const [statusList, setStatusList] = useState(defaultStatusList);
 
   const createToDo = (newToDo) => {
     newToDo.id = uuidv4();
