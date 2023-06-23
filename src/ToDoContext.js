@@ -13,6 +13,8 @@ export const ToDoProvider = ({ children }) => {
     setToDoList((prev) => [...prev, newToDo]);
   };
 
+  const updateToDo = (id) => {};
+
   const deleteToDo = (id) => {
     setToDoList((prevToDoList) =>
       prevToDoList.filter((toDo) => toDo.id !== id)
@@ -22,6 +24,7 @@ export const ToDoProvider = ({ children }) => {
   const providerValue = {
     toDoList,
     createToDo,
+    updateToDo,
     deleteToDo,
   };
 

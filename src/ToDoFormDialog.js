@@ -11,6 +11,7 @@ import {
   MenuItem,
   Select,
   TextField,
+  Alert,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 
@@ -29,6 +30,7 @@ const defaultNewToDo = {
 const ToDoForm = ({ isOpen, setIsOpen }) => {
   const { createToDo } = useContext(ToDoContext);
   const [newToDo, setNewToDo] = useState(defaultNewToDo);
+  const [showWarning, setShowWarning] = useState(false);
 
   const handleClose = () => {
     setIsOpen(false);
@@ -53,15 +55,29 @@ const ToDoForm = ({ isOpen, setIsOpen }) => {
     }));
   };
   const handleSubmit = () => {
-    createToDo(newToDo);
-    setNewToDo(defaultNewToDo);
-    setIsOpen(false);
+    if (newToDo.title !== "" || newToDo.description !== "") {
+      createToDo(newToDo);
+      setNewToDo(defaultNewToDo);
+      setIsOpen(false);
+    } else {
+      setShowWarning(true);
+      // return (
+      //   <Alert severity="warning">
+      //     Title and Description must be filled out
+      //   </Alert>
+      // );
+    }
   };
 
   return (
     <Dialog open={isOpen} onClose={handleClose}>
       <DialogTitle>New ToDo:</DialogTitle>
       <DialogContent>
+        {showWarning && (
+          <Alert severity="warning">
+            Title and Description must be filled out
+          </Alert>
+        )}
         <TextField
           autoFocus
           margin="dense"
