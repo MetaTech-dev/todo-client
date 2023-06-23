@@ -28,7 +28,7 @@ const defaultNewToDo = {
 };
 
 const ToDoForm = ({ isOpen, setIsOpen }) => {
-  const { createToDo } = useContext(ToDoContext);
+  const { createToDo, statusList } = useContext(ToDoContext);
   const [newToDo, setNewToDo] = useState(defaultNewToDo);
   const [showWarning, setShowWarning] = useState(false);
 
@@ -61,11 +61,6 @@ const ToDoForm = ({ isOpen, setIsOpen }) => {
       setIsOpen(false);
     } else {
       setShowWarning(true);
-      // return (
-      //   <Alert severity="warning">
-      //     Title and Description must be filled out
-      //   </Alert>
-      // );
     }
   };
 
@@ -144,11 +139,9 @@ const ToDoForm = ({ isOpen, setIsOpen }) => {
             onChange={handleStatusChange}
             label="status"
           >
-            <MenuItem value="new">New</MenuItem>
-            <MenuItem value="ready">Ready</MenuItem>
-            <MenuItem value="in progress">In Progress</MenuItem>
-            <MenuItem value="in review">In Review</MenuItem>
-            <MenuItem value="done">Done</MenuItem>
+            {statusList.map((status) => {
+              return <MenuItem value={status}>{status}</MenuItem>;
+            })}
           </Select>
         </FormControl>
       </DialogContent>
