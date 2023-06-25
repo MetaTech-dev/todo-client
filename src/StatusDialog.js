@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import ToDoContext from "./ToDoContext";
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
@@ -31,23 +32,33 @@ const StatusDialog = ({ isOpen, setIsOpen }) => {
   return (
     <Dialog open={isOpen} onClose={handleClose}>
       <DialogTitle>New Status:</DialogTitle>
-      <DialogContent>
-        <TextField
-          autoFocus
-          margin="dense"
-          id="newStatus"
-          label="New Status"
-          name="New Status"
-          type="text"
-          fullWidth
-          variant="standard"
-          value={newStatus}
-          onChange={handleInputChange}
-        />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={() => handleSubmit()}>Submit</Button>
-      </DialogActions>
+      <Box
+        component="form"
+        noValidate
+        autoComplete="off"
+        onSubmit={(event) => {
+          event.preventDefault();
+          handleSubmit();
+        }}
+      >
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="newStatus"
+            label="New Status"
+            name="New Status"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={newStatus}
+            onChange={handleInputChange}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button type="submit">Submit</Button>
+        </DialogActions>
+      </Box>
     </Dialog>
   );
 };

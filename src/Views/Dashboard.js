@@ -1,15 +1,19 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Box, Button } from "@mui/material";
 import ToDoFormDialog from "../ToDoFormDialog";
 import StatusColumns from "../StatusColumns";
 import StatusDialog from "../StatusDialog";
+import ToDoContext from "../ToDoContext";
 
 const Dashboard = () => {
-  const [showToDoForm, setShowToDoForm] = useState(false);
   const [showStatusDialog, setShowStatusDialog] = useState(false);
+
+  const { isNewToDo, setIsNewToDo, showToDoForm, setShowToDoForm } =
+    useContext(ToDoContext);
 
   const handleToDoFormOpen = () => {
     setShowToDoForm(true);
+    setIsNewToDo(true);
   };
   const handleNewStatusDialogOpen = () => {
     setShowStatusDialog(true);
@@ -32,7 +36,11 @@ const Dashboard = () => {
       >
         Create ToDo Status
       </Button>
-      <ToDoFormDialog isOpen={showToDoForm} setIsOpen={setShowToDoForm} />
+      <ToDoFormDialog
+        isOpen={showToDoForm}
+        setIsOpen={setShowToDoForm}
+        isNewToDo={isNewToDo}
+      />
       <StatusDialog isOpen={showStatusDialog} setIsOpen={setShowStatusDialog} />
       <StatusColumns />
     </Box>

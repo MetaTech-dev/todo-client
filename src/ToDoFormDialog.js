@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ToDoContext from "./ToDoContext";
 import {
   Box,
@@ -16,56 +16,59 @@ import {
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 
-const ToDoForm = ({ isOpen, setIsOpen }) => {
-  const { createToDo, statusList } = useContext(ToDoContext);
+const ToDoForm = ({ isOpen, setIsOpen, toDo }) => {
+  const {
+    createToDo,
+    isNewToDo,
+    defaultNewToDo,
+    statusList,
+    updateToDo,
+    toDoData,
+    setToDoData,
+    // formData,
+    // setFormData,
+  } = useContext(ToDoContext);
 
-  const defaultNewToDo = {
-    title: "",
-    description: "",
-    author: "",
-    createdDate: "",
-    dueDate: null,
-    assignee: "",
-    priority: "low",
-    status: statusList[0],
-    id: "",
+  const toDoFormTitle = (isNewToDo) => {
+    return isNewToDo ? "New ToDo:" : "Update ToDo:";
   };
 
-  const [newToDo, setNewToDo] = useState(defaultNewToDo);
   const [showWarning, setShowWarning] = useState(false);
 
   const handleClose = () => {
     setIsOpen(false);
   };
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setNewToDo((prev) => ({
+    setToDoData((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
-  const handleSubmit = () => {
-    if (newToDo.title !== "" || newToDo.description !== "") {
-      createToDo(newToDo);
-      setNewToDo(defaultNewToDo);
+  const handleSubmit = (isNewToDo) => {
+    if (toDoData.title !== "" || toDoData.description !== "") {
+      if (isNewToDo) {
+        createToDo(toDoData);
+      } else {
+        updateToDo(toDoData);
+      }
+      setToDoData(defaultNewToDo);
       setIsOpen(false);
-    } else {
-      setShowWarning(true);
     }
   };
 
   return (
     <Dialog open={isOpen} onClose={handleClose}>
-      <DialogTitle>New ToDo:</DialogTitle>
+      <DialogTitle>{toDoFormTitle(isNewToDo)}</DialogTitle>
       <Box
         component="form"
         noValidate
         autoComplete="off"
         onSubmit={(event) => {
-          console.log("hi");
           event.preventDefault();
-          handleSubmit();
+          handleSubmit(isNewToDo);
         }}
       >
         <DialogContent>
@@ -83,7 +86,7 @@ const ToDoForm = ({ isOpen, setIsOpen }) => {
             type="text"
             fullWidth
             variant="standard"
-            value={newToDo.title}
+            value={toDoData.title}
             onChange={handleInputChange}
             required
           />
@@ -96,7 +99,7 @@ const ToDoForm = ({ isOpen, setIsOpen }) => {
             type="text"
             fullWidth
             variant="standard"
-            value={newToDo.description}
+            value={toDoData.description}
             onChange={handleInputChange}
             sx={{ paddingBottom: "1rem" }}
             required
@@ -104,9 +107,9 @@ const ToDoForm = ({ isOpen, setIsOpen }) => {
           <DatePicker
             sx={{ paddingBottom: "1rem" }}
             label="Date Due"
-            value={newToDo.dueDate}
+            value={toDoData.dueDate}
             onChange={(newDate) =>
-              setNewToDo((prev) => ({
+              setToDoData((prev) => ({
                 ...prev,
                 dueDate: newDate,
                 // instanceof Date ? newDate : new Date(newDate)
@@ -121,7 +124,7 @@ const ToDoForm = ({ isOpen, setIsOpen }) => {
               labelId="toDo-priority-label"
               id="toDo-priority-select"
               name="priority"
-              value={newToDo.priority}
+              value={toDoData.priority}
               onChange={handleInputChange}
               label="priority"
             >
@@ -136,7 +139,7 @@ const ToDoForm = ({ isOpen, setIsOpen }) => {
               labelId="toDo-status-label"
               id="toDo-status-select"
               name="status"
-              value={newToDo.status}
+              value={toDoData.status}
               onChange={handleInputChange}
               label="status"
             >

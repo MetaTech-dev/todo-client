@@ -10,7 +10,6 @@ import { RouterProvider } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { blueGrey, orange } from "@mui/material/colors";
 import router from "./router";
-import { useContext } from "react";
 
 function App() {
   const theme = createTheme({

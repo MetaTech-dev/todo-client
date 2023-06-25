@@ -9,7 +9,21 @@ const defaultStatusList = ["Ready", "In Progress", "Done"];
 export const ToDoProvider = ({ children }) => {
   const [toDoList, setToDoList] = useState([]);
   const [statusList, setStatusList] = useState(defaultStatusList);
-
+  const [showToDoForm, setShowToDoForm] = useState(false);
+  const [isNewToDo, setIsNewToDo] = useState(true);
+  const defaultNewToDo = {
+    title: "",
+    description: "",
+    author: "",
+    createdDate: "",
+    dueDate: null,
+    assignee: "",
+    priority: "low",
+    status: statusList[0],
+    id: "",
+  };
+  const [toDoData, setToDoData] = useState(defaultNewToDo);
+  console.log("is this correct", toDoData);
   const createToDo = (newToDo) => {
     newToDo.id = uuidv4();
     setToDoList((prev) => [...prev, newToDo]);
@@ -19,7 +33,17 @@ export const ToDoProvider = ({ children }) => {
     setStatusList((prev) => [...prev, newStatus]);
   };
 
-  const updateToDo = (id) => {};
+  const updateToDo = (updatedToDo) => {
+    setToDoList((prev) => {
+      const updatedList = prev.map((toDo) => {
+        if (toDo.id === updatedToDo.id) {
+          return { ...toDo, ...updatedToDo };
+        }
+        return toDo;
+      });
+      return updatedList;
+    });
+  };
 
   const deleteToDo = (id) => {
     setToDoList((prevToDoList) =>
@@ -28,7 +52,15 @@ export const ToDoProvider = ({ children }) => {
   };
 
   const providerValue = {
+    defaultNewToDo,
+    isNewToDo,
+    setIsNewToDo,
+    toDoData,
+    setToDoData,
     toDoList,
+    // formData,
+    setShowToDoForm,
+    showToDoForm,
     statusList,
     addToStatusList,
     createToDo,
