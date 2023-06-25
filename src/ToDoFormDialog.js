@@ -37,6 +37,8 @@ const ToDoForm = ({ isOpen, setIsOpen, toDo }) => {
 
   const handleClose = () => {
     setIsOpen(false);
+    setToDoData(defaultNewToDo);
+    setShowWarning(false);
   };
 
   const handleInputChange = (event) => {
@@ -48,33 +50,20 @@ const ToDoForm = ({ isOpen, setIsOpen, toDo }) => {
   };
 
   const handleSubmit = (isNewToDo) => {
-    // if (toDoData.title !== "" || toDoData.description !== "") {
-    //   if (isNewToDo) {
-    //     createToDo(toDoData);
-    //   } else {
-    //     updateToDo(toDoData);
-    //   }
-    //   setToDoData(defaultNewToDo);
-    //   setIsOpen(false);
-    // } else {
-    //   setShowWarning(true);
-    // }
-    if (isNewToDo) {
-      if (toDoData.title !== "" || toDoData.description !== "") {
+    const trimmedTitle = toDoData.title.trim();
+    const trimmedDescription = toDoData.description.trim();
+
+    if (trimmedTitle !== "" && trimmedDescription !== "") {
+      if (isNewToDo) {
         createToDo(toDoData);
-        setIsOpen(false);
-        setToDoData(defaultNewToDo);
       } else {
-        setShowWarning(true);
-      }
-    } else {
-      if (toDoData.title !== "" || toDoData.description !== "") {
         updateToDo(toDoData);
-        setIsOpen(false);
-        setToDoData(defaultNewToDo);
-      } else {
-        setShowWarning(true);
       }
+      setIsOpen(false);
+      setToDoData(defaultNewToDo);
+      setShowWarning(false);
+    } else {
+      setShowWarning(true);
     }
   };
 
