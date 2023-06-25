@@ -23,7 +23,7 @@ export const ToDoProvider = ({ children }) => {
     id: "",
   };
   const [toDoData, setToDoData] = useState(defaultNewToDo);
-  console.log("is this correct", toDoData);
+
   const createToDo = (newToDo) => {
     newToDo.id = uuidv4();
     setToDoList((prev) => [...prev, newToDo]);
@@ -34,10 +34,10 @@ export const ToDoProvider = ({ children }) => {
   };
 
   const updateToDo = (updatedToDo) => {
-    setToDoList((prev) => {
-      const updatedList = prev.map((toDo) => {
+    setToDoList((prevToDoList) => {
+      const updatedList = prevToDoList.map((toDo) => {
         if (toDo.id === updatedToDo.id) {
-          return { ...toDo, ...updatedToDo };
+          return updatedToDo;
         }
         return toDo;
       });

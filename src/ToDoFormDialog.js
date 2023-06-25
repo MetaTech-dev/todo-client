@@ -48,14 +48,33 @@ const ToDoForm = ({ isOpen, setIsOpen, toDo }) => {
   };
 
   const handleSubmit = (isNewToDo) => {
-    if (toDoData.title !== "" || toDoData.description !== "") {
-      if (isNewToDo) {
+    // if (toDoData.title !== "" || toDoData.description !== "") {
+    //   if (isNewToDo) {
+    //     createToDo(toDoData);
+    //   } else {
+    //     updateToDo(toDoData);
+    //   }
+    //   setToDoData(defaultNewToDo);
+    //   setIsOpen(false);
+    // } else {
+    //   setShowWarning(true);
+    // }
+    if (isNewToDo) {
+      if (toDoData.title !== "" || toDoData.description !== "") {
         createToDo(toDoData);
+        setIsOpen(false);
+        setToDoData(defaultNewToDo);
       } else {
-        updateToDo(toDoData);
+        setShowWarning(true);
       }
-      setToDoData(defaultNewToDo);
-      setIsOpen(false);
+    } else {
+      if (toDoData.title !== "" || toDoData.description !== "") {
+        updateToDo(toDoData);
+        setIsOpen(false);
+        setToDoData(defaultNewToDo);
+      } else {
+        setShowWarning(true);
+      }
     }
   };
 

@@ -5,14 +5,14 @@ import dayjs from "dayjs";
 import ToDoContext from "./ToDoContext";
 import { useContext } from "react";
 
-const ToDoCard = ({ toDo, onEdit }) => {
+const ToDoCard = ({ toDo }) => {
   const { deleteToDo, setToDoData, setShowToDoForm, setIsNewToDo } =
     useContext(ToDoContext);
 
   const formattedDueDate = dayjs(toDo.dueDate).format("dddd, MMMM, DD, YYYY");
 
   const handleEdit = () => {
-    setToDoData();
+    setToDoData(toDo);
     setIsNewToDo(false);
     setShowToDoForm(true);
   };
@@ -40,10 +40,14 @@ const ToDoCard = ({ toDo, onEdit }) => {
         </Typography>
         <CardActions>
           <Box sx={{ flexGrow: 1 }} />
-          <Button size="small" variant="outlined" onClick={handleEdit}>
+          <Button size="small" variant="outlined" onClick={() => handleEdit()}>
             Edit
           </Button>
-          <Button size="small" variant="outlined" onClick={handleDelete}>
+          <Button
+            size="small"
+            variant="outlined"
+            onClick={() => handleDelete()}
+          >
             Delete
           </Button>
         </CardActions>
