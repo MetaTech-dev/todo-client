@@ -4,7 +4,7 @@ import { alpha, useTheme } from "@mui/material/styles";
 import ToDoCard from "./ToDoCard";
 import ToDoContext from "./ToDoContext";
 
-const StatusColumns = ({ isOpen, setIsOpen }) => {
+const StatusColumns = () => {
   const theme = useTheme();
   const { toDoList, statusList } = useContext(ToDoContext);
 
@@ -74,7 +74,7 @@ const StatusColumns = ({ isOpen, setIsOpen }) => {
                   return (
                     <li key={toDo.id} style={{ display: "flex" }}>
                       <Box sx={{ flexGrow: 1 }} />
-                      <ToDoCard toDo={toDo} isOpen={setIsOpen} />
+                      <ToDoCard toDo={toDo} />
                       <Box sx={{ flexGrow: 1 }} />
                     </li>
                   );

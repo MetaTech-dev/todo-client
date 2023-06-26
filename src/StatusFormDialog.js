@@ -10,8 +10,8 @@ import {
   TextField,
 } from "@mui/material";
 
-const StatusDialog = ({ isOpen, setIsOpen }) => {
-  const { addToStatusList, StatusList } = useContext(ToDoContext);
+const StatusFormDialog = ({ isOpen, setIsOpen }) => {
+  const { addToStatusList } = useContext(ToDoContext);
   const [newStatus, setNewStatus] = useState("");
 
   const handleClose = () => {
@@ -63,4 +63,4 @@ const StatusDialog = ({ isOpen, setIsOpen }) => {
   );
 };
 
-export default StatusDialog;
+export default StatusFormDialog;

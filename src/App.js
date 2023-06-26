@@ -8,7 +8,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { RouterProvider } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { blueGrey, orange } from "@mui/material/colors";
+import { blueGrey } from "@mui/material/colors";
 import router from "./router";
 
 function App() {
@@ -16,9 +16,6 @@ function App() {
     palette: {
       mode: "light",
       primary: blueGrey,
-      text: {
-        // primary: orange[500],
-      },
     },
   });
 

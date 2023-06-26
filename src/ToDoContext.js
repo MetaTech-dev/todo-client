@@ -1,5 +1,7 @@
 import { createContext, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import StatusFormDialog from "../StatusFormDialog";
+import ToDoFormDialog from "../ToDoFormDialog";
 
 const ToDoContext = createContext();
 export default ToDoContext;
@@ -9,8 +11,8 @@ const defaultStatusList = ["Ready", "In Progress", "Done"];
 export const ToDoProvider = ({ children }) => {
   const [toDoList, setToDoList] = useState([]);
   const [statusList, setStatusList] = useState(defaultStatusList);
-  const [showToDoForm, setShowToDoForm] = useState(false);
-  const [isNewToDo, setIsNewToDo] = useState(true);
+  const [isToDoFormDialogOpen, setIsToDoFormDialogOpen] = useState(false);
+  const [isToDoFormNew, setIsToDoFormNew] = useState(true);
   const defaultNewToDo = {
     title: "",
     description: "",
@@ -22,11 +24,11 @@ export const ToDoProvider = ({ children }) => {
     status: statusList[0],
     id: "",
   };
-  const [toDoData, setToDoData] = useState(defaultNewToDo);
+  const [toDoFormData, setToDoFormData] = useState(defaultNewToDo);
+  const [isStatusFormDialogOpen, setIsStatusFormDialogOpen] = useState(false);
 
   const createToDo = (newToDo) => {
-    newToDo.id = uuidv4();
-    setToDoList((prev) => [...prev, newToDo]);
+    setToDoList((prev) => [...prev, { id: uuidv4(), ...newToDo }]);
   };
 
   const addToStatusList = (newStatus) => {
@@ -34,15 +36,11 @@ export const ToDoProvider = ({ children }) => {
   };
 
   const updateToDo = (updatedToDo) => {
-    setToDoList((prevToDoList) => {
-      const updatedList = prevToDoList.map((toDo) => {
-        if (toDo.id === updatedToDo.id) {
-          return updatedToDo;
-        }
-        return toDo;
-      });
-      return updatedList;
-    });
+    setToDoList((prevToDoList) =>
+      prevToDoList.map((toDo) =>
+        toDo.id === updatedToDo.id ? updatedToDo : toDo
+      )
+    );
   };
 
   const deleteToDo = (id) => {
@@ -53,14 +51,14 @@ export const ToDoProvider = ({ children }) => {
 
   const providerValue = {
     defaultNewToDo,
-    isNewToDo,
-    setIsNewToDo,
-    toDoData,
-    setToDoData,
+    isToDoFormNew,
+    setIsToDoFormNew,
+    toDoFormData,
+    setToDoFormData,
     toDoList,
     // formData,
-    setShowToDoForm,
-    showToDoForm,
+    setIsToDoFormDialogOpen,
+    isToDoFormDialogOpen,
     statusList,
     addToStatusList,
     createToDo,
@@ -71,6 +69,15 @@ export const ToDoProvider = ({ children }) => {
   return (
     <ToDoContext.Provider value={providerValue}>
       {children}
+      <ToDoFormDialog
+        isOpen={isToDoFormDialogOpen}
+        setIsOpen={setIsToDoFormDialogOpen}
+        isToDoFormNew={isToDoFormNew}
+      />
+      <StatusFormDialog
+        isOpen={isStatusFormDialogOpen}
+        setIsOpen={setIsStatusFormDialogOpen}
+      />
     </ToDoContext.Provider>
   );
 };

@@ -6,15 +6,19 @@ import ToDoContext from "./ToDoContext";
 import { useContext } from "react";
 
 const ToDoCard = ({ toDo }) => {
-  const { deleteToDo, setToDoData, setShowToDoForm, setIsNewToDo } =
-    useContext(ToDoContext);
+  const {
+    deleteToDo,
+    setToDoFormData,
+    setIsToDoFormDialogOpen,
+    setIsToDoFormNew,
+  } = useContext(ToDoContext);
 
   const formattedDueDate = dayjs(toDo.dueDate).format("dddd, MMMM, DD, YYYY");
 
   const handleEdit = () => {
-    setToDoData(toDo);
-    setIsNewToDo(false);
-    setShowToDoForm(true);
+    setToDoFormData(toDo);
+    setIsToDoFormNew(false);
+    setIsToDoFormDialogOpen(true);
   };
 
   const handleDelete = () => {
