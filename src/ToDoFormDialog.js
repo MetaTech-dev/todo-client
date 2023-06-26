@@ -17,39 +17,49 @@ import {
 import { DatePicker } from "@mui/x-date-pickers";
 
 const ToDoForm = ({ isOpen, setIsOpen }) => {
-  const { createToDo, statusList } = useContext(ToDoContext);
+  const {
+    createToDo,
+    isToDoFormNew,
+    defaultNewToDo,
+    statusList,
+    updateToDo,
+    toDoFormData,
+    setToDoFormData,
+  } = useContext(ToDoContext);
 
-  const defaultNewToDo = {
-    title: "",
-    description: "",
-    author: "",
-    createdDate: "",
-    dueDate: null,
-    assignee: "",
-    priority: "low",
-    status: statusList[0],
-    id: "",
+  const toDoFormTitle = (isToDoFormNew) => {
+    return isToDoFormNew ? "New ToDo:" : "Update ToDo:";
   };
 
-  const [newToDo, setNewToDo] = useState(defaultNewToDo);
   const [showWarning, setShowWarning] = useState(false);
 
   const handleClose = () => {
     setIsOpen(false);
+    setToDoFormData(defaultNewToDo);
+    setShowWarning(false);
   };
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setNewToDo((prev) => ({
+    setToDoFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
-  const handleSubmit = () => {
-    if (newToDo.title !== "" || newToDo.description !== "") {
-      createToDo(newToDo);
-      setNewToDo(defaultNewToDo);
+  const handleSubmit = (isToDoFormNew) => {
+    const trimmedTitle = toDoFormData.title.trim();
+    const trimmedDescription = toDoFormData.description.trim();
+
+    if (trimmedTitle !== "" && trimmedDescription !== "") {
+      if (isToDoFormNew) {
+        createToDo(toDoFormData);
+      } else {
+        updateToDo(toDoFormData);
+      }
       setIsOpen(false);
+      setToDoFormData(defaultNewToDo);
+      setShowWarning(false);
     } else {
       setShowWarning(true);
     }
@@ -57,15 +67,14 @@ const ToDoForm = ({ isOpen, setIsOpen }) => {
 
   return (
     <Dialog open={isOpen} onClose={handleClose}>
-      <DialogTitle>New ToDo:</DialogTitle>
+      <DialogTitle>{toDoFormTitle(isToDoFormNew)}</DialogTitle>
       <Box
         component="form"
         noValidate
         autoComplete="off"
         onSubmit={(event) => {
-          console.log("hi");
           event.preventDefault();
-          handleSubmit();
+          handleSubmit(isToDoFormNew);
         }}
       >
         <DialogContent>
@@ -83,7 +92,7 @@ const ToDoForm = ({ isOpen, setIsOpen }) => {
             type="text"
             fullWidth
             variant="standard"
-            value={newToDo.title}
+            value={toDoFormData.title}
             onChange={handleInputChange}
             required
           />
@@ -96,7 +105,7 @@ const ToDoForm = ({ isOpen, setIsOpen }) => {
             type="text"
             fullWidth
             variant="standard"
-            value={newToDo.description}
+            value={toDoFormData.description}
             onChange={handleInputChange}
             sx={{ paddingBottom: "1rem" }}
             required
@@ -104,12 +113,11 @@ const ToDoForm = ({ isOpen, setIsOpen }) => {
           <DatePicker
             sx={{ paddingBottom: "1rem" }}
             label="Date Due"
-            value={newToDo.dueDate}
+            value={toDoFormData.dueDate}
             onChange={(newDate) =>
-              setNewToDo((prev) => ({
+              setToDoFormData((prev) => ({
                 ...prev,
                 dueDate: newDate,
-                // instanceof Date ? newDate : new Date(newDate)
               }))
             }
             disablePast
@@ -121,7 +129,7 @@ const ToDoForm = ({ isOpen, setIsOpen }) => {
               labelId="toDo-priority-label"
               id="toDo-priority-select"
               name="priority"
-              value={newToDo.priority}
+              value={toDoFormData.priority}
               onChange={handleInputChange}
               label="priority"
             >
@@ -136,7 +144,7 @@ const ToDoForm = ({ isOpen, setIsOpen }) => {
               labelId="toDo-status-label"
               id="toDo-status-select"
               name="status"
-              value={newToDo.status}
+              value={toDoFormData.status}
               onChange={handleInputChange}
               label="status"
             >
