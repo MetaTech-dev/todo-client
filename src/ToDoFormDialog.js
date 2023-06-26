@@ -118,7 +118,6 @@ const ToDoForm = ({ isOpen, setIsOpen }) => {
               setToDoFormData((prev) => ({
                 ...prev,
                 dueDate: newDate,
-                // instanceof Date ? newDate : new Date(newDate)
               }))
             }
             disablePast
