@@ -10,12 +10,13 @@ import {
   TextField,
 } from "@mui/material";
 
-const StatusFormDialog = ({ isOpen, setIsOpen }) => {
-  const { addToStatusList } = useContext(ToDoContext);
+const StatusFormDialog = () => {
+  const { addToStatusList, setIsStatusFormDialogOpen, isStatusFormDialogOpen } =
+    useContext(ToDoContext);
   const [newStatus, setNewStatus] = useState("");
 
   const handleClose = () => {
-    setIsOpen(false);
+    setIsStatusFormDialogOpen(false);
   };
 
   const handleInputChange = (event) => {
@@ -25,12 +26,12 @@ const StatusFormDialog = ({ isOpen, setIsOpen }) => {
 
   const handleSubmit = () => {
     addToStatusList(newStatus);
-    setIsOpen(false);
+    setIsStatusFormDialogOpen(false);
     setNewStatus("");
   };
 
   return (
-    <Dialog open={isOpen} onClose={handleClose}>
+    <Dialog open={isStatusFormDialogOpen} onClose={handleClose}>
       <DialogTitle>New Status:</DialogTitle>
       <Box
         component="form"

@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 
-const ToDoForm = ({ isOpen, setIsOpen }) => {
+const ToDoForm = () => {
   const {
     createToDo,
     isToDoFormNew,
@@ -25,6 +25,8 @@ const ToDoForm = ({ isOpen, setIsOpen }) => {
     updateToDo,
     toDoFormData,
     setToDoFormData,
+    isToDoFormDialogOpen,
+    setIsToDoFormDialogOpen,
   } = useContext(ToDoContext);
 
   const toDoFormTitle = (isToDoFormNew) => {
@@ -34,7 +36,7 @@ const ToDoForm = ({ isOpen, setIsOpen }) => {
   const [showWarning, setShowWarning] = useState(false);
 
   const handleClose = () => {
-    setIsOpen(false);
+    setIsToDoFormDialogOpen(false);
     setToDoFormData(defaultNewToDo);
     setShowWarning(false);
   };
@@ -57,7 +59,7 @@ const ToDoForm = ({ isOpen, setIsOpen }) => {
       } else {
         updateToDo(toDoFormData);
       }
-      setIsOpen(false);
+      setIsToDoFormDialogOpen(false);
       setToDoFormData(defaultNewToDo);
       setShowWarning(false);
     } else {
@@ -66,7 +68,7 @@ const ToDoForm = ({ isOpen, setIsOpen }) => {
   };
 
   return (
-    <Dialog open={isOpen} onClose={handleClose}>
+    <Dialog open={isToDoFormDialogOpen} onClose={handleClose}>
       <DialogTitle>{toDoFormTitle(isToDoFormNew)}</DialogTitle>
       <Box
         component="form"
