@@ -10,28 +10,29 @@ import { RouterProvider } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { blueGrey, orange } from "@mui/material/colors";
 import router from "./router";
-
-const theme = createTheme({
-  palette: {
-    mode: "light",
-    primary: blueGrey,
-    text: {
-      // primary: orange[500],
-    },
-  },
-});
+import { useContext } from "react";
 
 function App() {
+  const theme = createTheme({
+    palette: {
+      mode: "light",
+      primary: blueGrey,
+      text: {
+        // primary: orange[500],
+      },
+    },
+  });
+
   return (
-    <CssBaseline>
-      <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
+      <CssBaseline>
         <ToDoProvider>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <RouterProvider router={router} />
           </LocalizationProvider>
         </ToDoProvider>
-      </ThemeProvider>
-    </CssBaseline>
+      </CssBaseline>
+    </ThemeProvider>
   );
 }
 
