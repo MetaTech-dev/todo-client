@@ -50,17 +50,19 @@ export const ToDoProvider = ({ children }) => {
   };
 
   const providerValue = {
-    defaultNewToDo,
+    toDoList,
+    statusList,
+    isToDoFormDialogOpen,
+    setIsToDoFormDialogOpen,
     isToDoFormNew,
     setIsToDoFormNew,
+    defaultNewToDo,
     toDoFormData,
     setToDoFormData,
-    toDoList,
-    setIsToDoFormDialogOpen,
-    isToDoFormDialogOpen,
-    statusList,
-    addToStatusList,
+    isStatusFormDialogOpen,
+    setIsStatusFormDialogOpen,
     createToDo,
+    addToStatusList,
     updateToDo,
     deleteToDo,
   };
@@ -68,15 +70,8 @@ export const ToDoProvider = ({ children }) => {
   return (
     <ToDoContext.Provider value={providerValue}>
       {children}
-      <ToDoFormDialog
-        isOpen={isToDoFormDialogOpen}
-        setIsOpen={setIsToDoFormDialogOpen}
-        isToDoFormNew={isToDoFormNew}
-      />
-      <StatusFormDialog
-        isOpen={isStatusFormDialogOpen}
-        setIsOpen={setIsStatusFormDialogOpen}
-      />
+      <ToDoFormDialog />
+      <StatusFormDialog />
     </ToDoContext.Provider>
   );
 };
