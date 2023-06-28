@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import { CssBaseline } from "@mui/material";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
@@ -10,11 +11,14 @@ import { RouterProvider } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { blueGrey } from "@mui/material/colors";
 import router from "./router";
+import DarkModeContext from "./DarkModeContext";
 
 function App() {
+  const { darkSwitch } = useContext(DarkModeContext);
+
   const theme = createTheme({
     palette: {
-      mode: "light",
+      mode: darkSwitch(),
       primary: blueGrey,
     },
   });

@@ -3,7 +3,12 @@ import AppBar from "@mui/material/AppBar";
 import MenuIcon from "@mui/icons-material/Menu";
 import Button from "@mui/material/Button";
 
+import { useContext } from "react";
+import DarkModeContext from "../DarkModeContext";
+
 const Header = () => {
+  const { darkIcons, toggleDarkMode } = useContext(DarkModeContext);
+
   return (
     <AppBar position="static" sx={{ flexShrink: 1 }} elevation={6}>
       <Toolbar>
@@ -21,6 +26,9 @@ const Header = () => {
         </Typography>
         <Box sx={{ flexGrow: 1 }} />
         <Button color="inherit">Login</Button>
+        <Box onClick={() => toggleDarkMode()} sx={{ cursor: "pointer" }}>
+          {darkIcons()}
+        </Box>
       </Toolbar>
     </AppBar>
   );
