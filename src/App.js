@@ -22,11 +22,11 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline>
-        <ToDoProvider>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ToDoProvider>
             <RouterProvider router={router} />
-          </LocalizationProvider>
-        </ToDoProvider>
+          </ToDoProvider>
+        </LocalizationProvider>
       </CssBaseline>
     </ThemeProvider>
   );
