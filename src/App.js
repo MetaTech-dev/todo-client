@@ -11,14 +11,14 @@ import { RouterProvider } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { blueGrey } from "@mui/material/colors";
 import router from "./router";
-import DarkModeContext from "./DarkModeContext";
+import AppSettingsContext from "./AppSettingsContext";
 
 function App() {
-  const { darkSwitch } = useContext(DarkModeContext);
+  const { isDarkMode } = useContext(AppSettingsContext);
 
   const theme = createTheme({
     palette: {
-      mode: darkSwitch(),
+      mode: isDarkMode ? "dark" : "light",
       primary: blueGrey,
     },
   });
