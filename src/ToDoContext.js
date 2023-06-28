@@ -1,7 +1,7 @@
 import { createContext, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import StatusFormDialog from "../StatusFormDialog";
-import ToDoFormDialog from "../ToDoFormDialog";
+import StatusFormDialog from "./StatusFormDialog";
+import ToDoFormDialog from "./ToDoFormDialog";
 
 const ToDoContext = createContext();
 export default ToDoContext;
