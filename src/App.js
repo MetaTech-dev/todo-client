@@ -21,6 +21,11 @@ function App() {
       mode: isDarkMode ? "dark" : "light",
       primary: blueGrey,
     },
+    status: {
+      low: "blue",
+      medium: "yellow",
+      high: "red",
+    },
   });
 
   return (
