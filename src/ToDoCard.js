@@ -37,13 +37,13 @@ const ToDoCard = ({ toDo }) => {
   const getPriorityColor = () => {
     switch (toDo.priority) {
       case "low":
-        return "green";
+        return "success.main";
       case "medium":
-        return "orange";
+        return "warning.main";
       case "high":
-        return "red";
+        return "error.main";
       default:
-        return "green";
+        return "success.main";
     }
   };
 
