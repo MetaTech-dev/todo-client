@@ -20,7 +20,7 @@ const Dashboard = () => {
   };
 
   return (
-    <Box>
+    <Box sx={{ overflow: "scroll" }}>
       <Button
         color="inherit"
         variant="contained"
