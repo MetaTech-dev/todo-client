@@ -1,9 +1,18 @@
-import { Box, Card, CardContent, Divider, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  Divider,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import CardActions from "@mui/material/CardActions";
-import Button from "@mui/material/Button";
 import dayjs from "dayjs";
 import ToDoContext from "./ToDoContext";
 import { useContext } from "react";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
+import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 
 const ToDoCard = ({ toDo }) => {
   const {
@@ -25,6 +34,19 @@ const ToDoCard = ({ toDo }) => {
     deleteToDo(toDo.id);
   };
 
+  const getPriorityColor = () => {
+    switch (toDo.priority) {
+      case "low":
+        return "success.main";
+      case "medium":
+        return "warning.main";
+      case "high":
+        return "error.main";
+      default:
+        return "success.main";
+    }
+  };
+
   return (
     <Card elevation={3} sx={{ m: 1, width: "90%" }}>
       <CardContent>
@@ -40,20 +62,29 @@ const ToDoCard = ({ toDo }) => {
         </Typography>
         {/* <Typography>Assignee:</Typography> */}
         <Typography>
-          <b>Priority:</b> {toDo.priority}
+          <b>Priority:</b> {toDo.priority}{" "}
+          <FiberManualRecordIcon
+            sx={{ fontSize: "small", color: getPriorityColor() }}
+          />
         </Typography>
         <CardActions>
           <Box sx={{ flexGrow: 1 }} />
-          <Button size="small" variant="outlined" onClick={() => handleEdit()}>
-            Edit
-          </Button>
-          <Button
+          <IconButton
             size="small"
-            variant="outlined"
-            onClick={() => handleDelete()}
+            color="inherit"
+            onClick={() => handleEdit()}
+            aria-label="Edit ToDo"
           >
-            Delete
-          </Button>
+            <EditTwoToneIcon />
+          </IconButton>
+          <IconButton
+            size="small"
+            color="inherit"
+            onClick={() => handleDelete()}
+            aria-label="Delete ToDo"
+          >
+            <DeleteOutlineOutlinedIcon />
+          </IconButton>
         </CardActions>
       </CardContent>
     </Card>
