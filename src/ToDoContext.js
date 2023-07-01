@@ -22,13 +22,17 @@ export const ToDoProvider = ({ children }) => {
     assignee: "",
     priority: "low",
     status: statusList[0],
-    id: "",
+    // id: null,
   };
+
+  console.log(toDoList);
   const [toDoFormData, setToDoFormData] = useState(defaultNewToDo);
   const [isStatusFormDialogOpen, setIsStatusFormDialogOpen] = useState(false);
 
   const createToDo = (newToDo) => {
-    setToDoList((prev) => [...prev, { id: uuidv4(), ...newToDo }]);
+    const todoWithId = { ...newToDo, id: uuidv4() };
+    setToDoList((prev) => [...prev, todoWithId]);
+    // setToDoList((prev) => [...prev, { id: uuidv4(), ...newToDo }]);
   };
 
   const addToStatusList = (newStatus) => {
