@@ -1,10 +1,10 @@
 import { useContext } from "react";
 import { Box, Card, Paper, Stack, Typography } from "@mui/material";
 import { alpha, useTheme } from "@mui/material/styles";
-import ToDoCard from "./ToDoCard";
-import ToDoContext from "./ToDoContext";
+import ToDoCard from "../ToDoCard";
+import ToDoContext from "../ToDoContext";
 
-const StatusColumns = () => {
+const BoardView = () => {
   const theme = useTheme();
   const { toDoList, statusList } = useContext(ToDoContext);
 
@@ -88,4 +88,4 @@ const StatusColumns = () => {
   );
 };
 
-export default StatusColumns;
+export default BoardView;
