@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import { Box, Card, Paper, Stack, Typography } from "@mui/material";
 import { alpha, useTheme } from "@mui/material/styles";
-import ToDoCard from "../ToDoCard";
-import ToDoContext from "../ToDoContext";
+import ToDoCard from "../../ToDoCard";
+import ToDoContext from "../../ToDoContext";
 
 const BoardView = () => {
   const theme = useTheme();
@@ -43,6 +43,7 @@ const BoardView = () => {
                 marginBottom: "1rem",
                 marginLeft: "auto",
                 marginRight: "auto",
+                position: "fixed",
               }}
             >
               <Typography
@@ -62,6 +63,19 @@ const BoardView = () => {
                 backgroundColor: alpha(theme.palette.primary.light, 0.35),
                 minWidth: theme.spacing(40),
                 minHeight: theme.spacing(10),
+                marginTop: "3rem",
+                overflow: "auto",
+                maxHeight: "80vh",
+                "::-webkit-scrollbar": {
+                  width: "0.4em",
+                  height: "0.4em",
+                },
+                "::-webkit-scrollbar-thumb": {
+                  backgroundColor: "transparent",
+                },
+                "::-webkit-scrollbar-track": {
+                  backgroundColor: "transparent",
+                },
               }}
             >
               <ul

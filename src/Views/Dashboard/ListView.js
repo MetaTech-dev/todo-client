@@ -1,7 +1,7 @@
 import { Box } from "@mui/system";
 import { DataGrid } from "@mui/x-data-grid";
 import { useContext } from "react";
-import ToDoContext from "../ToDoContext";
+import ToDoContext from "../../ToDoContext";
 
 const ListView = () => {
   const { toDoList } = useContext(ToDoContext);

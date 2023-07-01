@@ -1,9 +1,9 @@
 import { useContext, useState } from "react";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import BoardView from "./BoardView";
-import ToDoContext from "../ToDoContext";
+import ToDoContext from "../../ToDoContext";
 import ListView from "./ListView";
 
 const Dashboard = () => {
@@ -37,7 +37,7 @@ const Dashboard = () => {
     }
   };
   return (
-    <Box sx={{ overflow: "scroll" }}>
+    <Box>
       <Box id="dashboard-subheader" sx={{ display: "flex" }}>
         <Button
           color="inherit"
