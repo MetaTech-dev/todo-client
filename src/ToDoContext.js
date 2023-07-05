@@ -25,7 +25,6 @@ export const ToDoProvider = ({ children }) => {
     id: "",
   };
 
-  console.log(toDoList);
   const [toDoFormData, setToDoFormData] = useState(defaultNewToDo);
   const [isStatusFormDialogOpen, setIsStatusFormDialogOpen] = useState(false);
 

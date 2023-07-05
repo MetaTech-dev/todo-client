@@ -8,7 +8,7 @@ import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import { Typography } from "@mui/material";
 
-const ListView = ({ toDo }) => {
+const ListView = () => {
   const {
     toDoList,
     deleteToDo,
@@ -53,14 +53,14 @@ const ListView = ({ toDo }) => {
     {
       field: "description",
       headerName: "Description",
-      width: 300,
+      width: 700,
       editable: true,
     },
-    { field: "status", headerName: "Status", width: 120, editable: true },
+    { field: "status", headerName: "Status", width: 110, editable: true },
     {
       field: "dueDate",
       headerName: "Due Date",
-      width: 200,
+      width: 230,
       type: "date",
       valueGetter: (params) => dayjs(params.row.dueDate).toDate(),
       valueFormatter: (params) =>
