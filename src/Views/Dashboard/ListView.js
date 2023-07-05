@@ -40,14 +40,7 @@ const ListView = () => {
     deleteToDo(toDo.id);
   };
 
-  const rows = toDoList.map((toDo) => ({
-    id: toDo.id,
-    title: toDo.title,
-    description: toDo.description,
-    priority: toDo.priority,
-    dueDate: toDo.dueDate,
-    status: toDo.status,
-  }));
+  const rows = toDoList;
   const columns = [
     { field: "title", headerName: "Title", width: 200, editable: true },
     {
@@ -56,7 +49,7 @@ const ListView = () => {
       width: 700,
       editable: true,
     },
-    { field: "status", headerName: "Status", width: 110, editable: true },
+    { field: "status", headerName: "Status", width: 110, editable: false },
     {
       field: "dueDate",
       headerName: "Due Date",
@@ -65,7 +58,7 @@ const ListView = () => {
       valueGetter: (params) => dayjs(params.row.dueDate).toDate(),
       valueFormatter: (params) =>
         dayjs(params.value).format("dddd, MMMM D, YYYY"),
-      editable: true,
+      editable: false,
     },
     {
       field: "priority",
@@ -84,7 +77,7 @@ const ListView = () => {
           />
         </Box>
       ),
-      editable: true,
+      editable: false,
     },
     {
       field: "actions",
