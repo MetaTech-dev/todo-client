@@ -67,14 +67,8 @@ const BoardView = () => {
                 overflow: "auto",
                 maxHeight: "80vh",
                 "::-webkit-scrollbar": {
-                  width: "0.4em",
-                  height: "0.4em",
-                },
-                "::-webkit-scrollbar-thumb": {
-                  backgroundColor: "transparent",
-                },
-                "::-webkit-scrollbar-track": {
-                  backgroundColor: "transparent",
+                  width: "0em",
+                  height: "0em",
                 },
               }}
             >
