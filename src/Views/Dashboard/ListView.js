@@ -108,7 +108,7 @@ const ListView = () => {
     },
   ];
   return (
-    <Box>
+    <Box sx={{ minHeight: "100vh" }}>
       <DataGrid rows={rows} columns={columns} />
     </Box>
   );

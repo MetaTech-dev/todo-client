@@ -19,6 +19,7 @@ const BoardView = () => {
         display: "flex",
         justifyContent: "space-between",
         overflowX: "auto",
+        minHeight: "100vh",
       }}
     >
       {statusList.map((status) => {
