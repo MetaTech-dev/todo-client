@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { Box, Button, Toolbar } from "@mui/material";
+import { Box, Button, TextField, Toolbar } from "@mui/material";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import BoardView from "./BoardView";
@@ -65,6 +65,14 @@ const Dashboard = () => {
           Create ToDo Status
         </Button>
         <Box sx={{ flexGrow: 1 }} />
+
+        <TextField
+          id="outlined-search"
+          label="Search field"
+          type="search"
+          size="small"
+          sx={{ paddingRight: "1rem" }}
+        />
         <ToggleButtonGroup
           color="secondary"
           size="small"
