@@ -50,6 +50,7 @@ const Dashboard = () => {
         <Button
           color="inherit"
           variant="contained"
+          size="small"
           onClick={() => handleToDoFormOpen()}
           sx={{ marginRight: "1rem" }}
         >
@@ -58,6 +59,7 @@ const Dashboard = () => {
         <Button
           color="inherit"
           variant="contained"
+          size="small"
           onClick={() => handleNewStatusFormDialogOpen()}
         >
           Create ToDo Status
