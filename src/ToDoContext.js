@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import StatusFormDialog from "./StatusFormDialog";
 import ToDoFormDialog from "./ToDoFormDialog";
+import { useDebounce } from "./utils/useDebounce";
 
 const ToDoContext = createContext();
 export default ToDoContext;
@@ -59,8 +60,22 @@ export const ToDoProvider = ({ children }) => {
   const handleChangeSearchQuery = (input) => {
     setSearchQuery(input);
   };
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
-  console.log("SEARCH Q", searchQuery);
+  useEffect(() => {
+    if (debouncedSearchQuery === "") {
+      setFilteredToDoList(toDoList);
+    } else {
+      const filteredList = toDoList.filter((toDo) =>
+        Object.values(toDo).some((value) =>
+          String(value)
+            .toLowerCase()
+            .includes(debouncedSearchQuery.toLowerCase())
+        )
+      );
+      setFilteredToDoList(filteredList);
+    }
+  }, [toDoList, debouncedSearchQuery]);
 
   const providerValue = {
     toDoList,
