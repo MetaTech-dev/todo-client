@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { Box, Card, Paper, Stack, Typography } from "@mui/material";
-import { alpha, useTheme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import ToDoCard from "../../ToDoCard";
 import ToDoContext from "../../ToDoContext";
 
@@ -61,7 +61,7 @@ const BoardView = () => {
             <Paper
               elevation={10}
               sx={{
-                backgroundColor: alpha(theme.palette.primary.light, 0.35),
+                backgroundColor: "neutral",
                 minWidth: theme.spacing(40),
                 minHeight: theme.spacing(10),
                 marginTop: "3rem",

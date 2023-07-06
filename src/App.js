@@ -9,7 +9,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { RouterProvider } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { blueGrey } from "@mui/material/colors";
+import { blueGrey, grey } from "@mui/material/colors";
 import router from "./router";
 import AppSettingsContext from "./AppSettingsContext";
 
@@ -20,6 +20,11 @@ function App() {
     palette: {
       mode: isDarkMode ? "dark" : "light",
       primary: blueGrey,
+      secondary: {
+        main: "#000",
+        light: "#3f3f40",
+      },
+      neutral: "#90A4AE66",
     },
   });
 

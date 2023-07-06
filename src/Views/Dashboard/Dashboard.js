@@ -1,6 +1,5 @@
 import { useContext, useState } from "react";
 import { Box, Button, Toolbar } from "@mui/material";
-import { alpha, useTheme } from "@mui/material/styles";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import BoardView from "./BoardView";
@@ -8,7 +7,6 @@ import ToDoContext from "../../ToDoContext";
 import ListView from "./ListView";
 
 const Dashboard = () => {
-  const theme = useTheme();
   const {
     setIsToDoFormDialogOpen,
     setIsToDoFormNew,
@@ -46,7 +44,7 @@ const Dashboard = () => {
         color="inherit"
         sx={{
           display: "flex",
-          backgroundColor: alpha(theme.palette.primary.light, 0.4),
+          backgroundColor: "neutral",
         }}
       >
         <Button
@@ -66,6 +64,7 @@ const Dashboard = () => {
         </Button>
         <Box sx={{ flexGrow: 1 }} />
         <ToggleButtonGroup
+          color="secondary"
           value={viewState}
           exclusive
           onChange={handleViewState}
