@@ -21,7 +21,7 @@ function App() {
       mode: isDarkMode ? "dark" : "light",
       primary: blueGrey,
       secondary: {
-        main: "#000",
+        main: isDarkMode ? "#fff" : "#000",
         light: "#3f3f40",
       },
       neutral: "#90A4AE66",
