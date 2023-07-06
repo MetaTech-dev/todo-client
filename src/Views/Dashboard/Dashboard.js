@@ -65,6 +65,7 @@ const Dashboard = () => {
         <Box sx={{ flexGrow: 1 }} />
         <ToggleButtonGroup
           color="secondary"
+          size="small"
           value={viewState}
           exclusive
           onChange={handleViewState}
