@@ -10,7 +10,7 @@ import { Typography } from "@mui/material";
 
 const ListView = () => {
   const {
-    toDoList,
+    filteredToDoList,
     deleteToDo,
     setToDoFormData,
     setIsToDoFormDialogOpen,
@@ -40,7 +40,7 @@ const ListView = () => {
     deleteToDo(toDo.id);
   };
 
-  const rows = toDoList;
+  const rows = filteredToDoList;
   const columns = [
     { field: "title", headerName: "Title", width: 200, editable: true },
     {

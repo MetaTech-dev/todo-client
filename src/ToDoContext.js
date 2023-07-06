@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import StatusFormDialog from "./StatusFormDialog";
 import ToDoFormDialog from "./ToDoFormDialog";
@@ -49,9 +49,23 @@ export const ToDoProvider = ({ children }) => {
       prevToDoList.filter((toDo) => toDo.id !== id)
     );
   };
+  const [filteredToDoList, setFilteredToDoList] = useState(toDoList);
+
+  useEffect(() => {
+    setFilteredToDoList(toDoList);
+  }, [toDoList]);
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const handleChangeSearchQuery = (input) => {
+    setSearchQuery(input);
+  };
+
+  console.log("SEARCH Q", searchQuery);
 
   const providerValue = {
     toDoList,
+    filteredToDoList,
+    setFilteredToDoList,
     statusList,
     isToDoFormDialogOpen,
     setIsToDoFormDialogOpen,
@@ -66,7 +80,12 @@ export const ToDoProvider = ({ children }) => {
     addToStatusList,
     updateToDo,
     deleteToDo,
+    searchQuery,
+    handleChangeSearchQuery,
   };
+
+  // console.log("TODOLIST", toDoList);
+  // console.log("FILTERED", filteredToDoList);
 
   return (
     <ToDoContext.Provider value={providerValue}>

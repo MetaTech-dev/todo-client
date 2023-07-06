@@ -6,10 +6,10 @@ import ToDoContext from "../../ToDoContext";
 
 const BoardView = () => {
   const theme = useTheme();
-  const { toDoList, statusList } = useContext(ToDoContext);
+  const { filteredToDoList, statusList } = useContext(ToDoContext);
 
   const filterToDosByStatus = (status) => {
-    return toDoList.filter((toDo) => toDo.status === status);
+    return filteredToDoList.filter((toDo) => toDo.status === status);
   };
 
   return (

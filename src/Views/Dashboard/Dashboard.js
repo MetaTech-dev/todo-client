@@ -8,6 +8,7 @@ import ListView from "./ListView";
 
 const Dashboard = () => {
   const {
+    handleChangeSearchQuery,
     setIsToDoFormDialogOpen,
     setIsToDoFormNew,
     setIsStatusFormDialogOpen,
@@ -36,6 +37,11 @@ const Dashboard = () => {
         return <BoardView />;
     }
   };
+
+  const handleSearchFieldChange = (e) => {
+    handleChangeSearchQuery(e.target.value);
+  };
+
   return (
     <Box>
       <Toolbar
@@ -69,9 +75,11 @@ const Dashboard = () => {
         <TextField
           id="outlined-search"
           label="Search field"
+          variant="outlined"
           type="search"
           size="small"
-          sx={{ paddingRight: "1rem" }}
+          sx={{ marginRight: "1rem" }}
+          onChange={handleSearchFieldChange}
         />
         <ToggleButtonGroup
           color="secondary"
