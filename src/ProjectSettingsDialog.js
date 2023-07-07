@@ -1,9 +1,13 @@
-// import * as React from "react";
 import {
   AppBar,
+  Box,
   Button,
   Dialog,
   IconButton,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
   Paper,
   Toolbar,
   Typography,
@@ -12,6 +16,9 @@ import { useContext, useState, forwardRef } from "react";
 import ToDoContext from "./ToDoContext";
 import Slide from "@mui/material/Slide";
 import CloseIcon from "@mui/icons-material/Close";
+import DragHandleIcon from "@mui/icons-material/DragHandle";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -21,6 +28,7 @@ const ProjectSettingsDialog = () => {
     isProjectSettingsDialogOpen,
     setIsProjectSettingsDialogOpen,
     setIsStatusFormDialogOpen,
+    statusList,
   } = useContext(ToDoContext);
 
   const handleClose = () => {
@@ -72,6 +80,21 @@ const ProjectSettingsDialog = () => {
           Create ToDo Status
         </Button>
       </Toolbar>
+      <Box>
+        <Typography>Status Management</Typography>
+        <List>
+          {statusList.map((status) => {
+            return (
+              <ListItem>
+                <ListItemIcon>
+                  <DragHandleIcon />
+                </ListItemIcon>
+                <ListItemText primary={status} />
+              </ListItem>
+            );
+          })}
+        </List>
+      </Box>
     </Dialog>
   );
 };

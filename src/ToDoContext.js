@@ -77,7 +77,6 @@ export const ToDoProvider = ({ children }) => {
   const providerValue = {
     toDoList,
     filteredToDoList,
-
     statusList,
     isToDoFormDialogOpen,
     setIsToDoFormDialogOpen,
