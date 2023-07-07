@@ -1,7 +1,8 @@
-import { createContext, useState } from "react";
+import { createContext, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import StatusFormDialog from "./StatusFormDialog";
 import ToDoFormDialog from "./ToDoFormDialog";
+import { useDebounce } from "./utils/useDebounce";
 
 const ToDoContext = createContext();
 export default ToDoContext;
@@ -24,11 +25,12 @@ export const ToDoProvider = ({ children }) => {
     status: statusList[0],
     id: "",
   };
+
   const [toDoFormData, setToDoFormData] = useState(defaultNewToDo);
   const [isStatusFormDialogOpen, setIsStatusFormDialogOpen] = useState(false);
 
   const createToDo = (newToDo) => {
-    setToDoList((prev) => [...prev, { id: uuidv4(), ...newToDo }]);
+    setToDoList((prev) => [...prev, { ...newToDo, id: uuidv4() }]);
   };
 
   const addToStatusList = (newStatus) => {
@@ -49,8 +51,30 @@ export const ToDoProvider = ({ children }) => {
     );
   };
 
+  const [searchQuery, setSearchQuery] = useState("");
+  const handleChangeSearchQuery = (input) => {
+    setSearchQuery(input);
+  };
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
+
+  const filteredToDoList = useMemo(() => {
+    if (debouncedSearchQuery === "") {
+      return toDoList;
+    } else {
+      return toDoList.filter((toDo) =>
+        Object.values(toDo).some((value) =>
+          String(value)
+            .toLowerCase()
+            .includes(debouncedSearchQuery.toLowerCase())
+        )
+      );
+    }
+  }, [toDoList, debouncedSearchQuery]);
+
   const providerValue = {
     toDoList,
+    filteredToDoList,
+
     statusList,
     isToDoFormDialogOpen,
     setIsToDoFormDialogOpen,
@@ -65,6 +89,8 @@ export const ToDoProvider = ({ children }) => {
     addToStatusList,
     updateToDo,
     deleteToDo,
+    searchQuery,
+    handleChangeSearchQuery,
   };
 
   return (

@@ -1,15 +1,15 @@
 import { useContext } from "react";
 import { Box, Card, Paper, Stack, Typography } from "@mui/material";
-import { alpha, useTheme } from "@mui/material/styles";
-import ToDoCard from "./ToDoCard";
-import ToDoContext from "./ToDoContext";
+import { useTheme } from "@mui/material/styles";
+import ToDoCard from "../../ToDoCard";
+import ToDoContext from "../../ToDoContext";
 
-const StatusColumns = () => {
+const BoardView = () => {
   const theme = useTheme();
-  const { toDoList, statusList } = useContext(ToDoContext);
+  const { filteredToDoList, statusList } = useContext(ToDoContext);
 
   const filterToDosByStatus = (status) => {
-    return toDoList.filter((toDo) => toDo.status === status);
+    return filteredToDoList.filter((toDo) => toDo.status === status);
   };
 
   return (
@@ -19,6 +19,7 @@ const StatusColumns = () => {
         display: "flex",
         justifyContent: "space-between",
         overflowX: "auto",
+        minHeight: "100vh",
       }}
     >
       {statusList.map((status) => {
@@ -43,6 +44,7 @@ const StatusColumns = () => {
                 marginBottom: "1rem",
                 marginLeft: "auto",
                 marginRight: "auto",
+                position: "fixed",
               }}
             >
               <Typography
@@ -59,9 +61,16 @@ const StatusColumns = () => {
             <Paper
               elevation={10}
               sx={{
-                backgroundColor: alpha(theme.palette.primary.light, 0.35),
+                backgroundColor: "neutral",
                 minWidth: theme.spacing(40),
                 minHeight: theme.spacing(10),
+                marginTop: "3rem",
+                overflow: "auto",
+                maxHeight: "80vh",
+                "::-webkit-scrollbar": {
+                  width: "0em",
+                  height: "0em",
+                },
               }}
             >
               <ul
@@ -88,4 +97,4 @@ const StatusColumns = () => {
   );
 };
 
-export default StatusColumns;
+export default BoardView;
