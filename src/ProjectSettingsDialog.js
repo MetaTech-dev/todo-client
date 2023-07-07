@@ -4,6 +4,7 @@ import {
   Button,
   Dialog,
   IconButton,
+  Paper,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -16,11 +17,18 @@ const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 const ProjectSettingsDialog = () => {
-  const { isProjectSettingsDialogOpen, setIsProjectSettingsDialogOpen } =
-    useContext(ToDoContext);
+  const {
+    isProjectSettingsDialogOpen,
+    setIsProjectSettingsDialogOpen,
+    setIsStatusFormDialogOpen,
+  } = useContext(ToDoContext);
 
   const handleClose = () => {
     setIsProjectSettingsDialogOpen(false);
+  };
+
+  const handleNewStatusFormDialogOpen = () => {
+    setIsStatusFormDialogOpen(true);
   };
 
   return (
@@ -45,6 +53,25 @@ const ProjectSettingsDialog = () => {
           </Typography>
         </Toolbar>
       </AppBar>
+      <Toolbar
+        id="project-settings-toolbar"
+        variant="dense"
+        color="inherit"
+        sx={{
+          display: "flex",
+          backgroundColor: "neutral",
+        }}
+      >
+        {" "}
+        <Button
+          color="inherit"
+          variant="contained"
+          size="small"
+          onClick={() => handleNewStatusFormDialogOpen()}
+        >
+          Create ToDo Status
+        </Button>
+      </Toolbar>
     </Dialog>
   );
 };

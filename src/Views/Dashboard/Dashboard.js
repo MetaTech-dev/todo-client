@@ -12,18 +12,12 @@ const Dashboard = () => {
     handleChangeSearchQuery,
     setIsToDoFormDialogOpen,
     setIsToDoFormNew,
-    setIsStatusFormDialogOpen,
-    isProjectSettingsDialogOpen,
     setIsProjectSettingsDialogOpen,
   } = useContext(ToDoContext);
 
   const handleToDoFormOpen = () => {
     setIsToDoFormDialogOpen(true);
     setIsToDoFormNew(true);
-  };
-
-  const handleNewStatusFormDialogOpen = () => {
-    setIsStatusFormDialogOpen(true);
   };
 
   const handleProjectSettingsDialogOpen = () => {
@@ -68,14 +62,6 @@ const Dashboard = () => {
           sx={{ marginRight: "1rem" }}
         >
           New ToDo
-        </Button>
-        <Button
-          color="inherit"
-          variant="contained"
-          size="small"
-          onClick={() => handleNewStatusFormDialogOpen()}
-        >
-          Create ToDo Status
         </Button>
         <Box sx={{ flexGrow: 1 }} />
 
