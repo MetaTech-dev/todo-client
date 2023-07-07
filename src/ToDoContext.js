@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import StatusFormDialog from "./StatusFormDialog";
 import ToDoFormDialog from "./ToDoFormDialog";
@@ -50,11 +50,6 @@ export const ToDoProvider = ({ children }) => {
       prevToDoList.filter((toDo) => toDo.id !== id)
     );
   };
-  const [filteredToDoList, setFilteredToDoList] = useState(toDoList);
-
-  useEffect(() => {
-    setFilteredToDoList(toDoList);
-  }, [toDoList]);
 
   const [searchQuery, setSearchQuery] = useState("");
   const handleChangeSearchQuery = (input) => {
@@ -62,25 +57,24 @@ export const ToDoProvider = ({ children }) => {
   };
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
-  useEffect(() => {
+  const filteredToDoList = useMemo(() => {
     if (debouncedSearchQuery === "") {
-      setFilteredToDoList(toDoList);
+      return toDoList;
     } else {
-      const filteredList = toDoList.filter((toDo) =>
+      return toDoList.filter((toDo) =>
         Object.values(toDo).some((value) =>
           String(value)
             .toLowerCase()
             .includes(debouncedSearchQuery.toLowerCase())
         )
       );
-      setFilteredToDoList(filteredList);
     }
   }, [toDoList, debouncedSearchQuery]);
 
   const providerValue = {
     toDoList,
     filteredToDoList,
-    setFilteredToDoList,
+
     statusList,
     isToDoFormDialogOpen,
     setIsToDoFormDialogOpen,
@@ -98,9 +92,6 @@ export const ToDoProvider = ({ children }) => {
     searchQuery,
     handleChangeSearchQuery,
   };
-
-  // console.log("TODOLIST", toDoList);
-  // console.log("FILTERED", filteredToDoList);
 
   return (
     <ToDoContext.Provider value={providerValue}>
