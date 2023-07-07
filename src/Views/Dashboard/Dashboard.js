@@ -1,10 +1,11 @@
 import { useContext, useState } from "react";
-import { Box, Button, TextField, Toolbar } from "@mui/material";
+import { Box, Button, IconButton, TextField, Toolbar } from "@mui/material";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import BoardView from "./BoardView";
 import ToDoContext from "../../ToDoContext";
 import ListView from "./ListView";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 const Dashboard = () => {
   const {
@@ -12,6 +13,8 @@ const Dashboard = () => {
     setIsToDoFormDialogOpen,
     setIsToDoFormNew,
     setIsStatusFormDialogOpen,
+    isProjectSettingsDialogOpen,
+    setIsProjectSettingsDialogOpen,
   } = useContext(ToDoContext);
 
   const handleToDoFormOpen = () => {
@@ -21,6 +24,10 @@ const Dashboard = () => {
 
   const handleNewStatusFormDialogOpen = () => {
     setIsStatusFormDialogOpen(true);
+  };
+
+  const handleProjectSettingsDialogOpen = () => {
+    setIsProjectSettingsDialogOpen(true);
   };
 
   const [viewState, setViewState] = useState("board");
@@ -92,6 +99,14 @@ const Dashboard = () => {
           <ToggleButton value="board">Board</ToggleButton>
           <ToggleButton value="list">List</ToggleButton>
         </ToggleButtonGroup>
+        <IconButton
+          color="primary.dark"
+          aria-label="Open Project Settings"
+          onClick={() => handleProjectSettingsDialogOpen()}
+          sx={{ marginLeft: "1rem" }}
+        >
+          <SettingsIcon />
+        </IconButton>
       </Toolbar>
 
       {getViewState()}

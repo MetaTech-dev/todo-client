@@ -2,6 +2,7 @@ import { createContext, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import StatusFormDialog from "./StatusFormDialog";
 import ToDoFormDialog from "./ToDoFormDialog";
+import ProjectSettingsDialog from "./ProjectSettingsDialog";
 import { useDebounce } from "./utils/useDebounce";
 
 const ToDoContext = createContext();
@@ -28,6 +29,8 @@ export const ToDoProvider = ({ children }) => {
 
   const [toDoFormData, setToDoFormData] = useState(defaultNewToDo);
   const [isStatusFormDialogOpen, setIsStatusFormDialogOpen] = useState(false);
+  const [isProjectSettingsDialogOpen, setIsProjectSettingsDialogOpen] =
+    useState(false);
 
   const createToDo = (newToDo) => {
     setToDoList((prev) => [...prev, { ...newToDo, id: uuidv4() }]);
@@ -91,6 +94,8 @@ export const ToDoProvider = ({ children }) => {
     deleteToDo,
     searchQuery,
     handleChangeSearchQuery,
+    isProjectSettingsDialogOpen,
+    setIsProjectSettingsDialogOpen,
   };
 
   return (
@@ -98,6 +103,7 @@ export const ToDoProvider = ({ children }) => {
       {children}
       <ToDoFormDialog />
       <StatusFormDialog />
+      <ProjectSettingsDialog />
     </ToDoContext.Provider>
   );
 };
