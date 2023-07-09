@@ -39,6 +39,8 @@ const ProjectSettingsDialog = () => {
     setIsStatusFormDialogOpen(true);
   };
 
+  const handleEditStatus = () => {};
+
   return (
     <Dialog
       fullScreen
@@ -68,6 +70,7 @@ const ProjectSettingsDialog = () => {
         sx={{
           display: "flex",
           backgroundColor: "neutral",
+          marginBottom: "1rem",
         }}
       >
         {" "}
@@ -80,20 +83,52 @@ const ProjectSettingsDialog = () => {
           Create ToDo Status
         </Button>
       </Toolbar>
-      <Box>
-        <Typography>Status Management</Typography>
-        <List>
-          {statusList.map((status) => {
-            return (
-              <ListItem>
-                <ListItemIcon>
-                  <DragHandleIcon />
-                </ListItemIcon>
-                <ListItemText primary={status} />
-              </ListItem>
-            );
-          })}
-        </List>
+      <Box sx={{ display: "flex" }}>
+        <Box sx={{ flexGrow: "1" }}></Box>
+        <Paper elevation={6}>
+          <AppBar
+            elevation={6}
+            sx={{ position: "static", backgroundColor: "neutral" }}
+          >
+            <Toolbar>
+              <Typography
+                variant="h6"
+                component="div"
+                sx={{
+                  textAlign: "center",
+                  color: "secondary.main",
+                  opacity: "0.9",
+                }}
+              >
+                Status Management
+              </Typography>
+            </Toolbar>
+          </AppBar>
+
+          <List>
+            {statusList.map((status) => {
+              return (
+                <ListItem
+                  secondaryAction={
+                    <IconButton>
+                      <EditTwoToneIcon sx={{ marginRight: "1rem" }} />
+                      <DeleteOutlineOutlinedIcon />
+                    </IconButton>
+                  }
+                >
+                  <ListItemIcon>
+                    <DragHandleIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={status}
+                    sx={{ paddingRight: "6rem" }}
+                  />
+                </ListItem>
+              );
+            })}
+          </List>
+        </Paper>
+        <Box sx={{ flexGrow: "1" }}></Box>
       </Box>
     </Dialog>
   );
