@@ -12,7 +12,7 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { useContext, useState, forwardRef } from "react";
+import { useContext, forwardRef } from "react";
 import ToDoContext from "./ToDoContext";
 import Slide from "@mui/material/Slide";
 import CloseIcon from "@mui/icons-material/Close";
@@ -29,6 +29,7 @@ const ProjectSettingsDialog = () => {
     setIsProjectSettingsDialogOpen,
     setIsStatusFormDialogOpen,
     statusList,
+    deleteStatus,
   } = useContext(ToDoContext);
 
   const handleClose = () => {
@@ -40,6 +41,11 @@ const ProjectSettingsDialog = () => {
   };
 
   const handleEditStatus = () => {};
+
+  const handleDeleteStatus = (status) => {
+    deleteStatus(status.id);
+    console.log("DELETE");
+  };
 
   return (
     <Dialog
@@ -110,17 +116,24 @@ const ProjectSettingsDialog = () => {
               return (
                 <ListItem
                   secondaryAction={
-                    <IconButton>
-                      <EditTwoToneIcon sx={{ marginRight: "1rem" }} />
-                      <DeleteOutlineOutlinedIcon />
-                    </IconButton>
+                    <>
+                      <IconButton>
+                        <EditTwoToneIcon />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => handleDeleteStatus(status)}
+                        aria-label="Delete Status"
+                      >
+                        <DeleteOutlineOutlinedIcon />
+                      </IconButton>
+                    </>
                   }
                 >
                   <ListItemIcon>
                     <DragHandleIcon />
                   </ListItemIcon>
                   <ListItemText
-                    primary={status}
+                    primary={status.title}
                     sx={{ paddingRight: "6rem" }}
                   />
                 </ListItem>

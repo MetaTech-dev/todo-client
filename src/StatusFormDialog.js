@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 
 const StatusFormDialog = () => {
-  const { addToStatusList, setIsStatusFormDialogOpen, isStatusFormDialogOpen } =
+  const { createNewStatus, setIsStatusFormDialogOpen, isStatusFormDialogOpen } =
     useContext(ToDoContext);
   const [newStatus, setNewStatus] = useState("");
 
@@ -25,7 +25,7 @@ const StatusFormDialog = () => {
   };
 
   const handleSubmit = () => {
-    addToStatusList(newStatus);
+    createNewStatus(newStatus);
     setIsStatusFormDialogOpen(false);
     setNewStatus("");
   };

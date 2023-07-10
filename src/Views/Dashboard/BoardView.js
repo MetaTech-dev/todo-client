@@ -32,7 +32,7 @@ const BoardView = () => {
               alignItems: "center",
               display: "flex",
             }}
-            key={status}
+            key={status.id}
           >
             <Card
               className="statusTitle"
@@ -55,7 +55,7 @@ const BoardView = () => {
                   textAlign: "center",
                 }}
               >
-                {status}
+                {status.title}
               </Typography>
             </Card>
             <Paper

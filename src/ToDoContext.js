@@ -8,7 +8,11 @@ import { useDebounce } from "./utils/useDebounce";
 const ToDoContext = createContext();
 export default ToDoContext;
 
-const defaultStatusList = ["Ready", "In Progress", "Done"];
+const defaultStatusList = [
+  { title: "Ready", id: uuidv4() },
+  { title: "In Progress", id: uuidv4() },
+  { title: "Done", id: uuidv4() },
+];
 
 export const ToDoProvider = ({ children }) => {
   const [toDoList, setToDoList] = useState([]);
@@ -27,6 +31,11 @@ export const ToDoProvider = ({ children }) => {
     id: "",
   };
 
+  const defaultStatus = {
+    title: "",
+    id: "",
+  };
+
   const [toDoFormData, setToDoFormData] = useState(defaultNewToDo);
   const [isStatusFormDialogOpen, setIsStatusFormDialogOpen] = useState(false);
   const [isProjectSettingsDialogOpen, setIsProjectSettingsDialogOpen] =
@@ -36,8 +45,8 @@ export const ToDoProvider = ({ children }) => {
     setToDoList((prev) => [...prev, { ...newToDo, id: uuidv4() }]);
   };
 
-  const addToStatusList = (newStatus) => {
-    setStatusList((prev) => [...prev, newStatus]);
+  const createNewStatus = (newStatus) => {
+    setStatusList((prev) => [...prev, { ...newStatus, id: uuidv4() }]);
   };
 
   const updateToDo = (updatedToDo) => {
@@ -51,6 +60,12 @@ export const ToDoProvider = ({ children }) => {
   const deleteToDo = (id) => {
     setToDoList((prevToDoList) =>
       prevToDoList.filter((toDo) => toDo.id !== id)
+    );
+  };
+
+  const deleteStatus = (id) => {
+    setStatusList((prevStatusList) =>
+      prevStatusList.filter((status) => status.id !== id)
     );
   };
 
@@ -88,13 +103,14 @@ export const ToDoProvider = ({ children }) => {
     isStatusFormDialogOpen,
     setIsStatusFormDialogOpen,
     createToDo,
-    addToStatusList,
+    createNewStatus,
     updateToDo,
     deleteToDo,
     searchQuery,
     handleChangeSearchQuery,
     isProjectSettingsDialogOpen,
     setIsProjectSettingsDialogOpen,
+    deleteStatus,
   };
 
   return (
