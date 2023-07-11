@@ -17,7 +17,6 @@ const StatusFormDialog = () => {
     setIsStatusFormDialogOpen,
     isStatusFormDialogOpen,
     isStatusFormNew,
-    // setIsStatusFormNew,
     statusFormData,
     setStatusFormData,
     defaultNewStatus,

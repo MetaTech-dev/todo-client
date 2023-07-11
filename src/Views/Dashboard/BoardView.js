@@ -40,7 +40,7 @@ const BoardView = () => {
               sx={{
                 minWidth: "10rem",
                 alignItems: "center",
-                marginBottom: "1rem",
+                marginBottom: "0.5rem",
                 marginLeft: "auto",
                 marginRight: "auto",
               }}
@@ -63,7 +63,7 @@ const BoardView = () => {
                 backgroundColor: "neutral",
                 minWidth: theme.spacing(40),
                 minHeight: theme.spacing(10),
-                marginTop: "3rem",
+                marginTop: "1rem",
                 overflow: "auto",
                 maxHeight: "80vh",
                 "::-webkit-scrollbar": {
