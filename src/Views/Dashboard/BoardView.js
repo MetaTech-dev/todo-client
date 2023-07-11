@@ -9,7 +9,7 @@ const BoardView = () => {
   const { filteredToDoList, statusList } = useContext(ToDoContext);
 
   const filterToDosByStatus = (status) => {
-    return filteredToDoList.filter((toDo) => toDo.status === status);
+    return filteredToDoList.filter((toDo) => toDo.status === status.title);
   };
 
   return (
@@ -40,11 +40,9 @@ const BoardView = () => {
               sx={{
                 minWidth: "10rem",
                 alignItems: "center",
-                maxWidth: "30%",
                 marginBottom: "1rem",
                 marginLeft: "auto",
                 marginRight: "auto",
-                position: "fixed",
               }}
             >
               <Typography
@@ -53,6 +51,7 @@ const BoardView = () => {
                   fontSize: "22px",
                   opacity: ".8",
                   textAlign: "center",
+                  padding: "0 1rem",
                 }}
               >
                 {status.title}

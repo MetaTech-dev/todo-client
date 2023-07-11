@@ -30,6 +30,9 @@ const ProjectSettingsDialog = () => {
     setIsStatusFormDialogOpen,
     statusList,
     deleteStatus,
+    setStatusFormData,
+    defaultNewStatus,
+    setIsStatusFormNew,
   } = useContext(ToDoContext);
 
   const handleClose = () => {
@@ -37,10 +40,15 @@ const ProjectSettingsDialog = () => {
   };
 
   const handleNewStatusFormDialogOpen = () => {
+    setIsStatusFormNew(true);
     setIsStatusFormDialogOpen(true);
   };
 
-  const handleEditStatus = () => {};
+  const handleEditStatus = (status) => {
+    setStatusFormData(status);
+    setIsStatusFormNew(false);
+    setIsStatusFormDialogOpen(true);
+  };
 
   const handleDeleteStatus = (status) => {
     deleteStatus(status.id);
@@ -115,10 +123,14 @@ const ProjectSettingsDialog = () => {
             {statusList.map((status) => {
               return (
                 <ListItem
+                  key={status.id}
                   secondaryAction={
                     <>
                       <IconButton>
-                        <EditTwoToneIcon />
+                        <EditTwoToneIcon
+                          onClick={() => handleEditStatus(status)}
+                          aria-label="Edit Status"
+                        />
                       </IconButton>
                       <IconButton
                         onClick={() => handleDeleteStatus(status)}

@@ -15,6 +15,9 @@ const defaultStatusList = [
 ];
 
 export const ToDoProvider = ({ children }) => {
+  //
+  // TODO SECTION
+
   const [toDoList, setToDoList] = useState([]);
   const [statusList, setStatusList] = useState(defaultStatusList);
   const [isToDoFormDialogOpen, setIsToDoFormDialogOpen] = useState(false);
@@ -27,26 +30,14 @@ export const ToDoProvider = ({ children }) => {
     dueDate: null,
     assignee: "",
     priority: "low",
-    status: statusList[0],
-    id: "",
-  };
-
-  const defaultStatus = {
-    title: "",
+    status: statusList[0].title,
     id: "",
   };
 
   const [toDoFormData, setToDoFormData] = useState(defaultNewToDo);
-  const [isStatusFormDialogOpen, setIsStatusFormDialogOpen] = useState(false);
-  const [isProjectSettingsDialogOpen, setIsProjectSettingsDialogOpen] =
-    useState(false);
 
   const createToDo = (newToDo) => {
     setToDoList((prev) => [...prev, { ...newToDo, id: uuidv4() }]);
-  };
-
-  const createNewStatus = (newStatus) => {
-    setStatusList((prev) => [...prev, { ...newStatus, id: uuidv4() }]);
   };
 
   const updateToDo = (updatedToDo) => {
@@ -63,11 +54,37 @@ export const ToDoProvider = ({ children }) => {
     );
   };
 
+  // STATUS SECTION
+
+  const [isStatusFormDialogOpen, setIsStatusFormDialogOpen] = useState(false);
+  const [isStatusFormNew, setIsStatusFormNew] = useState(true);
+  const defaultNewStatus = {
+    title: "",
+    id: "",
+  };
+  const [statusFormData, setStatusFormData] = useState(defaultNewStatus);
+  const [isProjectSettingsDialogOpen, setIsProjectSettingsDialogOpen] =
+    useState(false);
+
+  const createNewStatus = (newStatus) => {
+    setStatusList((prev) => [...prev, { ...newStatus, id: uuidv4() }]);
+  };
+
+  const updateStatus = (updatedStatus) => {
+    setStatusList((prevStatusList) =>
+      prevStatusList.map((status) =>
+        status.id === updatedStatus.id ? updatedStatus : status
+      )
+    );
+  };
+
   const deleteStatus = (id) => {
     setStatusList((prevStatusList) =>
       prevStatusList.filter((status) => status.id !== id)
     );
   };
+
+  // FILTER SECTION
 
   const [searchQuery, setSearchQuery] = useState("");
   const handleChangeSearchQuery = (input) => {
@@ -110,7 +127,13 @@ export const ToDoProvider = ({ children }) => {
     handleChangeSearchQuery,
     isProjectSettingsDialogOpen,
     setIsProjectSettingsDialogOpen,
+    isStatusFormNew,
+    setIsStatusFormNew,
+    statusFormData,
+    setStatusFormData,
+    defaultNewStatus,
     deleteStatus,
+    updateStatus,
   };
 
   return (
