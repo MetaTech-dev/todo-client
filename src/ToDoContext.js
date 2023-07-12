@@ -2,14 +2,22 @@ import { createContext, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import StatusFormDialog from "./StatusFormDialog";
 import ToDoFormDialog from "./ToDoFormDialog";
+import ProjectSettingsDialog from "./ProjectSettingsDialog";
 import { useDebounce } from "./utils/useDebounce";
 
 const ToDoContext = createContext();
 export default ToDoContext;
 
-const defaultStatusList = ["Ready", "In Progress", "Done"];
+const defaultStatusList = [
+  { title: "Ready", id: uuidv4() },
+  { title: "In Progress", id: uuidv4() },
+  { title: "Done", id: uuidv4() },
+];
 
 export const ToDoProvider = ({ children }) => {
+  //
+  // TODO SECTION
+
   const [toDoList, setToDoList] = useState([]);
   const [statusList, setStatusList] = useState(defaultStatusList);
   const [isToDoFormDialogOpen, setIsToDoFormDialogOpen] = useState(false);
@@ -22,19 +30,14 @@ export const ToDoProvider = ({ children }) => {
     dueDate: null,
     assignee: "",
     priority: "low",
-    status: statusList[0],
+    status: statusList[0].title,
     id: "",
   };
 
   const [toDoFormData, setToDoFormData] = useState(defaultNewToDo);
-  const [isStatusFormDialogOpen, setIsStatusFormDialogOpen] = useState(false);
 
   const createToDo = (newToDo) => {
     setToDoList((prev) => [...prev, { ...newToDo, id: uuidv4() }]);
-  };
-
-  const addToStatusList = (newStatus) => {
-    setStatusList((prev) => [...prev, newStatus]);
   };
 
   const updateToDo = (updatedToDo) => {
@@ -50,6 +53,38 @@ export const ToDoProvider = ({ children }) => {
       prevToDoList.filter((toDo) => toDo.id !== id)
     );
   };
+
+  // STATUS SECTION
+
+  const [isStatusFormDialogOpen, setIsStatusFormDialogOpen] = useState(false);
+  const [isStatusFormNew, setIsStatusFormNew] = useState(true);
+  const defaultNewStatus = {
+    title: "",
+    id: "",
+  };
+  const [statusFormData, setStatusFormData] = useState(defaultNewStatus);
+  const [isProjectSettingsDialogOpen, setIsProjectSettingsDialogOpen] =
+    useState(false);
+
+  const createNewStatus = (newStatus) => {
+    setStatusList((prev) => [...prev, { ...newStatus, id: uuidv4() }]);
+  };
+
+  const updateStatus = (updatedStatus) => {
+    setStatusList((prevStatusList) =>
+      prevStatusList.map((status) =>
+        status.id === updatedStatus.id ? updatedStatus : status
+      )
+    );
+  };
+
+  const deleteStatus = (id) => {
+    setStatusList((prevStatusList) =>
+      prevStatusList.filter((status) => status.id !== id)
+    );
+  };
+
+  // FILTER SECTION
 
   const [searchQuery, setSearchQuery] = useState("");
   const handleChangeSearchQuery = (input) => {
@@ -74,7 +109,6 @@ export const ToDoProvider = ({ children }) => {
   const providerValue = {
     toDoList,
     filteredToDoList,
-
     statusList,
     isToDoFormDialogOpen,
     setIsToDoFormDialogOpen,
@@ -86,11 +120,20 @@ export const ToDoProvider = ({ children }) => {
     isStatusFormDialogOpen,
     setIsStatusFormDialogOpen,
     createToDo,
-    addToStatusList,
+    createNewStatus,
     updateToDo,
     deleteToDo,
     searchQuery,
     handleChangeSearchQuery,
+    isProjectSettingsDialogOpen,
+    setIsProjectSettingsDialogOpen,
+    isStatusFormNew,
+    setIsStatusFormNew,
+    statusFormData,
+    setStatusFormData,
+    defaultNewStatus,
+    deleteStatus,
+    updateStatus,
   };
 
   return (
@@ -98,6 +141,7 @@ export const ToDoProvider = ({ children }) => {
       {children}
       <ToDoFormDialog />
       <StatusFormDialog />
+      <ProjectSettingsDialog />
     </ToDoContext.Provider>
   );
 };

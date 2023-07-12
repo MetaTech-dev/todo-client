@@ -152,8 +152,8 @@ const ToDoForm = () => {
             >
               {statusList.map((status) => {
                 return (
-                  <MenuItem value={status} key={status}>
-                    {status}
+                  <MenuItem value={status.title} key={status.id}>
+                    {status.title}
                   </MenuItem>
                 );
               })}

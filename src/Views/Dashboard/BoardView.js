@@ -9,7 +9,7 @@ const BoardView = () => {
   const { filteredToDoList, statusList } = useContext(ToDoContext);
 
   const filterToDosByStatus = (status) => {
-    return filteredToDoList.filter((toDo) => toDo.status === status);
+    return filteredToDoList.filter((toDo) => toDo.status === status.title);
   };
 
   return (
@@ -32,7 +32,7 @@ const BoardView = () => {
               alignItems: "center",
               display: "flex",
             }}
-            key={status}
+            key={status.id}
           >
             <Card
               className="statusTitle"
@@ -40,11 +40,9 @@ const BoardView = () => {
               sx={{
                 minWidth: "10rem",
                 alignItems: "center",
-                maxWidth: "30%",
-                marginBottom: "1rem",
+                marginBottom: "0.5rem",
                 marginLeft: "auto",
                 marginRight: "auto",
-                position: "fixed",
               }}
             >
               <Typography
@@ -53,9 +51,10 @@ const BoardView = () => {
                   fontSize: "22px",
                   opacity: ".8",
                   textAlign: "center",
+                  padding: "0 1rem",
                 }}
               >
-                {status}
+                {status.title}
               </Typography>
             </Card>
             <Paper
@@ -64,7 +63,7 @@ const BoardView = () => {
                 backgroundColor: "neutral",
                 minWidth: theme.spacing(40),
                 minHeight: theme.spacing(10),
-                marginTop: "3rem",
+                mt: 2,
                 overflow: "auto",
                 maxHeight: "80vh",
                 "::-webkit-scrollbar": {
