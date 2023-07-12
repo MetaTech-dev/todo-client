@@ -83,7 +83,7 @@ const ProjectSettingsDialog = () => {
         sx={{
           display: "flex",
           backgroundColor: "neutral",
-          marginBottom: "1rem",
+          mb: 2,
         }}
       >
         <Button
