@@ -77,11 +77,15 @@ const Dashboard = () => {
             variant="outlined"
             type="search"
             size="small"
-            sx={{ marginRight: "1rem" }}
+            sx={{
+              marginRight: "1rem",
+              "& .MuiOutlinedInput-root": {
+                backgroundColor: "white",
+              },
+            }}
             onChange={handleSearchFieldChange}
           />
           <ToggleButtonGroup
-            color="secondary"
             size="small"
             value={viewState}
             exclusive
@@ -92,7 +96,6 @@ const Dashboard = () => {
             <ToggleButton value="list">List</ToggleButton>
           </ToggleButtonGroup>
           <IconButton
-            color="primary.dark"
             aria-label="Open Project Settings"
             onClick={() => handleProjectSettingsDialogOpen()}
             sx={{ marginLeft: "1rem" }}
