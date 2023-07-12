@@ -63,7 +63,7 @@ const BoardView = () => {
                 backgroundColor: "neutral",
                 minWidth: theme.spacing(40),
                 minHeight: theme.spacing(10),
-                marginTop: "1rem",
+                mt: 2,
                 overflow: "auto",
                 maxHeight: "80vh",
                 "::-webkit-scrollbar": {
