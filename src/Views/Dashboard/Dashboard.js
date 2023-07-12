@@ -79,7 +79,7 @@ const Dashboard = () => {
             size="small"
             sx={{
               marginRight: "1rem",
-              "& .MuiOutlinedInput-root": {
+              "& .MuiInputBase-root": {
                 backgroundColor: "white",
               },
             }}
