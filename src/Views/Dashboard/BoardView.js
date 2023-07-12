@@ -33,8 +33,6 @@ const BoardView = () => {
               flexDirection: "column",
               flexGrow: 1,
               m: 1,
-              // ml: "auto",
-              // mr: "auto",
               maxWidth: theme.spacing(40),
             }}
           >
