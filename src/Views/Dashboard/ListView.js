@@ -57,7 +57,9 @@ const ListView = () => {
       type: "date",
       valueGetter: (params) => dayjs(params.row.dueDate).toDate(),
       valueFormatter: (params) =>
-        dayjs(params.value).format("dddd, MMMM D, YYYY"),
+        dayjs(params.value).isValid()
+          ? dayjs(params.value).format("dddd, MMMM D, YYYY")
+          : "none selected",
       editable: false,
     },
     {
