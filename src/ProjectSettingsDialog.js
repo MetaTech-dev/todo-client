@@ -52,7 +52,6 @@ const ProjectSettingsDialog = () => {
 
   const handleDeleteStatus = (status) => {
     deleteStatus(status.id);
-    console.log("DELETE");
   };
 
   return (
