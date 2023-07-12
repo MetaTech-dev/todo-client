@@ -17,23 +17,27 @@ const BoardView = () => {
       id="stack-holder"
       sx={{
         display: "flex",
-        justifyContent: "space-between",
+        justifyContent: "space-around",
         overflowX: "auto",
-        minHeight: "100vh",
+        // height: "100%",
+        // width: "100%",
+        flexGrow: 1,
       }}
     >
+      {" "}
+      {/* <Stack
+        direction="row"
+        sx={{
+          // height: "100%",
+          width: "100%",
+          margin: "1rem",
+          alignItems: "center",
+          display: "flex",
+        }}
+      > */}
       {statusList.map((status) => {
         return (
-          <Stack
-            sx={{
-              height: "100%",
-              width: "100%",
-              margin: "1rem",
-              alignItems: "center",
-              display: "flex",
-            }}
-            key={status.id}
-          >
+          <div key={status.id}>
             <Card
               className="statusTitle"
               elevation={5}
@@ -65,7 +69,7 @@ const BoardView = () => {
                 minHeight: theme.spacing(10),
                 marginTop: "1rem",
                 overflow: "auto",
-                maxHeight: "80vh",
+                maxHeight: "80%",
                 "::-webkit-scrollbar": {
                   width: "0em",
                   height: "0em",
@@ -89,9 +93,10 @@ const BoardView = () => {
                 })}
               </ul>
             </Paper>
-          </Stack>
+          </div>
         );
       })}
+      {/* </Stack> */}
     </Box>
   );
 };

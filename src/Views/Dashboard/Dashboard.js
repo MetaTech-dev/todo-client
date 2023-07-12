@@ -1,5 +1,12 @@
 import { useContext, useState } from "react";
-import { Box, Button, IconButton, TextField, Toolbar } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  Button,
+  IconButton,
+  TextField,
+  Toolbar,
+} from "@mui/material";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import BoardView from "./BoardView";
@@ -44,57 +51,52 @@ const Dashboard = () => {
   };
 
   return (
-    <Box>
-      <Toolbar
-        id="dashboard-toolbar"
-        variant="dense"
-        color="inherit"
-        sx={{
-          display: "flex",
-          backgroundColor: "neutral",
-        }}
+    <Box id="Dashboard-Box" sx={{ flexGrow: 1 }}>
+      <AppBar
+        position="static"
+        sx={{ backgroundColor: "neutral", flexShrink: 1 }}
       >
-        <Button
-          color="inherit"
-          variant="contained"
-          size="small"
-          onClick={() => handleToDoFormOpen()}
-          sx={{ marginRight: "1rem" }}
-        >
-          New ToDo
-        </Button>
-        <Box sx={{ flexGrow: 1 }} />
+        <Toolbar id="dashboard-toolbar" variant="dense" color="inherit">
+          <Button
+            variant="contained"
+            size="small"
+            onClick={() => handleToDoFormOpen()}
+            sx={{ marginRight: "1rem" }}
+          >
+            New ToDo
+          </Button>
+          <Box sx={{ flexGrow: 1 }} />
 
-        <TextField
-          id="outlined-search"
-          label="Search field"
-          variant="outlined"
-          type="search"
-          size="small"
-          sx={{ marginRight: "1rem" }}
-          onChange={handleSearchFieldChange}
-        />
-        <ToggleButtonGroup
-          color="secondary"
-          size="small"
-          value={viewState}
-          exclusive
-          onChange={handleViewState}
-          aria-label="View Option Buttons"
-        >
-          <ToggleButton value="board">Board</ToggleButton>
-          <ToggleButton value="list">List</ToggleButton>
-        </ToggleButtonGroup>
-        <IconButton
-          color="primary.dark"
-          aria-label="Open Project Settings"
-          onClick={() => handleProjectSettingsDialogOpen()}
-          sx={{ marginLeft: "1rem" }}
-        >
-          <SettingsIcon />
-        </IconButton>
-      </Toolbar>
-
+          <TextField
+            id="outlined-search"
+            label="Search field"
+            variant="outlined"
+            type="search"
+            size="small"
+            sx={{ marginRight: "1rem" }}
+            onChange={handleSearchFieldChange}
+          />
+          <ToggleButtonGroup
+            color="secondary"
+            size="small"
+            value={viewState}
+            exclusive
+            onChange={handleViewState}
+            aria-label="View Option Buttons"
+          >
+            <ToggleButton value="board">Board</ToggleButton>
+            <ToggleButton value="list">List</ToggleButton>
+          </ToggleButtonGroup>
+          <IconButton
+            color="primary.dark"
+            aria-label="Open Project Settings"
+            onClick={() => handleProjectSettingsDialogOpen()}
+            sx={{ marginLeft: "1rem" }}
+          >
+            <SettingsIcon />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
       {getViewState()}
     </Box>
   );
