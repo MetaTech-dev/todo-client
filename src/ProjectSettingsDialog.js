@@ -151,7 +151,7 @@ const ProjectSettingsDialog = () => {
             })}
           </List>
         </Paper>
-        <Box sx={{ flexGrow: "1" }}></Box>
+        <Box sx={{ flexGrow: "1" }} />
       </Box>
     </Dialog>
   );
