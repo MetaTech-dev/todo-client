@@ -89,7 +89,7 @@ const Dashboard = () => {
           color="primary.dark"
           aria-label="Open Project Settings"
           onClick={() => handleProjectSettingsDialogOpen()}
-          sx={{ marginLeft: "1rem" }}
+          sx={{ ml: 2 }}
         >
           <SettingsIcon />
         </IconButton>
