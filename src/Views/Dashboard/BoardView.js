@@ -29,7 +29,8 @@ const BoardView = () => {
               display: "flex",
               flexDirection: "column",
               flexGrow: 1,
-              margin: "1rem",
+              m: 1,
+              maxWidth: theme.spacing(40),
             }}
           >
             <Card
@@ -37,7 +38,7 @@ const BoardView = () => {
               elevation={5}
               sx={{
                 minWidth: "10rem",
-                marginBottom: "0.5rem",
+                marginBottom: 1,
                 flexShrink: 0,
               }}
             >
@@ -57,31 +58,14 @@ const BoardView = () => {
               sx={{
                 backgroundColor: "neutral",
                 minWidth: theme.spacing(40),
-                minHeight: theme.spacing(10),
-                overflow: "auto",
-                "::-webkit-scrollbar": {
-                  width: "0em",
-                  height: "0em",
-                },
+                overflowY: "auto",
                 flexGrow: 1,
+                p: 1,
               }}
             >
-              <ul
-                style={{
-                  listStyle: "none",
-                  padding: "0.3rem",
-                }}
-              >
-                {filterToDosByStatus(status).map((toDo) => {
-                  return (
-                    <li key={toDo.id} style={{ display: "flex" }}>
-                      <Box sx={{ flexGrow: 1 }} />
-                      <ToDoCard toDo={toDo} />
-                      <Box sx={{ flexGrow: 1 }} />
-                    </li>
-                  );
-                })}
-              </ul>
+              {filterToDosByStatus(status).map((toDo) => {
+                return <ToDoCard toDo={toDo} key={toDo.id} />;
+              })}
             </Paper>
           </Box>
         );

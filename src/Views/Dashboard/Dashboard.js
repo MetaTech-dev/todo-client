@@ -57,6 +57,7 @@ const Dashboard = () => {
         flexGrow: 1,
         display: "flex",
         flexDirection: "column",
+        overflow: "hidden",
       }}
     >
       <AppBar position="static" sx={{ backgroundColor: "neutral" }}>

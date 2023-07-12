@@ -47,16 +47,29 @@ const ToDoCard = ({ toDo }) => {
     }
   };
 
+  const handleDescription = () => {
+    if (toDo.description.length > 400) {
+      return toDo.description.substring(0, 400) + "... (click edit to expand)";
+    } else {
+      return toDo.description;
+    }
+  };
+
   return (
-    <Card elevation={3} sx={{ m: 1, width: "90%" }}>
+    <Card
+      elevation={3}
+      sx={(theme) => ({
+        maxWidth: theme.spacing(40),
+      })}
+    >
       <CardContent>
         <Typography variant="h5">{toDo.title}</Typography>
         <Divider />
         {/* <Typography>Created By:{toDo.author}</Typography> */}
-        <Typography>{toDo.description}</Typography>
+        <Typography>{handleDescription()}</Typography>
 
         {/* <Typography>Created at:</Typography> */}
-        <Divider sx={{ padding: ".5rem" }} />
+        <Divider sx={{ mb: 1 }} />
         <Typography>
           <b>Due Date:</b> {formattedDueDate}
         </Typography>
