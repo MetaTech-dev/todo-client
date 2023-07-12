@@ -53,7 +53,7 @@ const StatusFormDialog = () => {
         setShowWarning("Status title can't be more than 30 characters");
       }
     } else {
-      setShowWarning("Status title cant be empty");
+      setShowWarning("Status title can't be empty");
     }
   };
 
