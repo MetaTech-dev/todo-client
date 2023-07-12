@@ -86,7 +86,6 @@ const ProjectSettingsDialog = () => {
           marginBottom: "1rem",
         }}
       >
-        {" "}
         <Button
           color="inherit"
           variant="contained"
