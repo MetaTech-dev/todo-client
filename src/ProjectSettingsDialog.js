@@ -96,7 +96,7 @@ const ProjectSettingsDialog = () => {
         </Button>
       </Toolbar>
       <Box sx={{ display: "flex" }}>
-        <Box sx={{ flexGrow: "1" }}></Box>
+        <Box sx={{ flexGrow: "1" }} />
         <Paper elevation={6}>
           <AppBar
             elevation={6}
