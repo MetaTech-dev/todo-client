@@ -11,7 +11,7 @@ const Header = () => {
   const { isDarkMode, toggleDarkMode } = useContext(DarkModeContext);
 
   return (
-    <AppBar position="static" sx={{ flexShrink: 1 }} elevation={6}>
+    <AppBar position="static" elevation={6}>
       <Toolbar>
         <IconButton
           size="large"

@@ -51,11 +51,17 @@ const Dashboard = () => {
   };
 
   return (
-    <Box id="Dashboard-Box" sx={{ flexGrow: 1 }}>
-      <AppBar
-        position="static"
-        sx={{ backgroundColor: "neutral", flexShrink: 1 }}
-      >
+    <Box
+      id="dashboard-container"
+      sx={{
+        flexGrow: 1,
+        display: "flex",
+        flexDirection: "column",
+        width: "100%",
+        height: "100%",
+      }}
+    >
+      <AppBar position="static" sx={{ backgroundColor: "neutral" }}>
         <Toolbar id="dashboard-toolbar" variant="dense" color="inherit">
           <Button
             variant="contained"

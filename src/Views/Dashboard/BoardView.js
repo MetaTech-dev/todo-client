@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Box, Card, Paper, Stack, Typography } from "@mui/material";
+import { Box, Card, Paper, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import ToDoCard from "../../ToDoCard";
 import ToDoContext from "../../ToDoContext";
@@ -14,39 +14,33 @@ const BoardView = () => {
 
   return (
     <Box
-      id="stack-holder"
+      id="board-view-container"
       sx={{
         display: "flex",
-        justifyContent: "space-around",
-        overflowX: "auto",
-        // height: "100%",
-        // width: "100%",
         flexGrow: 1,
+        overflowX: "auto",
+        width: "100%",
+        height: "100%",
       }}
     >
-      {" "}
-      {/* <Stack
-        direction="row"
-        sx={{
-          // height: "100%",
-          width: "100%",
-          margin: "1rem",
-          alignItems: "center",
-          display: "flex",
-        }}
-      > */}
       {statusList.map((status) => {
         return (
-          <div key={status.id}>
+          <Box
+            key={status.id}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              flexGrow: 1,
+              margin: "1rem",
+            }}
+          >
             <Card
               className="statusTitle"
               elevation={5}
               sx={{
                 minWidth: "10rem",
-                alignItems: "center",
                 marginBottom: "0.5rem",
-                marginLeft: "auto",
-                marginRight: "auto",
+                flexShrink: 0,
               }}
             >
               <Typography
@@ -55,7 +49,6 @@ const BoardView = () => {
                   fontSize: "22px",
                   opacity: ".8",
                   textAlign: "center",
-                  padding: "0 1rem",
                 }}
               >
                 {status.title}
@@ -67,13 +60,12 @@ const BoardView = () => {
                 backgroundColor: "neutral",
                 minWidth: theme.spacing(40),
                 minHeight: theme.spacing(10),
-                marginTop: "1rem",
                 overflow: "auto",
-                maxHeight: "80%",
                 "::-webkit-scrollbar": {
                   width: "0em",
                   height: "0em",
                 },
+                flexGrow: 1,
               }}
             >
               <ul
@@ -93,10 +85,9 @@ const BoardView = () => {
                 })}
               </ul>
             </Paper>
-          </div>
+          </Box>
         );
       })}
-      {/* </Stack> */}
     </Box>
   );
 };
