@@ -19,8 +19,6 @@ const BoardView = () => {
         display: "flex",
         flexGrow: 1,
         overflowX: "auto",
-        width: "100%",
-        height: "100%",
       }}
     >
       {statusList.map((status) => {
