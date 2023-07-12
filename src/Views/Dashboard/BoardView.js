@@ -19,17 +19,22 @@ const BoardView = () => {
         display: "flex",
         flexGrow: 1,
         overflowX: "auto",
+        justifyContent: "flex-start",
+        pt: 1,
       }}
     >
       {statusList.map((status) => {
         return (
           <Box
+            className="status-column"
             key={status.id}
             sx={{
               display: "flex",
               flexDirection: "column",
               flexGrow: 1,
               m: 1,
+              // ml: "auto",
+              // mr: "auto",
               maxWidth: theme.spacing(40),
             }}
           >
@@ -37,9 +42,13 @@ const BoardView = () => {
               className="statusTitle"
               elevation={5}
               sx={{
-                minWidth: "10rem",
+                alignSelf: "center",
+                width: "fit-content",
+                maxWidth: theme.spacing(40),
                 marginBottom: 1,
                 flexShrink: 0,
+                pl: 1.5,
+                pr: 1.5,
               }}
             >
               <Typography
