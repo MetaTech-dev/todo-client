@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Box, Card, Paper, Stack, Typography } from "@mui/material";
+import { Box, Card, Paper, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import ToDoCard from "../../ToDoCard";
 import ToDoContext from "../../ToDoContext";
@@ -14,35 +14,39 @@ const BoardView = () => {
 
   return (
     <Box
-      id="stack-holder"
+      id="board-view-container"
       sx={{
         display: "flex",
-        justifyContent: "space-between",
+        flexGrow: 1,
         overflowX: "auto",
-        minHeight: "100vh",
+        justifyContent: "flex-start",
+        pt: 1,
       }}
     >
       {statusList.map((status) => {
         return (
-          <Stack
-            sx={{
-              height: "100%",
-              width: "100%",
-              margin: "1rem",
-              alignItems: "center",
-              display: "flex",
-            }}
+          <Box
+            className="status-column"
             key={status.id}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              flexGrow: 1,
+              m: 1,
+              maxWidth: theme.spacing(40),
+            }}
           >
             <Card
               className="statusTitle"
               elevation={5}
               sx={{
-                minWidth: "10rem",
-                alignItems: "center",
-                marginBottom: "0.5rem",
-                marginLeft: "auto",
-                marginRight: "auto",
+                alignSelf: "center",
+                width: "fit-content",
+                maxWidth: theme.spacing(40),
+                marginBottom: 1,
+                flexShrink: 0,
+                pl: 1.5,
+                pr: 1.5,
               }}
             >
               <Typography
@@ -51,7 +55,6 @@ const BoardView = () => {
                   fontSize: "22px",
                   opacity: ".8",
                   textAlign: "center",
-                  padding: "0 1rem",
                 }}
               >
                 {status.title}
@@ -62,34 +65,16 @@ const BoardView = () => {
               sx={{
                 backgroundColor: "neutral",
                 minWidth: theme.spacing(40),
-                minHeight: theme.spacing(10),
-                mt: 2,
-                overflow: "auto",
-                maxHeight: "80vh",
-                "::-webkit-scrollbar": {
-                  width: "0em",
-                  height: "0em",
-                },
+                overflowY: "auto",
+                flexGrow: 1,
+                p: 1,
               }}
             >
-              <ul
-                style={{
-                  listStyle: "none",
-                  padding: "0.3rem",
-                }}
-              >
-                {filterToDosByStatus(status).map((toDo) => {
-                  return (
-                    <li key={toDo.id} style={{ display: "flex" }}>
-                      <Box sx={{ flexGrow: 1 }} />
-                      <ToDoCard toDo={toDo} />
-                      <Box sx={{ flexGrow: 1 }} />
-                    </li>
-                  );
-                })}
-              </ul>
+              {filterToDosByStatus(status).map((toDo) => {
+                return <ToDoCard toDo={toDo} key={toDo.id} />;
+              })}
             </Paper>
-          </Stack>
+          </Box>
         );
       })}
     </Box>

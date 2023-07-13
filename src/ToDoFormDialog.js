@@ -111,6 +111,7 @@ const ToDoForm = () => {
             onChange={handleInputChange}
             sx={{ paddingBottom: "1rem" }}
             required
+            multiline
           />
           <DatePicker
             sx={{ paddingBottom: "1rem" }}
