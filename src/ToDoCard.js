@@ -22,7 +22,10 @@ const ToDoCard = ({ toDo }) => {
     setIsToDoFormNew,
   } = useContext(ToDoContext);
 
-  const formattedDueDate = dayjs(toDo.dueDate).format("dddd, MMMM, DD, YYYY");
+  const dueDate = dayjs(toDo.dueDate);
+  const formattedDueDate = dueDate.isValid()
+    ? dueDate.format("dddd, MMMM, DD, YYYY")
+    : "none selected";
 
   const handleEdit = () => {
     setToDoFormData(toDo);
