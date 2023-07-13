@@ -52,7 +52,6 @@ const ProjectSettingsDialog = () => {
 
   const handleDeleteStatus = (status) => {
     deleteStatus(status.id);
-    console.log("DELETE");
   };
 
   return (
@@ -84,10 +83,9 @@ const ProjectSettingsDialog = () => {
         sx={{
           display: "flex",
           backgroundColor: "neutral",
-          marginBottom: "1rem",
+          mb: 2,
         }}
       >
-        {" "}
         <Button
           color="inherit"
           variant="contained"
@@ -98,7 +96,7 @@ const ProjectSettingsDialog = () => {
         </Button>
       </Toolbar>
       <Box sx={{ display: "flex" }}>
-        <Box sx={{ flexGrow: "1" }}></Box>
+        <Box sx={{ flexGrow: "1" }} />
         <Paper elevation={6}>
           <AppBar
             elevation={6}
@@ -153,7 +151,7 @@ const ProjectSettingsDialog = () => {
             })}
           </List>
         </Paper>
-        <Box sx={{ flexGrow: "1" }}></Box>
+        <Box sx={{ flexGrow: "1" }} />
       </Box>
     </Dialog>
   );
