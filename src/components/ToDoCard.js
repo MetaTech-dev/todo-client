@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import CardActions from "@mui/material/CardActions";
 import dayjs from "dayjs";
-import ToDoContext from "./ToDoContext";
+import ToDoContext from "../contexts/ToDoContext";
 import { useContext } from "react";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";

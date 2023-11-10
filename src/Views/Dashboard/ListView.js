@@ -2,7 +2,7 @@ import { Box } from "@mui/system";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import { useContext } from "react";
 import dayjs from "dayjs";
-import ToDoContext from "../../ToDoContext";
+import ToDoContext from "../../contexts/ToDoContext";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";

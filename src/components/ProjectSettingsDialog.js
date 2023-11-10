@@ -13,7 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useContext, forwardRef } from "react";
-import ToDoContext from "./ToDoContext";
+import ToDoContext from "../contexts/ToDoContext";
 import Slide from "@mui/material/Slide";
 import CloseIcon from "@mui/icons-material/Close";
 import DragHandleIcon from "@mui/icons-material/DragHandle";

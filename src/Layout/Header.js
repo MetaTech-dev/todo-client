@@ -3,7 +3,7 @@ import AppBar from "@mui/material/AppBar";
 import MenuIcon from "@mui/icons-material/Menu";
 import Button from "@mui/material/Button";
 import { useContext } from "react";
-import DarkModeContext from "../AppSettingsContext";
+import DarkModeContext from "../contexts/AppSettingsContext";
 import BedtimeOutlinedIcon from "@mui/icons-material/BedtimeOutlined";
 import BedtimeOffOutlinedIcon from "@mui/icons-material/BedtimeOffOutlined";
 
