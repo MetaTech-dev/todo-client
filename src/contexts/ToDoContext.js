@@ -1,9 +1,9 @@
 import { createContext, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import StatusFormDialog from "./StatusFormDialog";
-import ToDoFormDialog from "./ToDoFormDialog";
-import ProjectSettingsDialog from "./ProjectSettingsDialog";
-import { useDebounce } from "./utils/useDebounce";
+import StatusFormDialog from "../components/StatusFormDialog";
+import ToDoFormDialog from "../components/ToDoFormDialog";
+import ProjectSettingsDialog from "../components/ProjectSettingsDialog";
+import { useDebounce } from "../utils/useDebounce";
 
 const ToDoContext = createContext();
 export default ToDoContext;

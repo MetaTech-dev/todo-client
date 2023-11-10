@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import { Box, Card, Paper, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import ToDoCard from "../../ToDoCard";
-import ToDoContext from "../../ToDoContext";
+import ToDoCard from "../../components/ToDoCard";
+import ToDoContext from "../../contexts/ToDoContext";
 
 const BoardView = () => {
   const theme = useTheme();

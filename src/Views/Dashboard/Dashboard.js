@@ -10,7 +10,7 @@ import {
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import BoardView from "./BoardView";
-import ToDoContext from "../../ToDoContext";
+import ToDoContext from "../../contexts/ToDoContext";
 import ListView from "./ListView";
 import SettingsIcon from "@mui/icons-material/Settings";
 
