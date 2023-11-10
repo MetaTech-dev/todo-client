@@ -13,8 +13,10 @@ import {
   Select,
   TextField,
   Alert,
+  CircularProgress,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
+import AppSettingsContext from "../contexts/AppSettingsContext";
 
 const ToDoForm = () => {
   const {
@@ -28,6 +30,8 @@ const ToDoForm = () => {
     isToDoFormDialogOpen,
     setIsToDoFormDialogOpen,
   } = useContext(ToDoContext);
+
+  const { isLoading, setIsLoading } = useContext(AppSettingsContext);
 
   const toDoFormTitle = (isToDoFormNew) => {
     return isToDoFormNew ? "New ToDo:" : "Update ToDo:";
@@ -162,7 +166,8 @@ const ToDoForm = () => {
           </FormControl>
         </DialogContent>
         <DialogActions>
-          <Button type="submit">Submit</Button>
+          {!isLoading && <Button type="submit">Submit</Button>}
+          {isLoading && <CircularProgress size={25} sx={{ marginRight: 2 }} />}
         </DialogActions>
       </Box>
     </Dialog>
