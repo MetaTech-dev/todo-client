@@ -155,7 +155,7 @@ const ToDoForm = () => {
               onChange={handleInputChange}
               label="status"
             >
-              {statusList.map((status) => {
+              {statusList?.map((status) => {
                 return (
                   <MenuItem value={status.title} key={status.id}>
                     {status.title}

@@ -31,7 +31,6 @@ const ProjectSettingsDialog = () => {
     statusList,
     deleteStatus,
     setStatusFormData,
-    defaultNewStatus,
     setIsStatusFormNew,
   } = useContext(ToDoContext);
 
@@ -118,17 +117,17 @@ const ProjectSettingsDialog = () => {
           </AppBar>
 
           <List>
-            {statusList.map((status) => {
+            {statusList?.map((status) => {
               return (
                 <ListItem
                   key={status.id}
                   secondaryAction={
                     <>
-                      <IconButton>
-                        <EditTwoToneIcon
-                          onClick={() => handleEditStatus(status)}
-                          aria-label="Edit Status"
-                        />
+                      <IconButton
+                        onClick={() => handleEditStatus(status)}
+                        aria-label="Edit Status"
+                      >
+                        <EditTwoToneIcon />
                       </IconButton>
                       <IconButton
                         onClick={() => handleDeleteStatus(status)}

@@ -63,6 +63,7 @@ const ToDoCard = ({ toDo }) => {
       elevation={3}
       sx={(theme) => ({
         maxWidth: theme.spacing(40),
+        marginBottom: 1,
       })}
     >
       <CardContent>

@@ -5,6 +5,7 @@ import ToDoCard from "../../components/ToDoCard";
 import ToDoContext from "../../contexts/ToDoContext";
 import AppSettingsContext from "../../contexts/AppSettingsContext";
 import LoadingStatusBoardView from "../../components/loading/LoadingStatusBoardView";
+import LoadingToDoCard from "../../components/loading/LoadingToDoCard";
 
 const BoardView = () => {
   const theme = useTheme();
@@ -27,7 +28,7 @@ const BoardView = () => {
       }}
     >
       {!isLoading &&
-        statusList.map((status) => {
+        statusList?.map((status) => {
           return (
             <Box
               className="status-column"
