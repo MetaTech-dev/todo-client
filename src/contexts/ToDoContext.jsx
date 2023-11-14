@@ -4,7 +4,7 @@ import StatusFormDialog from "../components/StatusFormDialog";
 import ToDoFormDialog from "../components/ToDoFormDialog";
 import ProjectSettingsDialog from "../components/ProjectSettingsDialog";
 import { useDebounce } from "../utils/useDebounce";
-import { fetchStatus, createStatus } from "../api/statusCalls";
+import { fetchStatus, createStatus, removeStatus } from "../api/statusCalls";
 
 const ToDoContext = createContext();
 export default ToDoContext;
@@ -30,12 +30,24 @@ export const ToDoProvider = ({ children }) => {
   };
 
   const newStatus = async (statusFormData) => {
-    console.log(statusFormData);
     setFormLoading(true);
     let data;
     try {
       data = await createStatus(statusFormData);
       setStatusList((prev) => [...prev, data]);
+    } catch (err) {
+      console.log(err);
+    }
+    setFormLoading(false);
+  };
+
+  const deleteStatus = async (id) => {
+    setFormLoading(true);
+    try {
+      await removeStatus(id);
+      setStatusList((prevStatusList) =>
+        prevStatusList.filter((status) => status.id !== id)
+      );
     } catch (err) {
       console.log(err);
     }
@@ -51,21 +63,11 @@ export const ToDoProvider = ({ children }) => {
   const [isProjectSettingsDialogOpen, setIsProjectSettingsDialogOpen] =
     useState(false);
 
-  // const createNewStatus = (newStatus) => {
-  //   setStatusList((prev) => [...prev, { ...newStatus, id: uuidv4() }]);
-  // };
-
   const updateStatus = (updatedStatus) => {
     setStatusList((prevStatusList) =>
       prevStatusList.map((status) =>
         status.id === updatedStatus.id ? updatedStatus : status
       )
-    );
-  };
-
-  const deleteStatus = (id) => {
-    setStatusList((prevStatusList) =>
-      prevStatusList.filter((status) => status.id !== id)
     );
   };
 

@@ -2,6 +2,7 @@ import {
   AppBar,
   Box,
   Button,
+  CircularProgress,
   Dialog,
   IconButton,
   List,
@@ -30,6 +31,7 @@ const ProjectSettingsDialog = () => {
     setIsStatusFormDialogOpen,
     statusList,
     deleteStatus,
+    formLoading,
     setStatusFormData,
     setIsStatusFormNew,
   } = useContext(ToDoContext);
@@ -133,7 +135,10 @@ const ProjectSettingsDialog = () => {
                         onClick={() => handleDeleteStatus(status)}
                         aria-label="Delete Status"
                       >
-                        <DeleteOutlineOutlinedIcon />
+                        {!formLoading && <DeleteOutlineOutlinedIcon />}
+                        {formLoading && (
+                          <CircularProgress size={25} sx={{ marginRight: 1 }} />
+                        )}
                       </IconButton>
                     </>
                   }

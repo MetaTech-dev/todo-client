@@ -13,3 +13,10 @@ export const createStatus = async (status) => {
   const data = await response.json();
   return data;
 };
+
+export const removeStatus = async (id) => {
+  await fetch(`http://localhost:3000/status/${id}`, {
+    method: "DELETE",
+  });
+  return true;
+};
