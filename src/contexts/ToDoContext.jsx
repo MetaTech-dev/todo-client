@@ -5,16 +5,10 @@ import ToDoFormDialog from "../components/ToDoFormDialog";
 import ProjectSettingsDialog from "../components/ProjectSettingsDialog";
 import { useDebounce } from "../utils/useDebounce";
 import AppSettingsContext from "./AppSettingsContext";
-import FetchStatus from "../api/FetchStatus";
+import { getAllStatus } from "../api/statusCalls";
 
 const ToDoContext = createContext();
 export default ToDoContext;
-
-// const defaultStatusList = [
-//   { title: "Ready", id: uuidv4() },
-//   { title: "In Progress", id: uuidv4() },
-//   { title: "Done", id: uuidv4() },
-// ];
 
 export const ToDoProvider = ({ children }) => {
   const { setIsLoading } = useContext(AppSettingsContext);
@@ -25,7 +19,7 @@ export const ToDoProvider = ({ children }) => {
     setIsLoading(true);
     let data;
     try {
-      data = await FetchStatus(data);
+      data = await getAllStatus(data);
       setStatusList(data);
       console.log("data", data);
       console.log("statusList", statusList);
