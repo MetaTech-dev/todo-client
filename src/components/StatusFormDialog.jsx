@@ -4,6 +4,7 @@ import {
   Alert,
   Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -13,7 +14,7 @@ import {
 
 const StatusFormDialog = () => {
   const {
-    createNewStatus,
+    // createNewStatus,
     setIsStatusFormDialogOpen,
     isStatusFormDialogOpen,
     isStatusFormNew,
@@ -21,6 +22,8 @@ const StatusFormDialog = () => {
     setStatusFormData,
     defaultNewStatus,
     updateStatus,
+    newStatus,
+    formLoading,
   } = useContext(ToDoContext);
 
   const [showWarning, setShowWarning] = useState("");
@@ -44,7 +47,7 @@ const StatusFormDialog = () => {
     if (trimmedTitle !== "") {
       if (trimmedTitle.length < 30) {
         if (isStatusFormNew) {
-          createNewStatus(statusFormData);
+          newStatus(statusFormData);
         } else {
           updateStatus(statusFormData);
         }
@@ -85,7 +88,10 @@ const StatusFormDialog = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button type="submit">Submit</Button>
+          {!formLoading && <Button type="submit">Submit</Button>}
+          {formLoading && (
+            <CircularProgress size={25} sx={{ marginRight: 1 }} />
+          )}
         </DialogActions>
       </Box>
     </Dialog>

@@ -1,11 +1,10 @@
-import { createContext, useContext, useMemo, useState } from "react";
+import { createContext, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import StatusFormDialog from "../components/StatusFormDialog";
 import ToDoFormDialog from "../components/ToDoFormDialog";
 import ProjectSettingsDialog from "../components/ProjectSettingsDialog";
 import { useDebounce } from "../utils/useDebounce";
-import AppSettingsContext from "./AppSettingsContext";
-import { getAllStatus } from "../api/statusCalls";
+import { fetchStatus, createStatus } from "../api/statusCalls";
 
 const ToDoContext = createContext();
 export default ToDoContext;
@@ -13,35 +12,48 @@ export default ToDoContext;
 export const ToDoProvider = ({ children }) => {
   //Loading States
   const [isLoading, setIsLoading] = useState(false);
+  const [formLoading, setFormLoading] = useState(false);
   //
   // STATUS SECTION
   const [statusList, setStatusList] = useState([]);
+
   const getStatuses = async () => {
     setIsLoading(true);
     let data;
     try {
-      data = await getAllStatus(data);
+      data = await fetchStatus(data);
       setStatusList(data);
-      console.log("data", data);
-      console.log("statusList", statusList);
     } catch (err) {
       console.log(err);
     }
     setIsLoading(false);
   };
+
+  const newStatus = async (statusFormData) => {
+    console.log(statusFormData);
+    setFormLoading(true);
+    let data;
+    try {
+      data = await createStatus(statusFormData);
+      setStatusList((prev) => [...prev, data]);
+    } catch (err) {
+      console.log(err);
+    }
+    setFormLoading(false);
+  };
+
   const [isStatusFormDialogOpen, setIsStatusFormDialogOpen] = useState(false);
   const [isStatusFormNew, setIsStatusFormNew] = useState(true);
   const defaultNewStatus = {
     title: "",
-    id: "",
   };
   const [statusFormData, setStatusFormData] = useState(defaultNewStatus);
   const [isProjectSettingsDialogOpen, setIsProjectSettingsDialogOpen] =
     useState(false);
 
-  const createNewStatus = (newStatus) => {
-    setStatusList((prev) => [...prev, { ...newStatus, id: uuidv4() }]);
-  };
+  // const createNewStatus = (newStatus) => {
+  //   setStatusList((prev) => [...prev, { ...newStatus, id: uuidv4() }]);
+  // };
 
   const updateStatus = (updatedStatus) => {
     setStatusList((prevStatusList) =>
@@ -131,7 +143,7 @@ export const ToDoProvider = ({ children }) => {
     isStatusFormDialogOpen,
     setIsStatusFormDialogOpen,
     createToDo,
-    createNewStatus,
+    // createNewStatus,
     updateToDo,
     deleteToDo,
     searchQuery,
@@ -148,6 +160,8 @@ export const ToDoProvider = ({ children }) => {
     getStatuses,
     isLoading,
     setIsLoading,
+    newStatus,
+    formLoading,
   };
 
   return (
