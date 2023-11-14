@@ -3,14 +3,12 @@ import { Box, Card, Paper, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import ToDoCard from "../../components/ToDoCard";
 import ToDoContext from "../../contexts/ToDoContext";
-import AppSettingsContext from "../../contexts/AppSettingsContext";
 import LoadingStatusBoardView from "../../components/loading/LoadingStatusBoardView";
 import LoadingToDoCard from "../../components/loading/LoadingToDoCard";
 
 const BoardView = () => {
   const theme = useTheme();
-  const { filteredToDoList, statusList } = useContext(ToDoContext);
-  const { isLoading } = useContext(AppSettingsContext);
+  const { filteredToDoList, statusList, isLoading } = useContext(ToDoContext);
 
   const filterToDosByStatus = (status) => {
     return filteredToDoList.filter((toDo) => toDo.status === status.title);

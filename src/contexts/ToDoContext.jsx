@@ -11,7 +11,8 @@ const ToDoContext = createContext();
 export default ToDoContext;
 
 export const ToDoProvider = ({ children }) => {
-  const { setIsLoading } = useContext(AppSettingsContext);
+  //Loading States
+  const [isLoading, setIsLoading] = useState(false);
   //
   // STATUS SECTION
   const [statusList, setStatusList] = useState([]);
@@ -145,6 +146,8 @@ export const ToDoProvider = ({ children }) => {
     deleteStatus,
     updateStatus,
     getStatuses,
+    isLoading,
+    setIsLoading,
   };
 
   return (

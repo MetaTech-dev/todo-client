@@ -6,14 +6,11 @@ export default AppSettingsContext;
 export const AppSettingsProvider = ({ children }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const toggleDarkMode = () => setIsDarkMode((prev) => !prev);
-  const [isLoading, setIsLoading] = useState(false);
 
   const providerValue = {
     isDarkMode,
     setIsDarkMode,
     toggleDarkMode,
-    isLoading,
-    setIsLoading,
   };
 
   return (
