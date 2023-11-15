@@ -10,16 +10,19 @@ import {
   removeStatus,
   updateStatus,
 } from "../api/status";
+import { getToDoList } from "../api/toDo";
 
 const ToDoContext = createContext();
 export default ToDoContext;
 
 export const ToDoProvider = ({ children }) => {
   //Loading States
+
   const [isLoading, setIsLoading] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
 
   // STATUS SECTION
+
   const [statusList, setStatusList] = useState([]);
 
   const handleGetStatusList = async () => {
@@ -75,7 +78,7 @@ export const ToDoProvider = ({ children }) => {
   };
 
   const [isStatusFormDialogOpen, setIsStatusFormDialogOpen] = useState(false);
-  // const [isStatusFormNew, setIsStatusFormNew] = useState(true);
+
   const defaultNewStatus = {
     title: "",
   };
@@ -86,6 +89,19 @@ export const ToDoProvider = ({ children }) => {
   // TODO SECTION
 
   const [toDoList, setToDoList] = useState([]);
+  console.log("toDoList", toDoList);
+
+  const handleGetToDoList = async () => {
+    setIsLoading(true);
+    let data;
+    try {
+      data = await getToDoList();
+      setToDoList(data);
+    } catch (err) {
+      console.log(err);
+    }
+    setIsLoading(false);
+  };
 
   const [isToDoFormDialogOpen, setIsToDoFormDialogOpen] = useState(false);
   const [isToDoFormNew, setIsToDoFormNew] = useState(true);
@@ -143,6 +159,8 @@ export const ToDoProvider = ({ children }) => {
     }
   }, [toDoList, debouncedSearchQuery]);
 
+  console.log("filteredToDoList", filteredToDoList);
+
   const providerValue = {
     toDoList,
     filteredToDoList,
@@ -156,6 +174,7 @@ export const ToDoProvider = ({ children }) => {
     setToDoFormData,
     isStatusFormDialogOpen,
     setIsStatusFormDialogOpen,
+    handleGetToDoList,
     createToDo,
     updateToDo,
     deleteToDo,
@@ -163,8 +182,6 @@ export const ToDoProvider = ({ children }) => {
     handleChangeSearchQuery,
     isProjectSettingsDialogOpen,
     setIsProjectSettingsDialogOpen,
-    // isStatusFormNew,
-    // setIsStatusFormNew,
     statusFormData,
     setStatusFormData,
     defaultNewStatus,
