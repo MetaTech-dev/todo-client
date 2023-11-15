@@ -20,7 +20,7 @@ import AppSettingsContext from "../contexts/AppSettingsContext";
 
 const ToDoForm = () => {
   const {
-    createToDo,
+    handleCreateToDo,
     isToDoFormNew,
     defaultNewToDo,
     statusList,
@@ -31,7 +31,7 @@ const ToDoForm = () => {
     setIsToDoFormDialogOpen,
   } = useContext(ToDoContext);
 
-  const { isLoading, setIsLoading } = useContext(AppSettingsContext);
+  const { formLoading } = useContext(AppSettingsContext);
 
   const toDoFormTitle = (isToDoFormNew) => {
     return isToDoFormNew ? "New ToDo:" : "Update ToDo:";
@@ -59,7 +59,7 @@ const ToDoForm = () => {
 
     if (trimmedTitle !== "" && trimmedDescription !== "") {
       if (isToDoFormNew) {
-        createToDo(toDoFormData);
+        handleCreateToDo(toDoFormData);
       } else {
         updateToDo(toDoFormData);
       }
@@ -150,14 +150,14 @@ const ToDoForm = () => {
             <Select
               labelId="toDo-status-label"
               id="toDo-status-select"
-              name="status"
-              value={toDoFormData.status}
+              name="statusId"
+              value={toDoFormData.statusId}
               onChange={handleInputChange}
               label="status"
             >
               {statusList?.map((status) => {
                 return (
-                  <MenuItem value={status.title} key={status.id}>
+                  <MenuItem value={status.id} key={status.id}>
                     {status.title}
                   </MenuItem>
                 );
@@ -166,8 +166,10 @@ const ToDoForm = () => {
           </FormControl>
         </DialogContent>
         <DialogActions>
-          {!isLoading && <Button type="submit">Submit</Button>}
-          {isLoading && <CircularProgress size={25} sx={{ marginRight: 2 }} />}
+          {!formLoading && <Button type="submit">Submit</Button>}
+          {formLoading && (
+            <CircularProgress size={25} sx={{ marginRight: 2 }} />
+          )}
         </DialogActions>
       </Box>
     </Dialog>

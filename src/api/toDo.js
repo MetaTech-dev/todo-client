@@ -10,7 +10,9 @@ export const createToDo = async (toDo) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(toDo),
   });
+  console.log("dataSent", toDo);
   const data = await response.json();
+  console.log("dataBack", data);
   return data;
 };
 

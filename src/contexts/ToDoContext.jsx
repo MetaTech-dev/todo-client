@@ -10,7 +10,7 @@ import {
   removeStatus,
   updateStatus,
 } from "../api/status";
-import { getToDoList } from "../api/toDo";
+import { getToDoList, createToDo, removeToDo, updateToDo } from "../api/toDo";
 
 const ToDoContext = createContext();
 export default ToDoContext;
@@ -89,7 +89,6 @@ export const ToDoProvider = ({ children }) => {
   // TODO SECTION
 
   const [toDoList, setToDoList] = useState([]);
-  console.log("toDoList", toDoList);
 
   const handleGetToDoList = async () => {
     setIsLoading(true);
@@ -103,25 +102,33 @@ export const ToDoProvider = ({ children }) => {
     setIsLoading(false);
   };
 
+  const handleCreateToDo = async (toDoFormData) => {
+    setFormLoading(true);
+    let data;
+    try {
+      data = await createToDo(toDoFormData);
+      setToDoList((prev) => [...prev, data]);
+    } catch (err) {
+      console.log(err);
+    }
+    setFormLoading(false);
+  };
+
   const [isToDoFormDialogOpen, setIsToDoFormDialogOpen] = useState(false);
   const [isToDoFormNew, setIsToDoFormNew] = useState(true);
   const defaultNewToDo = {
     title: "",
     description: "",
-    author: "",
-    createdDate: "",
     dueDate: null,
-    assignee: "",
     priority: "low",
-    status: statusList && statusList.length > 0 ? statusList[0]?.title : "",
-    id: "",
+    statusId: statusList && statusList.length > 0 ? statusList[0]?.id : 1,
   };
 
   const [toDoFormData, setToDoFormData] = useState(defaultNewToDo);
 
-  const createToDo = (newToDo) => {
-    setToDoList((prev) => [...prev, { ...newToDo, id: uuidv4() }]);
-  };
+  // const createToDo = (newToDo) => {
+  //   setToDoList((prev) => [...prev, { ...newToDo, id: uuidv4() }]);
+  // };
 
   const updateToDo = (updatedToDo) => {
     setToDoList((prevToDoList) =>
@@ -159,8 +166,6 @@ export const ToDoProvider = ({ children }) => {
     }
   }, [toDoList, debouncedSearchQuery]);
 
-  console.log("filteredToDoList", filteredToDoList);
-
   const providerValue = {
     toDoList,
     filteredToDoList,
@@ -175,7 +180,7 @@ export const ToDoProvider = ({ children }) => {
     isStatusFormDialogOpen,
     setIsStatusFormDialogOpen,
     handleGetToDoList,
-    createToDo,
+    handleCreateToDo,
     updateToDo,
     deleteToDo,
     searchQuery,

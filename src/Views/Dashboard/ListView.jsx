@@ -15,7 +15,13 @@ const ListView = () => {
     setToDoFormData,
     setIsToDoFormDialogOpen,
     setIsToDoFormNew,
+    statusList,
   } = useContext(ToDoContext);
+
+  const getStatusTitle = (statusId) => {
+    const status = statusList.find((status) => status.id === statusId);
+    return status ? status.title : "Unknown Status";
+  };
 
   const getPriorityColor = (priority) => {
     switch (priority) {
@@ -46,10 +52,19 @@ const ListView = () => {
     {
       field: "description",
       headerName: "Description",
-      width: 700,
+      width: 500,
       editable: true,
     },
-    { field: "status", headerName: "Status", width: 110, editable: false },
+    {
+      field: "status",
+      headerName: "Status",
+      width: 110,
+      editable: false,
+      renderCell: (params) => {
+        const statusTitle = getStatusTitle(params.row.statusId);
+        return <span>{statusTitle}</span>;
+      },
+    },
     {
       field: "dueDate",
       headerName: "Due Date",
