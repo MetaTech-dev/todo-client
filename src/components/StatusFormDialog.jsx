@@ -14,10 +14,8 @@ import {
 
 const StatusFormDialog = () => {
   const {
-    // createNewStatus,
     setIsStatusFormDialogOpen,
     isStatusFormDialogOpen,
-    isStatusFormNew,
     statusFormData,
     setStatusFormData,
     defaultNewStatus,
@@ -41,14 +39,14 @@ const StatusFormDialog = () => {
     }));
   };
 
-  const handleSubmit = (isStatusFormNew) => {
+  const handleSubmit = (status) => {
     const trimmedTitle = statusFormData.title.trim();
 
     if (trimmedTitle !== "") {
       if (trimmedTitle.length < 30) {
-        if (isStatusFormNew) {
+        if (!status.id) {
           handleCreateStatus(statusFormData);
-        } else {
+        } else if (status.id) {
           handleUpdateStatus(statusFormData);
         }
         handleClose();
@@ -69,7 +67,7 @@ const StatusFormDialog = () => {
         autoComplete="off"
         onSubmit={(event) => {
           event.preventDefault();
-          handleSubmit(isStatusFormNew);
+          handleSubmit(statusFormData);
         }}
       >
         <DialogContent>

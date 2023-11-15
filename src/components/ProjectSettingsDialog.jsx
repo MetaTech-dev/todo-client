@@ -33,33 +33,18 @@ const ProjectSettingsDialog = () => {
     handleRemoveStatus,
     formLoading,
     setStatusFormData,
-    setIsStatusFormNew,
   } = useContext(ToDoContext);
-
-  const handleClose = () => {
-    setIsProjectSettingsDialogOpen(false);
-  };
-
-  const handleNewStatusFormDialogOpen = () => {
-    setIsStatusFormNew(true);
-    setIsStatusFormDialogOpen(true);
-  };
 
   const handleEditStatus = (status) => {
     setStatusFormData(status);
-    setIsStatusFormNew(false);
     setIsStatusFormDialogOpen(true);
-  };
-
-  const handleDeleteStatus = (status) => {
-    handleRemoveStatus(status.id);
   };
 
   return (
     <Dialog
       fullScreen
       open={isProjectSettingsDialogOpen}
-      onClose={handleClose}
+      onClose={() => setIsProjectSettingsDialogOpen(false)}
       TransitionComponent={Transition}
     >
       <AppBar elevation={6} sx={{ position: "relative" }}>
@@ -67,7 +52,7 @@ const ProjectSettingsDialog = () => {
           <IconButton
             edge="start"
             color="inherit"
-            onClick={handleClose}
+            onClick={() => setIsProjectSettingsDialogOpen(false)}
             aria-label="close"
           >
             <CloseIcon />
@@ -91,7 +76,7 @@ const ProjectSettingsDialog = () => {
           color="inherit"
           variant="contained"
           size="small"
-          onClick={() => handleNewStatusFormDialogOpen()}
+          onClick={() => setIsStatusFormDialogOpen(true)}
         >
           Create ToDo Status
         </Button>
@@ -132,7 +117,7 @@ const ProjectSettingsDialog = () => {
                         <EditTwoToneIcon />
                       </IconButton>
                       <IconButton
-                        onClick={() => handleDeleteStatus(status)}
+                        onClick={() => handleRemoveStatus(status.id)}
                         aria-label="Delete Status"
                       >
                         {!formLoading && <DeleteOutlineOutlinedIcon />}

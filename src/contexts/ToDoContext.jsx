@@ -18,7 +18,7 @@ export const ToDoProvider = ({ children }) => {
   //Loading States
   const [isLoading, setIsLoading] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
-  //
+
   // STATUS SECTION
   const [statusList, setStatusList] = useState([]);
 
@@ -63,20 +63,19 @@ export const ToDoProvider = ({ children }) => {
     setFormLoading(true);
     try {
       const result = await updateStatus(updatedStatus);
-      console.log("result", result);
       setStatusList((prevStatusList) =>
         prevStatusList.map((status) =>
           status.id === result.id ? result : status
         )
       );
     } catch (err) {
-      console.log("something", err);
+      console.log(err);
     }
     setFormLoading(false);
   };
 
   const [isStatusFormDialogOpen, setIsStatusFormDialogOpen] = useState(false);
-  const [isStatusFormNew, setIsStatusFormNew] = useState(true);
+  // const [isStatusFormNew, setIsStatusFormNew] = useState(true);
   const defaultNewStatus = {
     title: "",
   };
@@ -164,8 +163,8 @@ export const ToDoProvider = ({ children }) => {
     handleChangeSearchQuery,
     isProjectSettingsDialogOpen,
     setIsProjectSettingsDialogOpen,
-    isStatusFormNew,
-    setIsStatusFormNew,
+    // isStatusFormNew,
+    // setIsStatusFormNew,
     statusFormData,
     setStatusFormData,
     defaultNewStatus,
