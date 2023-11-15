@@ -20,11 +20,11 @@ const Dashboard = () => {
     setIsToDoFormDialogOpen,
     setIsToDoFormNew,
     setIsProjectSettingsDialogOpen,
-    getStatuses,
+    handleGetStatusList,
   } = useContext(ToDoContext);
 
   useEffect(() => {
-    getStatuses();
+    handleGetStatusList();
   }, []);
 
   const handleToDoFormOpen = () => {

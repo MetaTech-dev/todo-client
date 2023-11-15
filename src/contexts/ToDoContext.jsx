@@ -4,7 +4,12 @@ import StatusFormDialog from "../components/StatusFormDialog";
 import ToDoFormDialog from "../components/ToDoFormDialog";
 import ProjectSettingsDialog from "../components/ProjectSettingsDialog";
 import { useDebounce } from "../utils/useDebounce";
-import { fetchStatus, createStatus, removeStatus } from "../api/statusCalls";
+import {
+  getStatusList,
+  createStatus,
+  removeStatus,
+  updateStatus,
+} from "../api/status";
 
 const ToDoContext = createContext();
 export default ToDoContext;
@@ -17,11 +22,11 @@ export const ToDoProvider = ({ children }) => {
   // STATUS SECTION
   const [statusList, setStatusList] = useState([]);
 
-  const getStatuses = async () => {
+  const handleGetStatusList = async () => {
     setIsLoading(true);
     let data;
     try {
-      data = await fetchStatus(data);
+      data = await getStatusList(data);
       setStatusList(data);
     } catch (err) {
       console.log(err);
@@ -29,7 +34,7 @@ export const ToDoProvider = ({ children }) => {
     setIsLoading(false);
   };
 
-  const newStatus = async (statusFormData) => {
+  const handleCreateStatus = async (statusFormData) => {
     setFormLoading(true);
     let data;
     try {
@@ -41,7 +46,7 @@ export const ToDoProvider = ({ children }) => {
     setFormLoading(false);
   };
 
-  const deleteStatus = async (id) => {
+  const handleRemoveStatus = async (id) => {
     setFormLoading(true);
     try {
       await removeStatus(id);
@@ -54,6 +59,22 @@ export const ToDoProvider = ({ children }) => {
     setFormLoading(false);
   };
 
+  const handleUpdateStatus = async (updatedStatus) => {
+    setFormLoading(true);
+    try {
+      const result = await updateStatus(updatedStatus);
+      console.log("result", result);
+      setStatusList((prevStatusList) =>
+        prevStatusList.map((status) =>
+          status.id === result.id ? result : status
+        )
+      );
+    } catch (err) {
+      console.log("something", err);
+    }
+    setFormLoading(false);
+  };
+
   const [isStatusFormDialogOpen, setIsStatusFormDialogOpen] = useState(false);
   const [isStatusFormNew, setIsStatusFormNew] = useState(true);
   const defaultNewStatus = {
@@ -62,14 +83,6 @@ export const ToDoProvider = ({ children }) => {
   const [statusFormData, setStatusFormData] = useState(defaultNewStatus);
   const [isProjectSettingsDialogOpen, setIsProjectSettingsDialogOpen] =
     useState(false);
-
-  const updateStatus = (updatedStatus) => {
-    setStatusList((prevStatusList) =>
-      prevStatusList.map((status) =>
-        status.id === updatedStatus.id ? updatedStatus : status
-      )
-    );
-  };
 
   // TODO SECTION
 
@@ -145,7 +158,6 @@ export const ToDoProvider = ({ children }) => {
     isStatusFormDialogOpen,
     setIsStatusFormDialogOpen,
     createToDo,
-    // createNewStatus,
     updateToDo,
     deleteToDo,
     searchQuery,
@@ -157,12 +169,12 @@ export const ToDoProvider = ({ children }) => {
     statusFormData,
     setStatusFormData,
     defaultNewStatus,
-    deleteStatus,
-    updateStatus,
-    getStatuses,
+    handleRemoveStatus,
+    handleUpdateStatus,
+    handleGetStatusList,
     isLoading,
     setIsLoading,
-    newStatus,
+    handleCreateStatus,
     formLoading,
   };
 

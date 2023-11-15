@@ -21,8 +21,8 @@ const StatusFormDialog = () => {
     statusFormData,
     setStatusFormData,
     defaultNewStatus,
-    updateStatus,
-    newStatus,
+    handleUpdateStatus,
+    handleCreateStatus,
     formLoading,
   } = useContext(ToDoContext);
 
@@ -47,9 +47,9 @@ const StatusFormDialog = () => {
     if (trimmedTitle !== "") {
       if (trimmedTitle.length < 30) {
         if (isStatusFormNew) {
-          newStatus(statusFormData);
+          handleCreateStatus(statusFormData);
         } else {
-          updateStatus(statusFormData);
+          handleUpdateStatus(statusFormData);
         }
         handleClose();
       } else {

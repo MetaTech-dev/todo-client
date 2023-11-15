@@ -30,7 +30,7 @@ const ProjectSettingsDialog = () => {
     setIsProjectSettingsDialogOpen,
     setIsStatusFormDialogOpen,
     statusList,
-    deleteStatus,
+    handleRemoveStatus,
     formLoading,
     setStatusFormData,
     setIsStatusFormNew,
@@ -52,7 +52,7 @@ const ProjectSettingsDialog = () => {
   };
 
   const handleDeleteStatus = (status) => {
-    deleteStatus(status.id);
+    handleRemoveStatus(status.id);
   };
 
   return (
