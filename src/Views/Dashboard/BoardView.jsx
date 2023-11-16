@@ -11,7 +11,7 @@ const BoardView = () => {
   const { filteredToDoList, statusList, isLoading } = useContext(ToDoContext);
 
   const filterToDosByStatus = (status) => {
-    return filteredToDoList.filter((toDo) => toDo.status === status.title);
+    return filteredToDoList.filter((toDo) => toDo.statusId === status.id);
   };
 
   return (

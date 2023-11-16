@@ -10,16 +10,21 @@ import {
   removeStatus,
   updateStatus,
 } from "../api/status";
+import { getToDoList, createToDo, removeToDo, updateToDo } from "../api/toDo";
 
 const ToDoContext = createContext();
 export default ToDoContext;
 
 export const ToDoProvider = ({ children }) => {
   //Loading States
+
   const [isLoading, setIsLoading] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
+  const [statusLoading, setStatusLoading] = useState(false);
+  const [toDoLoading, setToDoLoading] = useState(false);
 
   // STATUS SECTION
+
   const [statusList, setStatusList] = useState([]);
 
   const handleGetStatusList = async () => {
@@ -47,7 +52,7 @@ export const ToDoProvider = ({ children }) => {
   };
 
   const handleRemoveStatus = async (id) => {
-    setFormLoading(true);
+    setStatusLoading(true);
     try {
       await removeStatus(id);
       setStatusList((prevStatusList) =>
@@ -56,11 +61,11 @@ export const ToDoProvider = ({ children }) => {
     } catch (err) {
       console.log(err);
     }
-    setFormLoading(false);
+    setStatusLoading(false);
   };
 
   const handleUpdateStatus = async (updatedStatus) => {
-    setFormLoading(true);
+    setStatusLoading(true);
     try {
       const result = await updateStatus(updatedStatus);
       setStatusList((prevStatusList) =>
@@ -71,11 +76,11 @@ export const ToDoProvider = ({ children }) => {
     } catch (err) {
       console.log(err);
     }
-    setFormLoading(false);
+    setStatusLoading(false);
   };
 
   const [isStatusFormDialogOpen, setIsStatusFormDialogOpen] = useState(false);
-  // const [isStatusFormNew, setIsStatusFormNew] = useState(true);
+
   const defaultNewStatus = {
     title: "",
   };
@@ -87,39 +92,75 @@ export const ToDoProvider = ({ children }) => {
 
   const [toDoList, setToDoList] = useState([]);
 
+  const handleGetToDoList = async () => {
+    setIsLoading(true);
+    let data;
+    try {
+      data = await getToDoList();
+      setToDoList(data);
+    } catch (err) {
+      console.log(err);
+    }
+    setIsLoading(false);
+  };
+
+  const handleCreateToDo = async (toDoFormData) => {
+    setFormLoading(true);
+    let data;
+    try {
+      data = await createToDo(toDoFormData);
+      setToDoList((prev) => [...prev, data]);
+    } catch (err) {
+      console.log(err);
+    }
+    setFormLoading(false);
+  };
+
+  const handleRemoveToDo = async (id) => {
+    setToDoLoading(true);
+    try {
+      await removeToDo(id);
+      setToDoList((prevToDoList) =>
+        prevToDoList.filter((toDo) => toDo.id !== id)
+      );
+    } catch (err) {
+      console.log(err);
+    }
+    setToDoLoading(false);
+  };
+
+  const handleUpdateToDo = async (updatedToDo) => {
+    setToDoLoading(true);
+    try {
+      const result = await updateToDo(updatedToDo);
+      setToDoList((prevToDoList) =>
+        prevToDoList.map((toDo) => (toDo.id === result.id ? result : toDo))
+      );
+    } catch (err) {
+      console.log(err);
+    }
+    setToDoLoading(false);
+  };
+
   const [isToDoFormDialogOpen, setIsToDoFormDialogOpen] = useState(false);
   const [isToDoFormNew, setIsToDoFormNew] = useState(true);
   const defaultNewToDo = {
     title: "",
     description: "",
-    author: "",
-    createdDate: "",
     dueDate: null,
-    assignee: "",
     priority: "low",
-    status: statusList && statusList.length > 0 ? statusList[0]?.title : "",
-    id: "",
+    statusId: statusList && statusList.length > 0 ? statusList[0]?.id : 1,
   };
 
   const [toDoFormData, setToDoFormData] = useState(defaultNewToDo);
 
-  const createToDo = (newToDo) => {
-    setToDoList((prev) => [...prev, { ...newToDo, id: uuidv4() }]);
-  };
-
-  const updateToDo = (updatedToDo) => {
-    setToDoList((prevToDoList) =>
-      prevToDoList.map((toDo) =>
-        toDo.id === updatedToDo.id ? updatedToDo : toDo
-      )
-    );
-  };
-
-  const deleteToDo = (id) => {
-    setToDoList((prevToDoList) =>
-      prevToDoList.filter((toDo) => toDo.id !== id)
-    );
-  };
+  // const updateToDo = (updatedToDo) => {
+  //   setToDoList((prevToDoList) =>
+  //     prevToDoList.map((toDo) =>
+  //       toDo.id === updatedToDo.id ? updatedToDo : toDo
+  //     )
+  //   );
+  // };
 
   // FILTER SECTION
 
@@ -156,15 +197,14 @@ export const ToDoProvider = ({ children }) => {
     setToDoFormData,
     isStatusFormDialogOpen,
     setIsStatusFormDialogOpen,
-    createToDo,
-    updateToDo,
-    deleteToDo,
+    handleGetToDoList,
+    handleCreateToDo,
+    handleUpdateToDo,
+    handleRemoveToDo,
     searchQuery,
     handleChangeSearchQuery,
     isProjectSettingsDialogOpen,
     setIsProjectSettingsDialogOpen,
-    // isStatusFormNew,
-    // setIsStatusFormNew,
     statusFormData,
     setStatusFormData,
     defaultNewStatus,
@@ -175,6 +215,10 @@ export const ToDoProvider = ({ children }) => {
     setIsLoading,
     handleCreateStatus,
     formLoading,
+    statusLoading,
+    setStatusLoading,
+    toDoLoading,
+    setToDoLoading,
   };
 
   return (

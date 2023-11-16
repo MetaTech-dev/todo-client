@@ -6,16 +6,22 @@ import ToDoContext from "../../contexts/ToDoContext";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
-import { Typography } from "@mui/material";
+import { CircularProgress, Typography } from "@mui/material";
 
 const ListView = () => {
   const {
     filteredToDoList,
-    deleteToDo,
+    handleRemoveToDo,
     setToDoFormData,
     setIsToDoFormDialogOpen,
-    setIsToDoFormNew,
+    statusList,
+    toDoLoading,
   } = useContext(ToDoContext);
+
+  const getStatusTitle = (statusId) => {
+    const status = statusList.find((status) => status.id === statusId);
+    return status ? status.title : "Unknown Status";
+  };
 
   const getPriorityColor = (priority) => {
     switch (priority) {
@@ -31,35 +37,43 @@ const ListView = () => {
   };
 
   const handleEdit = (toDo) => {
-    setToDoFormData(toDo);
-    setIsToDoFormNew(false);
+    const editedToDo = {
+      ...toDo,
+      dueDate: toDo.dueDate ? dayjs(toDo.dueDate) : null,
+    };
+    setToDoFormData(editedToDo);
     setIsToDoFormDialogOpen(true);
-  };
-
-  const handleDelete = (toDo) => {
-    deleteToDo(toDo.id);
   };
 
   const rows = filteredToDoList;
   const columns = [
-    { field: "title", headerName: "Title", width: 200, editable: true },
+    { field: "title", headerName: "Title", width: 150, editable: true },
     {
       field: "description",
       headerName: "Description",
-      width: 700,
+      width: 500,
       editable: true,
     },
-    { field: "status", headerName: "Status", width: 110, editable: false },
+    {
+      field: "status",
+      headerName: "Status",
+      width: 110,
+      editable: false,
+      renderCell: (params) => {
+        const statusTitle = getStatusTitle(params.row.statusId);
+        return <span>{statusTitle}</span>;
+      },
+    },
     {
       field: "dueDate",
       headerName: "Due Date",
-      width: 230,
+      width: 130,
       type: "date",
       valueGetter: (params) => dayjs(params.row.dueDate).toDate(),
       valueFormatter: (params) =>
         dayjs(params.value).isValid()
-          ? dayjs(params.value).format("dddd, MMMM D, YYYY")
-          : "none selected",
+          ? dayjs(params.value).format("DD/MM/YYYY")
+          : "",
       editable: false,
     },
     {
@@ -91,7 +105,13 @@ const ListView = () => {
         const toDo = params.row;
         return [
           <GridActionsCellItem
-            icon={<EditTwoToneIcon />}
+            icon={
+              toDoLoading ? (
+                <CircularProgress size={25} sx={{ marginRight: 1 }} />
+              ) : (
+                <EditTwoToneIcon />
+              )
+            }
             label="Edit"
             className="textPrimary"
             onClick={() => handleEdit(toDo)}
@@ -99,9 +119,15 @@ const ListView = () => {
             aria-label="Edit ToDo"
           />,
           <GridActionsCellItem
-            icon={<DeleteOutlineOutlinedIcon />}
+            icon={
+              toDoLoading ? (
+                <CircularProgress size={25} sx={{ marginRight: 1 }} />
+              ) : (
+                <DeleteOutlineOutlinedIcon />
+              )
+            }
             label="Delete"
-            onClick={() => handleDelete(toDo)}
+            onClick={() => handleRemoveToDo(toDo.id)}
             color="inherit"
             aria-label="Delete ToDo"
           />,

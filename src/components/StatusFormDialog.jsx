@@ -39,6 +39,10 @@ const StatusFormDialog = () => {
     }));
   };
 
+  const statusFormTitle = (status) => {
+    return !status.id ? "New Status:" : "Edit Status:";
+  };
+
   const handleSubmit = (status) => {
     const trimmedTitle = statusFormData.title.trim();
 
@@ -60,7 +64,7 @@ const StatusFormDialog = () => {
 
   return (
     <Dialog open={isStatusFormDialogOpen} onClose={handleClose}>
-      <DialogTitle>New Status:</DialogTitle>
+      <DialogTitle>{statusFormTitle(statusFormData)}</DialogTitle>
       <Box
         component="form"
         noValidate

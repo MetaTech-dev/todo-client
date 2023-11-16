@@ -1,5 +1,6 @@
 import { useTheme } from "@emotion/react";
-import { Box, Card, Paper, Typography } from "@mui/material";
+import { Box, Card, CircularProgress, Paper } from "@mui/material";
+import LoadingToDoCard from "./LoadingToDoCard";
 
 const LoadingStatusBoardView = (key) => {
   const theme = useTheme();
@@ -28,16 +29,7 @@ const LoadingStatusBoardView = (key) => {
           pr: 1.5,
         }}
       >
-        <Typography
-          sx={{
-            fontWeight: "450",
-            fontSize: "22px",
-            opacity: ".8",
-            textAlign: "center",
-          }}
-        >
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        </Typography>
+        <CircularProgress size={25} sx={{ marginRight: 1 }} />
       </Card>
       <Paper
         elevation={10}
@@ -48,7 +40,9 @@ const LoadingStatusBoardView = (key) => {
           flexGrow: 1,
           p: 1,
         }}
-      ></Paper>
+      >
+        <LoadingToDoCard />
+      </Paper>
     </Box>
   );
 };
