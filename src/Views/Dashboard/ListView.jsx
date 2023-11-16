@@ -6,16 +6,17 @@ import ToDoContext from "../../contexts/ToDoContext";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
-import { Typography } from "@mui/material";
+import { CircularProgress, Typography } from "@mui/material";
 
 const ListView = () => {
   const {
     filteredToDoList,
-    deleteToDo,
+    handleRemoveToDo,
     setToDoFormData,
     setIsToDoFormDialogOpen,
     setIsToDoFormNew,
     statusList,
+    toDoLoading,
   } = useContext(ToDoContext);
 
   const getStatusTitle = (statusId) => {
@@ -42,9 +43,9 @@ const ListView = () => {
     setIsToDoFormDialogOpen(true);
   };
 
-  const handleDelete = (toDo) => {
-    deleteToDo(toDo.id);
-  };
+  // const handleDelete = (toDo) => {
+  //   deleteToDo(toDo.id);
+  // };
 
   const rows = filteredToDoList;
   const columns = [
@@ -113,13 +114,17 @@ const ListView = () => {
             color="inherit"
             aria-label="Edit ToDo"
           />,
-          <GridActionsCellItem
-            icon={<DeleteOutlineOutlinedIcon />}
-            label="Delete"
-            onClick={() => handleDelete(toDo)}
-            color="inherit"
-            aria-label="Delete ToDo"
-          />,
+          !toDoLoading ? (
+            <GridActionsCellItem
+              icon={<DeleteOutlineOutlinedIcon />}
+              label="Delete"
+              onClick={() => handleRemoveToDo(toDo.id)}
+              color="inherit"
+              aria-label="Delete ToDo"
+            />
+          ) : (
+            <CircularProgress size={25} sx={{ marginRight: 1 }} />
+          ),
         ];
       },
     },

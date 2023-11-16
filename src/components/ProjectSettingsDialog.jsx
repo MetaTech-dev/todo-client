@@ -31,7 +31,7 @@ const ProjectSettingsDialog = () => {
     setIsStatusFormDialogOpen,
     statusList,
     handleRemoveStatus,
-    formLoading,
+    statusLoading,
     setStatusFormData,
   } = useContext(ToDoContext);
 
@@ -114,14 +114,17 @@ const ProjectSettingsDialog = () => {
                         onClick={() => handleEditStatus(status)}
                         aria-label="Edit Status"
                       >
-                        <EditTwoToneIcon />
+                        {!statusLoading && <EditTwoToneIcon />}
+                        {statusLoading && (
+                          <CircularProgress size={25} sx={{ marginRight: 1 }} />
+                        )}
                       </IconButton>
                       <IconButton
                         onClick={() => handleRemoveStatus(status.id)}
                         aria-label="Delete Status"
                       >
-                        {!formLoading && <DeleteOutlineOutlinedIcon />}
-                        {formLoading && (
+                        {!statusLoading && <DeleteOutlineOutlinedIcon />}
+                        {statusLoading && (
                           <CircularProgress size={25} sx={{ marginRight: 1 }} />
                         )}
                       </IconButton>

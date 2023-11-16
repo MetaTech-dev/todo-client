@@ -20,6 +20,8 @@ export const ToDoProvider = ({ children }) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
+  const [statusLoading, setStatusLoading] = useState(false);
+  const [toDoLoading, setToDoLoading] = useState(false);
 
   // STATUS SECTION
 
@@ -50,7 +52,7 @@ export const ToDoProvider = ({ children }) => {
   };
 
   const handleRemoveStatus = async (id) => {
-    setFormLoading(true);
+    setStatusLoading(true);
     try {
       await removeStatus(id);
       setStatusList((prevStatusList) =>
@@ -59,11 +61,11 @@ export const ToDoProvider = ({ children }) => {
     } catch (err) {
       console.log(err);
     }
-    setFormLoading(false);
+    setStatusLoading(false);
   };
 
   const handleUpdateStatus = async (updatedStatus) => {
-    setFormLoading(true);
+    setStatusLoading(true);
     try {
       const result = await updateStatus(updatedStatus);
       setStatusList((prevStatusList) =>
@@ -74,7 +76,7 @@ export const ToDoProvider = ({ children }) => {
     } catch (err) {
       console.log(err);
     }
-    setFormLoading(false);
+    setStatusLoading(false);
   };
 
   const [isStatusFormDialogOpen, setIsStatusFormDialogOpen] = useState(false);
@@ -114,6 +116,19 @@ export const ToDoProvider = ({ children }) => {
     setFormLoading(false);
   };
 
+  const handleRemoveToDo = async (id) => {
+    setToDoLoading(true);
+    try {
+      await removeToDo(id);
+      setToDoList((prevToDoList) =>
+        prevToDoList.filter((toDo) => toDo.id !== id)
+      );
+    } catch (err) {
+      console.log(err);
+    }
+    setToDoLoading(false);
+  };
+
   const [isToDoFormDialogOpen, setIsToDoFormDialogOpen] = useState(false);
   const [isToDoFormNew, setIsToDoFormNew] = useState(true);
   const defaultNewToDo = {
@@ -138,11 +153,11 @@ export const ToDoProvider = ({ children }) => {
     );
   };
 
-  const deleteToDo = (id) => {
-    setToDoList((prevToDoList) =>
-      prevToDoList.filter((toDo) => toDo.id !== id)
-    );
-  };
+  // const deleteToDo = (id) => {
+  //   setToDoList((prevToDoList) =>
+  //     prevToDoList.filter((toDo) => toDo.id !== id)
+  //   );
+  // };
 
   // FILTER SECTION
 
@@ -182,7 +197,7 @@ export const ToDoProvider = ({ children }) => {
     handleGetToDoList,
     handleCreateToDo,
     updateToDo,
-    deleteToDo,
+    handleRemoveToDo,
     searchQuery,
     handleChangeSearchQuery,
     isProjectSettingsDialogOpen,
@@ -197,6 +212,10 @@ export const ToDoProvider = ({ children }) => {
     setIsLoading,
     handleCreateStatus,
     formLoading,
+    statusLoading,
+    setStatusLoading,
+    toDoLoading,
+    setToDoLoading,
   };
 
   return (
