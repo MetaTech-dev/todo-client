@@ -21,10 +21,9 @@ import AppSettingsContext from "../contexts/AppSettingsContext";
 const ToDoForm = () => {
   const {
     handleCreateToDo,
-    isToDoFormNew,
     defaultNewToDo,
     statusList,
-    updateToDo,
+    handleUpdateToDo,
     toDoFormData,
     setToDoFormData,
     isToDoFormDialogOpen,
@@ -33,8 +32,8 @@ const ToDoForm = () => {
 
   const { formLoading } = useContext(AppSettingsContext);
 
-  const toDoFormTitle = (isToDoFormNew) => {
-    return isToDoFormNew ? "New ToDo:" : "Update ToDo:";
+  const toDoFormTitle = (toDo) => {
+    return !toDo.id ? "New ToDo:" : "Update ToDo:";
   };
 
   const [showWarning, setShowWarning] = useState(false);
@@ -53,15 +52,15 @@ const ToDoForm = () => {
     }));
   };
 
-  const handleSubmit = (isToDoFormNew) => {
+  const handleSubmit = (toDo) => {
     const trimmedTitle = toDoFormData.title.trim();
     const trimmedDescription = toDoFormData.description.trim();
 
     if (trimmedTitle !== "" && trimmedDescription !== "") {
-      if (isToDoFormNew) {
+      if (!toDo.id) {
         handleCreateToDo(toDoFormData);
-      } else {
-        updateToDo(toDoFormData);
+      } else if (toDo.id) {
+        handleUpdateToDo(toDoFormData);
       }
       setIsToDoFormDialogOpen(false);
       setToDoFormData(defaultNewToDo);
@@ -73,14 +72,14 @@ const ToDoForm = () => {
 
   return (
     <Dialog open={isToDoFormDialogOpen} onClose={handleClose}>
-      <DialogTitle>{toDoFormTitle(isToDoFormNew)}</DialogTitle>
+      <DialogTitle>{toDoFormTitle(toDoFormData)}</DialogTitle>
       <Box
         component="form"
         noValidate
         autoComplete="off"
         onSubmit={(event) => {
           event.preventDefault();
-          handleSubmit(isToDoFormNew);
+          handleSubmit(toDoFormData);
         }}
       >
         <DialogContent>

@@ -129,6 +129,19 @@ export const ToDoProvider = ({ children }) => {
     setToDoLoading(false);
   };
 
+  const handleUpdateToDo = async (updatedToDo) => {
+    setToDoLoading(true);
+    try {
+      const result = await updateToDo(updatedToDo);
+      setToDoList((prevToDoList) =>
+        prevToDoList.map((toDo) => (toDo.id === result.id ? result : toDo))
+      );
+    } catch (err) {
+      console.log(err);
+    }
+    setToDoLoading(false);
+  };
+
   const [isToDoFormDialogOpen, setIsToDoFormDialogOpen] = useState(false);
   const [isToDoFormNew, setIsToDoFormNew] = useState(true);
   const defaultNewToDo = {
@@ -141,21 +154,11 @@ export const ToDoProvider = ({ children }) => {
 
   const [toDoFormData, setToDoFormData] = useState(defaultNewToDo);
 
-  // const createToDo = (newToDo) => {
-  //   setToDoList((prev) => [...prev, { ...newToDo, id: uuidv4() }]);
-  // };
-
-  const updateToDo = (updatedToDo) => {
-    setToDoList((prevToDoList) =>
-      prevToDoList.map((toDo) =>
-        toDo.id === updatedToDo.id ? updatedToDo : toDo
-      )
-    );
-  };
-
-  // const deleteToDo = (id) => {
+  // const updateToDo = (updatedToDo) => {
   //   setToDoList((prevToDoList) =>
-  //     prevToDoList.filter((toDo) => toDo.id !== id)
+  //     prevToDoList.map((toDo) =>
+  //       toDo.id === updatedToDo.id ? updatedToDo : toDo
+  //     )
   //   );
   // };
 
@@ -196,7 +199,7 @@ export const ToDoProvider = ({ children }) => {
     setIsStatusFormDialogOpen,
     handleGetToDoList,
     handleCreateToDo,
-    updateToDo,
+    handleUpdateToDo,
     handleRemoveToDo,
     searchQuery,
     handleChangeSearchQuery,

@@ -14,7 +14,6 @@ const ListView = () => {
     handleRemoveToDo,
     setToDoFormData,
     setIsToDoFormDialogOpen,
-    setIsToDoFormNew,
     statusList,
     toDoLoading,
   } = useContext(ToDoContext);
@@ -38,14 +37,13 @@ const ListView = () => {
   };
 
   const handleEdit = (toDo) => {
-    setToDoFormData(toDo);
-    setIsToDoFormNew(false);
+    const editedToDo = {
+      ...toDo,
+      dueDate: toDo.dueDate ? dayjs(toDo.dueDate) : null,
+    };
+    setToDoFormData(editedToDo);
     setIsToDoFormDialogOpen(true);
   };
-
-  // const handleDelete = (toDo) => {
-  //   deleteToDo(toDo.id);
-  // };
 
   const rows = filteredToDoList;
   const columns = [
@@ -107,24 +105,32 @@ const ListView = () => {
         const toDo = params.row;
         return [
           <GridActionsCellItem
-            icon={<EditTwoToneIcon />}
+            icon={
+              toDoLoading ? (
+                <CircularProgress size={25} sx={{ marginRight: 1 }} />
+              ) : (
+                <EditTwoToneIcon />
+              )
+            }
             label="Edit"
             className="textPrimary"
             onClick={() => handleEdit(toDo)}
             color="inherit"
             aria-label="Edit ToDo"
           />,
-          !toDoLoading ? (
-            <GridActionsCellItem
-              icon={<DeleteOutlineOutlinedIcon />}
-              label="Delete"
-              onClick={() => handleRemoveToDo(toDo.id)}
-              color="inherit"
-              aria-label="Delete ToDo"
-            />
-          ) : (
-            <CircularProgress size={25} sx={{ marginRight: 1 }} />
-          ),
+          <GridActionsCellItem
+            icon={
+              toDoLoading ? (
+                <CircularProgress size={25} sx={{ marginRight: 1 }} />
+              ) : (
+                <DeleteOutlineOutlinedIcon />
+              )
+            }
+            label="Delete"
+            onClick={() => handleRemoveToDo(toDo.id)}
+            color="inherit"
+            aria-label="Delete ToDo"
+          />,
         ];
       },
     },
