@@ -48,7 +48,7 @@ const ListView = () => {
 
   const rows = filteredToDoList;
   const columns = [
-    { field: "title", headerName: "Title", width: 200, editable: true },
+    { field: "title", headerName: "Title", width: 150, editable: true },
     {
       field: "description",
       headerName: "Description",
@@ -68,13 +68,13 @@ const ListView = () => {
     {
       field: "dueDate",
       headerName: "Due Date",
-      width: 230,
+      width: 130,
       type: "date",
       valueGetter: (params) => dayjs(params.row.dueDate).toDate(),
       valueFormatter: (params) =>
         dayjs(params.value).isValid()
-          ? dayjs(params.value).format("dddd, MMMM D, YYYY")
-          : "none selected",
+          ? dayjs(params.value).format("DD/MM/YYYY")
+          : "",
       editable: false,
     },
     {
