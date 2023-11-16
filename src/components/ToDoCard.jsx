@@ -15,12 +15,8 @@ import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 
 const ToDoCard = ({ toDo }) => {
-  const {
-    deleteToDo,
-    setToDoFormData,
-    setIsToDoFormDialogOpen,
-    setIsToDoFormNew,
-  } = useContext(ToDoContext);
+  const { deleteToDo, setToDoFormData, setIsToDoFormDialogOpen } =
+    useContext(ToDoContext);
 
   const dueDate = dayjs(toDo.dueDate);
   const formattedDueDate = dueDate.isValid()
@@ -29,7 +25,6 @@ const ToDoCard = ({ toDo }) => {
 
   const handleEdit = () => {
     setToDoFormData(toDo);
-    setIsToDoFormNew(false);
     setIsToDoFormDialogOpen(true);
   };
 
@@ -63,9 +58,10 @@ const ToDoCard = ({ toDo }) => {
       elevation={3}
       sx={(theme) => ({
         maxWidth: theme.spacing(40),
+        marginBottom: 1,
       })}
     >
-      <CardContent>
+      <CardContent sx={{ "&:last-child": { paddingBottom: 0.5 } }}>
         <Typography variant="h5">{toDo.title}</Typography>
         <Divider />
         {/* <Typography>Created By:{toDo.author}</Typography> */}

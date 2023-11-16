@@ -2,6 +2,7 @@ import {
   AppBar,
   Box,
   Button,
+  CircularProgress,
   Dialog,
   IconButton,
   List,
@@ -29,36 +30,21 @@ const ProjectSettingsDialog = () => {
     setIsProjectSettingsDialogOpen,
     setIsStatusFormDialogOpen,
     statusList,
-    deleteStatus,
+    handleRemoveStatus,
+    statusLoading,
     setStatusFormData,
-    defaultNewStatus,
-    setIsStatusFormNew,
   } = useContext(ToDoContext);
-
-  const handleClose = () => {
-    setIsProjectSettingsDialogOpen(false);
-  };
-
-  const handleNewStatusFormDialogOpen = () => {
-    setIsStatusFormNew(true);
-    setIsStatusFormDialogOpen(true);
-  };
 
   const handleEditStatus = (status) => {
     setStatusFormData(status);
-    setIsStatusFormNew(false);
     setIsStatusFormDialogOpen(true);
-  };
-
-  const handleDeleteStatus = (status) => {
-    deleteStatus(status.id);
   };
 
   return (
     <Dialog
       fullScreen
       open={isProjectSettingsDialogOpen}
-      onClose={handleClose}
+      onClose={() => setIsProjectSettingsDialogOpen(false)}
       TransitionComponent={Transition}
     >
       <AppBar elevation={6} sx={{ position: "relative" }}>
@@ -66,7 +52,7 @@ const ProjectSettingsDialog = () => {
           <IconButton
             edge="start"
             color="inherit"
-            onClick={handleClose}
+            onClick={() => setIsProjectSettingsDialogOpen(false)}
             aria-label="close"
           >
             <CloseIcon />
@@ -90,7 +76,7 @@ const ProjectSettingsDialog = () => {
           color="inherit"
           variant="contained"
           size="small"
-          onClick={() => handleNewStatusFormDialogOpen()}
+          onClick={() => setIsStatusFormDialogOpen(true)}
         >
           Create ToDo Status
         </Button>
@@ -118,23 +104,29 @@ const ProjectSettingsDialog = () => {
           </AppBar>
 
           <List>
-            {statusList.map((status) => {
+            {statusList?.map((status) => {
               return (
                 <ListItem
                   key={status.id}
                   secondaryAction={
                     <>
-                      <IconButton>
-                        <EditTwoToneIcon
-                          onClick={() => handleEditStatus(status)}
-                          aria-label="Edit Status"
-                        />
+                      <IconButton
+                        onClick={() => handleEditStatus(status)}
+                        aria-label="Edit Status"
+                      >
+                        {!statusLoading && <EditTwoToneIcon />}
+                        {statusLoading && (
+                          <CircularProgress size={25} sx={{ marginRight: 1 }} />
+                        )}
                       </IconButton>
                       <IconButton
-                        onClick={() => handleDeleteStatus(status)}
+                        onClick={() => handleRemoveStatus(status.id)}
                         aria-label="Delete Status"
                       >
-                        <DeleteOutlineOutlinedIcon />
+                        {!statusLoading && <DeleteOutlineOutlinedIcon />}
+                        {statusLoading && (
+                          <CircularProgress size={25} sx={{ marginRight: 1 }} />
+                        )}
                       </IconButton>
                     </>
                   }

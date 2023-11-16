@@ -4,6 +4,7 @@ import {
   Alert,
   Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -13,14 +14,14 @@ import {
 
 const StatusFormDialog = () => {
   const {
-    createNewStatus,
     setIsStatusFormDialogOpen,
     isStatusFormDialogOpen,
-    isStatusFormNew,
     statusFormData,
     setStatusFormData,
     defaultNewStatus,
-    updateStatus,
+    handleUpdateStatus,
+    handleCreateStatus,
+    formLoading,
   } = useContext(ToDoContext);
 
   const [showWarning, setShowWarning] = useState("");
@@ -38,15 +39,19 @@ const StatusFormDialog = () => {
     }));
   };
 
-  const handleSubmit = (isStatusFormNew) => {
+  const statusFormTitle = (status) => {
+    return !status.id ? "New Status:" : "Edit Status:";
+  };
+
+  const handleSubmit = (status) => {
     const trimmedTitle = statusFormData.title.trim();
 
     if (trimmedTitle !== "") {
       if (trimmedTitle.length < 30) {
-        if (isStatusFormNew) {
-          createNewStatus(statusFormData);
-        } else {
-          updateStatus(statusFormData);
+        if (!status.id) {
+          handleCreateStatus(statusFormData);
+        } else if (status.id) {
+          handleUpdateStatus(statusFormData);
         }
         handleClose();
       } else {
@@ -59,14 +64,14 @@ const StatusFormDialog = () => {
 
   return (
     <Dialog open={isStatusFormDialogOpen} onClose={handleClose}>
-      <DialogTitle>New Status:</DialogTitle>
+      <DialogTitle>{statusFormTitle(statusFormData)}</DialogTitle>
       <Box
         component="form"
         noValidate
         autoComplete="off"
         onSubmit={(event) => {
           event.preventDefault();
-          handleSubmit(isStatusFormNew);
+          handleSubmit(statusFormData);
         }}
       >
         <DialogContent>
@@ -85,7 +90,10 @@ const StatusFormDialog = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button type="submit">Submit</Button>
+          {!formLoading && <Button type="submit">Submit</Button>}
+          {formLoading && (
+            <CircularProgress size={25} sx={{ marginRight: 1 }} />
+          )}
         </DialogActions>
       </Box>
     </Dialog>

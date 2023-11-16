@@ -13,24 +13,27 @@ import {
   Select,
   TextField,
   Alert,
+  CircularProgress,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
+import AppSettingsContext from "../contexts/AppSettingsContext";
 
 const ToDoForm = () => {
   const {
-    createToDo,
-    isToDoFormNew,
+    handleCreateToDo,
     defaultNewToDo,
     statusList,
-    updateToDo,
+    handleUpdateToDo,
     toDoFormData,
     setToDoFormData,
     isToDoFormDialogOpen,
     setIsToDoFormDialogOpen,
   } = useContext(ToDoContext);
 
-  const toDoFormTitle = (isToDoFormNew) => {
-    return isToDoFormNew ? "New ToDo:" : "Update ToDo:";
+  const { formLoading } = useContext(AppSettingsContext);
+
+  const toDoFormTitle = (toDo) => {
+    return !toDo.id ? "New ToDo:" : "Update ToDo:";
   };
 
   const [showWarning, setShowWarning] = useState(false);
@@ -49,15 +52,15 @@ const ToDoForm = () => {
     }));
   };
 
-  const handleSubmit = (isToDoFormNew) => {
+  const handleSubmit = (toDo) => {
     const trimmedTitle = toDoFormData.title.trim();
     const trimmedDescription = toDoFormData.description.trim();
 
     if (trimmedTitle !== "" && trimmedDescription !== "") {
-      if (isToDoFormNew) {
-        createToDo(toDoFormData);
-      } else {
-        updateToDo(toDoFormData);
+      if (!toDo.id) {
+        handleCreateToDo(toDoFormData);
+      } else if (toDo.id) {
+        handleUpdateToDo(toDoFormData);
       }
       setIsToDoFormDialogOpen(false);
       setToDoFormData(defaultNewToDo);
@@ -69,14 +72,14 @@ const ToDoForm = () => {
 
   return (
     <Dialog open={isToDoFormDialogOpen} onClose={handleClose}>
-      <DialogTitle>{toDoFormTitle(isToDoFormNew)}</DialogTitle>
+      <DialogTitle>{toDoFormTitle(toDoFormData)}</DialogTitle>
       <Box
         component="form"
         noValidate
         autoComplete="off"
         onSubmit={(event) => {
           event.preventDefault();
-          handleSubmit(isToDoFormNew);
+          handleSubmit(toDoFormData);
         }}
       >
         <DialogContent>
@@ -146,14 +149,14 @@ const ToDoForm = () => {
             <Select
               labelId="toDo-status-label"
               id="toDo-status-select"
-              name="status"
-              value={toDoFormData.status}
+              name="statusId"
+              value={toDoFormData.statusId}
               onChange={handleInputChange}
               label="status"
             >
-              {statusList.map((status) => {
+              {statusList?.map((status) => {
                 return (
-                  <MenuItem value={status.title} key={status.id}>
+                  <MenuItem value={status.id} key={status.id}>
                     {status.title}
                   </MenuItem>
                 );
@@ -162,7 +165,10 @@ const ToDoForm = () => {
           </FormControl>
         </DialogContent>
         <DialogActions>
-          <Button type="submit">Submit</Button>
+          {!formLoading && <Button type="submit">Submit</Button>}
+          {formLoading && (
+            <CircularProgress size={25} sx={{ marginRight: 2 }} />
+          )}
         </DialogActions>
       </Box>
     </Dialog>

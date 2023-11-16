@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   AppBar,
   Box,
@@ -20,7 +20,14 @@ const Dashboard = () => {
     setIsToDoFormDialogOpen,
     setIsToDoFormNew,
     setIsProjectSettingsDialogOpen,
+    handleGetStatusList,
+    handleGetToDoList,
   } = useContext(ToDoContext);
+
+  useEffect(() => {
+    handleGetStatusList();
+    handleGetToDoList();
+  }, []);
 
   const handleToDoFormOpen = () => {
     setIsToDoFormDialogOpen(true);
