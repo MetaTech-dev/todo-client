@@ -154,14 +154,6 @@ export const ToDoProvider = ({ children }) => {
 
   const [toDoFormData, setToDoFormData] = useState(defaultNewToDo);
 
-  // const updateToDo = (updatedToDo) => {
-  //   setToDoList((prevToDoList) =>
-  //     prevToDoList.map((toDo) =>
-  //       toDo.id === updatedToDo.id ? updatedToDo : toDo
-  //     )
-  //   );
-  // };
-
   // FILTER SECTION
 
   const [searchQuery, setSearchQuery] = useState("");
