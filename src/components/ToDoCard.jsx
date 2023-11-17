@@ -18,10 +18,15 @@ const ToDoCard = ({ toDo }) => {
   const { deleteToDo, setToDoFormData, setIsToDoFormDialogOpen } =
     useContext(ToDoContext);
 
-  const dueDate = dayjs(toDo.dueDate);
-  const formattedDueDate = dueDate.isValid()
-    ? dueDate.format("dddd, MMMM, DD, YYYY")
-    : "none selected";
+  const formatDate = (date) => {
+    const dayjsDate = dayjs(date);
+    return dayjsDate.isValid()
+      ? dayjsDate.format("ddd, MMMM, DD, YYYY")
+      : "none selected";
+  };
+
+  const formattedCreatedDate = formatDate(toDo.createdDate);
+  const formattedDueDate = formatDate(toDo.dueDate);
 
   const handleEdit = () => {
     setToDoFormData(toDo);
@@ -65,8 +70,10 @@ const ToDoCard = ({ toDo }) => {
         <Typography variant="h5">{toDo.title}</Typography>
         <Divider />
         <Typography>{handleDescription()}</Typography>
-
-        {/* <Typography>Created at:</Typography> */}
+        <Divider sx={{ mb: 1 }} />
+        <Typography>
+          <b>Created at:</b> {formattedCreatedDate}
+        </Typography>
         <Divider sx={{ mb: 1 }} />
         <Typography>
           <b>Due Date:</b> {formattedDueDate}
