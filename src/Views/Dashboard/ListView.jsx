@@ -65,6 +65,18 @@ const ListView = () => {
       },
     },
     {
+      field: "createdDate",
+      headerName: "Created At",
+      width: 130,
+      type: "date",
+      valueGetter: (params) => dayjs(params.row.createdDate).toDate(),
+      valueFormatter: (params) =>
+        dayjs(params.value).isValid()
+          ? dayjs(params.value).format("DD/MM/YYYY")
+          : "",
+      editable: false,
+    },
+    {
       field: "dueDate",
       headerName: "Due Date",
       width: 130,
