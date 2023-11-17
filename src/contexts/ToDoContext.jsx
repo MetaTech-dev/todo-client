@@ -1,4 +1,4 @@
-import { createContext, useMemo, useState } from "react";
+import { createContext, useEffect, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import StatusFormDialog from "../components/StatusFormDialog";
 import ToDoFormDialog from "../components/ToDoFormDialog";
@@ -54,10 +54,15 @@ export const ToDoProvider = ({ children }) => {
   const handleRemoveStatus = async (id) => {
     setStatusLoading(true);
     try {
-      await removeStatus(id);
-      setStatusList((prevStatusList) =>
-        prevStatusList.filter((status) => status.id !== id)
-      );
+      const response = await removeStatus(id);
+      if (response.ok) {
+        setStatusList((prevStatusList) =>
+          prevStatusList.filter((status) => status.id !== id)
+        );
+      } else {
+        const errorResponse = await response.json();
+        console.error("Failed to delete status", errorResponse);
+      }
     } catch (err) {
       console.log(err);
     }

@@ -15,10 +15,10 @@ export const createStatus = async (status) => {
 };
 
 export const removeStatus = async (id) => {
-  await fetch(`http://localhost:3000/status/${id}`, {
+  const response = await fetch(`http://localhost:3000/status/${id}`, {
     method: "DELETE",
   });
-  return true;
+  return response;
 };
 
 export const updateStatus = async (status) => {
