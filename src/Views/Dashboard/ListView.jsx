@@ -65,7 +65,7 @@ const ListView = () => {
       },
     },
     {
-      field: "CreatedDate",
+      field: "createdDate",
       headerName: "Created At",
       width: 130,
       type: "date",
