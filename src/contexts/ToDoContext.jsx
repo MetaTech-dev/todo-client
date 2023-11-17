@@ -92,8 +92,6 @@ export const ToDoProvider = ({ children }) => {
 
   const [toDoList, setToDoList] = useState([]);
 
-  console.log("toDoList", toDoList);
-
   const handleGetToDoList = async () => {
     setIsLoading(true);
     let data;
