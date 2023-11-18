@@ -103,7 +103,6 @@ const ToDoForm = () => {
             required
           />
           <TextField
-            autoFocus
             margin="dense"
             id="taskDescription"
             label="Description"
@@ -120,7 +119,7 @@ const ToDoForm = () => {
           <DatePicker
             sx={{ paddingBottom: "1rem" }}
             label="Date Due"
-            value={dayjs(toDoFormData.dueDate)}
+            value={toDoFormData.dueDate ? dayjs(toDoFormData.dueDate) : null}
             onChange={(newDate) =>
               setToDoFormData((prev) => ({
                 ...prev,
