@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import AppSettingsContext from "../contexts/AppSettingsContext";
+import dayjs from "dayjs";
 
 const ToDoForm = () => {
   const {
@@ -119,7 +120,7 @@ const ToDoForm = () => {
           <DatePicker
             sx={{ paddingBottom: "1rem" }}
             label="Date Due"
-            value={toDoFormData.dueDate}
+            value={dayjs(toDoFormData.dueDate)}
             onChange={(newDate) =>
               setToDoFormData((prev) => ({
                 ...prev,

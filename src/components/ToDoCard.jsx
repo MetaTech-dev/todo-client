@@ -15,7 +15,7 @@ import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 
 const ToDoCard = ({ toDo }) => {
-  const { deleteToDo, setToDoFormData, setIsToDoFormDialogOpen } =
+  const { handleRemoveToDo, setToDoFormData, setIsToDoFormDialogOpen } =
     useContext(ToDoContext);
 
   const formatDate = (date) => {
@@ -34,7 +34,7 @@ const ToDoCard = ({ toDo }) => {
   };
 
   const handleDelete = () => {
-    deleteToDo(toDo.id);
+    handleRemoveToDo(toDo.id);
   };
 
   const getPriorityColor = () => {
