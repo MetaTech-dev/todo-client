@@ -12,6 +12,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { blueGrey } from "@mui/material/colors";
 import router from "./router";
 import AppSettingsContext from "./contexts/AppSettingsContext";
+import { SnackbarProvider } from "notistack";
 
 function App() {
   const { isDarkMode } = useContext(AppSettingsContext);
@@ -33,7 +34,9 @@ function App() {
       <CssBaseline>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <ToDoProvider>
-            <RouterProvider router={router} />
+            <SnackbarProvider maxSnack={1}>
+              <RouterProvider router={router} />
+            </SnackbarProvider>
           </ToDoProvider>
         </LocalizationProvider>
       </CssBaseline>

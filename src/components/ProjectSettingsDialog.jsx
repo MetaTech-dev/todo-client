@@ -81,6 +81,7 @@ const ProjectSettingsDialog = () => {
           Create ToDo Status
         </Button>
       </Toolbar>
+
       <Box sx={{ display: "flex" }}>
         <Box sx={{ flexGrow: "1" }} />
         <Paper elevation={6}>

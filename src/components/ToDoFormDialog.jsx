@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import AppSettingsContext from "../contexts/AppSettingsContext";
+import dayjs from "dayjs";
 
 const ToDoForm = () => {
   const {
@@ -102,7 +103,6 @@ const ToDoForm = () => {
             required
           />
           <TextField
-            autoFocus
             margin="dense"
             id="taskDescription"
             label="Description"
@@ -119,7 +119,7 @@ const ToDoForm = () => {
           <DatePicker
             sx={{ paddingBottom: "1rem" }}
             label="Date Due"
-            value={toDoFormData.dueDate}
+            value={toDoFormData.dueDate ? dayjs(toDoFormData.dueDate) : null}
             onChange={(newDate) =>
               setToDoFormData((prev) => ({
                 ...prev,

@@ -1,5 +1,4 @@
 import { createContext, useMemo, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 import StatusFormDialog from "../components/StatusFormDialog";
 import ToDoFormDialog from "../components/ToDoFormDialog";
 import ProjectSettingsDialog from "../components/ProjectSettingsDialog";
@@ -11,6 +10,7 @@ import {
   updateStatus,
 } from "../api/status";
 import { getToDoList, createToDo, removeToDo, updateToDo } from "../api/toDo";
+import { enqueueSnackbar } from "notistack";
 
 const ToDoContext = createContext();
 export default ToDoContext;
@@ -29,10 +29,15 @@ export const ToDoProvider = ({ children }) => {
 
   const handleGetStatusList = async () => {
     setIsLoading(true);
-    let data;
     try {
-      data = await getStatusList(data);
-      setStatusList(data);
+      const response = await getStatusList();
+      if (response.ok) {
+        const data = await response.json();
+        setStatusList(data);
+      } else if (!response.ok) {
+        const errorResponse = await response.json();
+        enqueueSnackbar(errorResponse.message, { variant: "error" });
+      }
     } catch (err) {
       console.log(err);
     }
@@ -41,10 +46,15 @@ export const ToDoProvider = ({ children }) => {
 
   const handleCreateStatus = async (statusFormData) => {
     setFormLoading(true);
-    let data;
     try {
-      data = await createStatus(statusFormData);
-      setStatusList((prev) => [...prev, data]);
+      const response = await createStatus(statusFormData);
+      if (response.ok) {
+        const data = await response.json();
+        setStatusList((prev) => [...prev, data]);
+      } else if (!response.ok) {
+        const errorResponse = await response.json();
+        enqueueSnackbar(errorResponse.message, { variant: "error" });
+      }
     } catch (err) {
       console.log(err);
     }
@@ -54,10 +64,16 @@ export const ToDoProvider = ({ children }) => {
   const handleRemoveStatus = async (id) => {
     setStatusLoading(true);
     try {
-      await removeStatus(id);
-      setStatusList((prevStatusList) =>
-        prevStatusList.filter((status) => status.id !== id)
-      );
+      const response = await removeStatus(id);
+      if (response.ok) {
+        setStatusList((prevStatusList) =>
+          prevStatusList.filter((status) => status.id !== id)
+        );
+        enqueueSnackbar("Status deleted successfully", { variant: "success" });
+      } else {
+        const errorResponse = await response.json();
+        enqueueSnackbar(errorResponse.message, { variant: "error" });
+      }
     } catch (err) {
       console.log(err);
     }
@@ -67,12 +83,18 @@ export const ToDoProvider = ({ children }) => {
   const handleUpdateStatus = async (updatedStatus) => {
     setStatusLoading(true);
     try {
-      const result = await updateStatus(updatedStatus);
-      setStatusList((prevStatusList) =>
-        prevStatusList.map((status) =>
-          status.id === result.id ? result : status
-        )
-      );
+      const response = await updateStatus(updatedStatus);
+      if (response.ok) {
+        const result = await response.json();
+        setStatusList((prevStatusList) =>
+          prevStatusList.map((status) =>
+            status.id === result.id ? result : status
+          )
+        );
+      } else if (!response.ok) {
+        const errorResponse = await response.json();
+        enqueueSnackbar(errorResponse.message, { variant: "error" });
+      }
     } catch (err) {
       console.log(err);
     }
@@ -94,10 +116,15 @@ export const ToDoProvider = ({ children }) => {
 
   const handleGetToDoList = async () => {
     setIsLoading(true);
-    let data;
     try {
-      data = await getToDoList();
-      setToDoList(data);
+      const response = await getToDoList();
+      if (response.ok) {
+        const data = await response.json();
+        setToDoList(data);
+      } else if (!response.ok) {
+        const errorResponse = await response.json();
+        enqueueSnackbar(errorResponse.message, { variant: "error" });
+      }
     } catch (err) {
       console.log(err);
     }
@@ -106,10 +133,15 @@ export const ToDoProvider = ({ children }) => {
 
   const handleCreateToDo = async (toDoFormData) => {
     setFormLoading(true);
-    let data;
     try {
-      data = await createToDo(toDoFormData);
-      setToDoList((prev) => [...prev, data]);
+      const response = await createToDo(toDoFormData);
+      if (response.ok) {
+        const data = await response.json();
+        setToDoList((prev) => [...prev, data]);
+      } else if (!response.ok) {
+        const errorResponse = await response.json();
+        enqueueSnackbar(errorResponse.message, { variant: "error" });
+      }
     } catch (err) {
       console.log(err);
     }
@@ -119,10 +151,16 @@ export const ToDoProvider = ({ children }) => {
   const handleRemoveToDo = async (id) => {
     setToDoLoading(true);
     try {
-      await removeToDo(id);
-      setToDoList((prevToDoList) =>
-        prevToDoList.filter((toDo) => toDo.id !== id)
-      );
+      const response = await removeToDo(id);
+      if (response.ok) {
+        setToDoList((prevToDoList) =>
+          prevToDoList.filter((toDo) => toDo.id !== id)
+        );
+        enqueueSnackbar("ToDo deleted successfully", { variant: "success" });
+      } else if (!response.ok) {
+        const errorResponse = await response.json();
+        enqueueSnackbar(errorResponse.message, { variant: "error" });
+      }
     } catch (err) {
       console.log(err);
     }
@@ -132,10 +170,16 @@ export const ToDoProvider = ({ children }) => {
   const handleUpdateToDo = async (updatedToDo) => {
     setToDoLoading(true);
     try {
-      const result = await updateToDo(updatedToDo);
-      setToDoList((prevToDoList) =>
-        prevToDoList.map((toDo) => (toDo.id === result.id ? result : toDo))
-      );
+      const response = await updateToDo(updatedToDo);
+      if (response.ok) {
+        const result = await response.json();
+        setToDoList((prevToDoList) =>
+          prevToDoList.map((toDo) => (toDo.id === result.id ? result : toDo))
+        );
+      } else if (!response.ok) {
+        const errorResponse = await response.json();
+        enqueueSnackbar(errorResponse.message, { variant: "error" });
+      }
     } catch (err) {
       console.log(err);
     }
