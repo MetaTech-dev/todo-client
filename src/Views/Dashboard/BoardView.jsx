@@ -4,7 +4,6 @@ import { useTheme } from "@mui/material/styles";
 import ToDoCard from "../../components/ToDoCard";
 import ToDoContext from "../../contexts/ToDoContext";
 import LoadingStatusBoardView from "../../components/loading/LoadingStatusBoardView";
-import LoadingToDoCard from "../../components/loading/LoadingToDoCard";
 
 const BoardView = () => {
   const theme = useTheme();

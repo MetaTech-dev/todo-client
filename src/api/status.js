@@ -1,7 +1,6 @@
 export const getStatusList = async () => {
   const response = await fetch("http://localhost:3000/status");
-  const data = await response.json();
-  return data;
+  return response;
 };
 
 export const createStatus = async (status) => {
@@ -10,8 +9,7 @@ export const createStatus = async (status) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(status),
   });
-  const data = await response.json();
-  return data;
+  return response;
 };
 
 export const removeStatus = async (id) => {
@@ -27,6 +25,5 @@ export const updateStatus = async (status) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(status),
   });
-  const data = await response.json();
-  return data;
+  return response;
 };

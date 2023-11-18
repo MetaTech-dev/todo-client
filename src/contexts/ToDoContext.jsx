@@ -1,5 +1,4 @@
-import { createContext, useEffect, useMemo, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+import { createContext, useMemo, useState } from "react";
 import StatusFormDialog from "../components/StatusFormDialog";
 import ToDoFormDialog from "../components/ToDoFormDialog";
 import ProjectSettingsDialog from "../components/ProjectSettingsDialog";
@@ -11,6 +10,7 @@ import {
   updateStatus,
 } from "../api/status";
 import { getToDoList, createToDo, removeToDo, updateToDo } from "../api/toDo";
+import { enqueueSnackbar } from "notistack";
 
 const ToDoContext = createContext();
 export default ToDoContext;
@@ -29,10 +29,15 @@ export const ToDoProvider = ({ children }) => {
 
   const handleGetStatusList = async () => {
     setIsLoading(true);
-    let data;
     try {
-      data = await getStatusList(data);
-      setStatusList(data);
+      const response = await getStatusList();
+      if (response.ok) {
+        const data = await response.json();
+        setStatusList(data);
+      } else if (!response.ok) {
+        const errorResponse = await response.json();
+        enqueueSnackbar(errorResponse.message, { variant: "error" });
+      }
     } catch (err) {
       console.log(err);
     }
@@ -41,10 +46,15 @@ export const ToDoProvider = ({ children }) => {
 
   const handleCreateStatus = async (statusFormData) => {
     setFormLoading(true);
-    let data;
     try {
-      data = await createStatus(statusFormData);
-      setStatusList((prev) => [...prev, data]);
+      const response = await createStatus(statusFormData);
+      if (response.ok) {
+        const data = await response.json();
+        setStatusList((prev) => [...prev, data]);
+      } else if (!response.ok) {
+        const errorResponse = await response.json();
+        enqueueSnackbar(errorResponse.message, { variant: "error" });
+      }
     } catch (err) {
       console.log(err);
     }
@@ -59,9 +69,10 @@ export const ToDoProvider = ({ children }) => {
         setStatusList((prevStatusList) =>
           prevStatusList.filter((status) => status.id !== id)
         );
+        enqueueSnackbar("Status deleted successfully", { variant: "success" });
       } else {
         const errorResponse = await response.json();
-        console.error("Failed to delete status", errorResponse);
+        enqueueSnackbar(errorResponse.message, { variant: "error" });
       }
     } catch (err) {
       console.log(err);
@@ -72,12 +83,18 @@ export const ToDoProvider = ({ children }) => {
   const handleUpdateStatus = async (updatedStatus) => {
     setStatusLoading(true);
     try {
-      const result = await updateStatus(updatedStatus);
-      setStatusList((prevStatusList) =>
-        prevStatusList.map((status) =>
-          status.id === result.id ? result : status
-        )
-      );
+      const response = await updateStatus(updatedStatus);
+      if (response.ok) {
+        const result = await response.json();
+        setStatusList((prevStatusList) =>
+          prevStatusList.map((status) =>
+            status.id === result.id ? result : status
+          )
+        );
+      } else if (!response.ok) {
+        const errorResponse = await response.json();
+        enqueueSnackbar(errorResponse.message, { variant: "error" });
+      }
     } catch (err) {
       console.log(err);
     }
