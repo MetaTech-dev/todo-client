@@ -5,6 +5,7 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
+import { useSortable } from "@dnd-kit/sortable";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
@@ -15,9 +16,25 @@ const SortableStatus = ({
   handleEditStatus,
   handleRemoveStatus,
 }) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    //  transform, transition
+  } = useSortable({ id: status.id });
+
+  //   const style = {
+  //     transform: CSS.Transform.toString(transform),
+  //     transition,
+  //   };
+
   return (
     <ListItem
       key={status.id}
+      ref={setNodeRef}
+      //   style={style}
+      {...attributes}
+      {...listeners}
       secondaryAction={
         <>
           <IconButton
