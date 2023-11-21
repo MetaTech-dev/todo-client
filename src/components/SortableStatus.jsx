@@ -1,4 +1,5 @@
 import {
+  Card,
   CircularProgress,
   IconButton,
   ListItem,
@@ -11,6 +12,7 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 
 const SortableStatus = ({
+  active,
   status,
   statusLoading,
   handleEditStatus,
@@ -27,39 +29,43 @@ const SortableStatus = ({
   };
 
   return (
-    <ListItem
+    <Card
       key={status.id}
       ref={setNodeRef}
       style={style}
       {...attributes}
-      secondaryAction={
-        <>
-          <IconButton
-            onClick={() => handleEditStatus(status)}
-            aria-label="Edit Status"
-          >
-            {!statusLoading && <EditTwoToneIcon />}
-            {statusLoading && (
-              <CircularProgress size={25} sx={{ marginRight: 1 }} />
-            )}
-          </IconButton>
-          <IconButton
-            onClick={() => handleRemoveStatus(status.id)}
-            aria-label="Delete Status"
-          >
-            {!statusLoading && <DeleteOutlineOutlinedIcon />}
-            {statusLoading && (
-              <CircularProgress size={25} sx={{ marginRight: 1 }} />
-            )}
-          </IconButton>
-        </>
-      }
+      elevation={active ? 20 : 3}
     >
-      <ListItemIcon>
-        <DragHandleIcon {...listeners} sx={{ cursor: "grabbing" }} />
-      </ListItemIcon>
-      <ListItemText primary={status.title} sx={{ paddingRight: "6rem" }} />
-    </ListItem>
+      <ListItem
+        secondaryAction={
+          <>
+            <IconButton
+              onClick={() => handleEditStatus(status)}
+              aria-label="Edit Status"
+            >
+              {!statusLoading && <EditTwoToneIcon />}
+              {statusLoading && (
+                <CircularProgress size={25} sx={{ marginRight: 1 }} />
+              )}
+            </IconButton>
+            <IconButton
+              onClick={() => handleRemoveStatus(status.id)}
+              aria-label="Delete Status"
+            >
+              {!statusLoading && <DeleteOutlineOutlinedIcon />}
+              {statusLoading && (
+                <CircularProgress size={25} sx={{ marginRight: 1 }} />
+              )}
+            </IconButton>
+          </>
+        }
+      >
+        <ListItemIcon>
+          <DragHandleIcon {...listeners} sx={{ cursor: "grabbing" }} />
+        </ListItemIcon>
+        <ListItemText primary={status.title} sx={{ paddingRight: "6rem" }} />
+      </ListItem>
+    </Card>
   );
 };
 

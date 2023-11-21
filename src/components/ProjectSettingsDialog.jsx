@@ -50,19 +50,11 @@ const ProjectSettingsDialog = () => {
 
   const [items, setItems] = useState([]);
   const [dialogJustOpened, setDialogJustOpened] = useState(false);
+  const [activeId, setActiveId] = useState(null);
 
   useEffect(() => {
-    if (isProjectSettingsDialogOpen) {
-      setDialogJustOpened(true);
-    }
-  }, [isProjectSettingsDialogOpen]);
-
-  useEffect(() => {
-    if (dialogJustOpened) {
-      setItems(statusList.map((status) => status.id));
-      setDialogJustOpened(false);
-    }
-  }, [statusList, dialogJustOpened]);
+    setItems(statusList.map((status) => status.id));
+  }, [statusList]);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -76,9 +68,13 @@ const ProjectSettingsDialog = () => {
     setIsStatusFormDialogOpen(true);
   };
 
+  const handleDragStart = (event) => {
+    setActiveId(event.active.id);
+  };
+
   const handleDragEnd = async (event) => {
     const { active, over } = event;
-
+    setActiveId(null);
     if (active.id !== over.id) {
       const oldIndex = items.indexOf(active.id);
       const newIndex = items.indexOf(over.id);
@@ -172,13 +168,14 @@ const ProjectSettingsDialog = () => {
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
+            onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
           >
             <SortableContext
               items={items}
               strategy={verticalListSortingStrategy}
             >
-              <List>
+              <List sx={{ p: 0 }}>
                 {items.map((id) => {
                   const status = statusList.find((s) => s.id === id);
                   return status ? (
@@ -188,6 +185,7 @@ const ProjectSettingsDialog = () => {
                       statusLoading={statusLoading}
                       handleEditStatus={() => handleEditStatus(status)}
                       handleRemoveStatus={() => handleRemoveStatus(status.id)}
+                      active={activeId === status.id}
                     />
                   ) : null;
                 })}

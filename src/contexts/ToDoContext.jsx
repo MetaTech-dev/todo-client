@@ -27,6 +27,8 @@ export const ToDoProvider = ({ children }) => {
 
   const [statusList, setStatusList] = useState([]);
 
+  console.log("statusList in Context", statusList);
+
   const handleGetStatusList = async () => {
     setIsLoading(true);
     try {
@@ -99,6 +101,7 @@ export const ToDoProvider = ({ children }) => {
       console.log(err);
     }
     setStatusLoading(false);
+    handleGetStatusList();
   };
 
   const [isStatusFormDialogOpen, setIsStatusFormDialogOpen] = useState(false);
