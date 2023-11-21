@@ -13,8 +13,6 @@ const BoardView = () => {
     return filteredToDoList.filter((toDo) => toDo.statusId === status.id);
   };
 
-  console.log("statusList", statusList);
-
   return (
     <Box
       id="board-view-container"

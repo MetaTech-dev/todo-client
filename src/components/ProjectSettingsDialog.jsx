@@ -90,7 +90,7 @@ const ProjectSettingsDialog = () => {
             await handleUpdateStatus(updatedStatusData);
             setItems(newItems);
           } catch (error) {
-            console.log("Error updating status position:", error);
+            console.error("Error updating status position:", error);
           }
         }
       }
