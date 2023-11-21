@@ -16,25 +16,22 @@ const SortableStatus = ({
   handleEditStatus,
   handleRemoveStatus,
 }) => {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    //  transform, transition
-  } = useSortable({ id: status.id });
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: status.id });
 
-  //   const style = {
-  //     transform: CSS.Transform.toString(transform),
-  //     transition,
-  //   };
+  const style = {
+    transform: transform
+      ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
+      : undefined,
+    transition,
+  };
 
   return (
     <ListItem
       key={status.id}
       ref={setNodeRef}
-      //   style={style}
+      style={style}
       {...attributes}
-      {...listeners}
       secondaryAction={
         <>
           <IconButton
@@ -59,7 +56,7 @@ const SortableStatus = ({
       }
     >
       <ListItemIcon>
-        <DragHandleIcon />
+        <DragHandleIcon {...listeners} sx={{ cursor: "grabbing" }} />
       </ListItemIcon>
       <ListItemText primary={status.title} sx={{ paddingRight: "6rem" }} />
     </ListItem>

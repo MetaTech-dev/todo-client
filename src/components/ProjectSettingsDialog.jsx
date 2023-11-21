@@ -13,11 +13,10 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { useContext, forwardRef, useState, useEffect } from "react";
+import { useContext, forwardRef, useState, useEffect, useRef } from "react";
 import ToDoContext from "../contexts/ToDoContext";
 import {
   DndContext,
-  DragOverlay,
   closestCenter,
   KeyboardSensor,
   PointerSensor,
@@ -32,11 +31,7 @@ import {
 } from "@dnd-kit/sortable";
 import Slide from "@mui/material/Slide";
 import CloseIcon from "@mui/icons-material/Close";
-import DragHandleIcon from "@mui/icons-material/DragHandle";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import SortableStatus from "./SortableStatus";
-import { set } from "date-fns";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -50,17 +45,24 @@ const ProjectSettingsDialog = () => {
     handleRemoveStatus,
     statusLoading,
     setStatusFormData,
+    handleUpdateStatus,
   } = useContext(ToDoContext);
 
   const [items, setItems] = useState([]);
-  const [activeId, setActiveId] = useState(null);
+  const [dialogJustOpened, setDialogJustOpened] = useState(false);
 
   useEffect(() => {
-    setItems(statusList.map((status) => status.id));
-  }, [statusList]);
+    if (isProjectSettingsDialogOpen) {
+      setDialogJustOpened(true);
+    }
+  }, [isProjectSettingsDialogOpen]);
 
-  console.log("items", items);
-  console.log("statusList", statusList);
+  useEffect(() => {
+    if (dialogJustOpened) {
+      setItems(statusList.map((status) => status.id));
+      setDialogJustOpened(false);
+    }
+  }, [statusList, dialogJustOpened]);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -74,25 +76,35 @@ const ProjectSettingsDialog = () => {
     setIsStatusFormDialogOpen(true);
   };
 
-  const handleDragStart = (event) => {
-    setActiveId(event.active.id);
-  };
-
-  const handleDragEnd = (event) => {
+  const handleDragEnd = async (event) => {
     const { active, over } = event;
 
     if (active.id !== over.id) {
-      setItems((items) => {
-        const oldIndex = items.indexOf(active.id);
-        const newIndex = items.indexOf(over.id);
+      const oldIndex = items.indexOf(active.id);
+      const newIndex = items.indexOf(over.id);
 
-        return arrayMove(items, oldIndex, newIndex);
-      });
+      if (newIndex !== oldIndex) {
+        const newItems = arrayMove(items, oldIndex, newIndex);
+
+        const updatedStatus = statusList.find(
+          (status) => status.id === active.id
+        );
+        if (updatedStatus) {
+          const updatedStatusData = {
+            ...updatedStatus,
+            position: newIndex + 1,
+          };
+
+          try {
+            await handleUpdateStatus(updatedStatusData);
+            setItems(newItems);
+          } catch (error) {
+            console.log("Error updating status position:", error);
+          }
+        }
+      }
     }
-    setActiveId(null);
   };
-
-  const activeItem = statusList.find((status) => status.id === activeId);
 
   return (
     <Dialog
@@ -160,7 +172,6 @@ const ProjectSettingsDialog = () => {
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
-            onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
           >
             <SortableContext
@@ -182,16 +193,6 @@ const ProjectSettingsDialog = () => {
                 })}
               </List>
             </SortableContext>
-            <DragOverlay>
-              {activeItem ? (
-                <SortableStatus
-                  status={activeItem}
-                  statusLoading={statusLoading}
-                  handleEditStatus={() => handleEditStatus(activeItem)}
-                  handleRemoveStatus={() => handleRemoveStatus(activeItem.id)}
-                />
-              ) : null}
-            </DragOverlay>
           </DndContext>
         </Paper>
         <Box sx={{ flexGrow: "1" }} />
