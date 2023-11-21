@@ -2,18 +2,14 @@ import {
   AppBar,
   Box,
   Button,
-  CircularProgress,
   Dialog,
   IconButton,
   List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
   Paper,
   Toolbar,
   Typography,
 } from "@mui/material";
-import { useContext, forwardRef, useState, useEffect, useRef } from "react";
+import { useContext, forwardRef, useState, useEffect } from "react";
 import ToDoContext from "../contexts/ToDoContext";
 import {
   DndContext,
@@ -49,7 +45,6 @@ const ProjectSettingsDialog = () => {
   } = useContext(ToDoContext);
 
   const [items, setItems] = useState([]);
-  const [dialogJustOpened, setDialogJustOpened] = useState(false);
   const [activeId, setActiveId] = useState(null);
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   AppBar,
   Box,
@@ -27,6 +27,7 @@ const Dashboard = () => {
   useEffect(() => {
     handleGetStatusList();
     handleGetToDoList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleToDoFormOpen = () => {
