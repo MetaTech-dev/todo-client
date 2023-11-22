@@ -10,6 +10,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
+import { CSS } from "@dnd-kit/utilities";
 
 const SortableStatus = ({
   active,
@@ -22,9 +23,7 @@ const SortableStatus = ({
     useSortable({ id: status.id });
 
   const style = {
-    transform: transform
-      ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
-      : undefined,
+    transform: CSS.Transform.toString(transform),
     transition,
   };
 

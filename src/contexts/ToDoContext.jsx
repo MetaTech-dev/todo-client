@@ -85,12 +85,7 @@ export const ToDoProvider = ({ children }) => {
     try {
       const response = await updateStatus(updatedStatus);
       if (response.ok) {
-        const result = await response.json();
-        setStatusList((prevStatusList) =>
-          prevStatusList.map((status) =>
-            status.id === result.id ? result : status
-          )
-        );
+        handleGetStatusList();
       } else if (!response.ok) {
         const errorResponse = await response.json();
         enqueueSnackbar(errorResponse.message, { variant: "error" });
@@ -99,7 +94,6 @@ export const ToDoProvider = ({ children }) => {
       console.error(err);
     }
     setStatusLoading(false);
-    handleGetStatusList();
   };
 
   const [isStatusFormDialogOpen, setIsStatusFormDialogOpen] = useState(false);
@@ -173,10 +167,7 @@ export const ToDoProvider = ({ children }) => {
     try {
       const response = await updateToDo(updatedToDo);
       if (response.ok) {
-        const result = await response.json();
-        setToDoList((prevToDoList) =>
-          prevToDoList.map((toDo) => (toDo.id === result.id ? result : toDo))
-        );
+        handleGetToDoList();
       } else if (!response.ok) {
         const errorResponse = await response.json();
         enqueueSnackbar(errorResponse.message, { variant: "error" });
