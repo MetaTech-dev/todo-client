@@ -27,6 +27,7 @@ const Dashboard = () => {
   useEffect(() => {
     handleGetStatusList();
     handleGetToDoList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleToDoFormOpen = () => {

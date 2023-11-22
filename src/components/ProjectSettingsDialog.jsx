@@ -2,24 +2,32 @@ import {
   AppBar,
   Box,
   Button,
-  CircularProgress,
   Dialog,
   IconButton,
   List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
   Paper,
   Toolbar,
   Typography,
 } from "@mui/material";
-import { useContext, forwardRef } from "react";
+import { useContext, forwardRef, useState, useEffect } from "react";
 import ToDoContext from "../contexts/ToDoContext";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import Slide from "@mui/material/Slide";
 import CloseIcon from "@mui/icons-material/Close";
-import DragHandleIcon from "@mui/icons-material/DragHandle";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
+import SortableStatus from "./SortableStatus";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -33,11 +41,60 @@ const ProjectSettingsDialog = () => {
     handleRemoveStatus,
     statusLoading,
     setStatusFormData,
+    handleUpdateStatus,
   } = useContext(ToDoContext);
+
+  const [items, setItems] = useState([]);
+  const [activeId, setActiveId] = useState(null);
+
+  useEffect(() => {
+    setItems(statusList.map((status) => status.id));
+  }, [statusList]);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   const handleEditStatus = (status) => {
     setStatusFormData(status);
     setIsStatusFormDialogOpen(true);
+  };
+
+  const handleDragStart = (event) => {
+    setActiveId(event.active.id);
+  };
+
+  const handleDragEnd = async (event) => {
+    const { active, over } = event;
+    setActiveId(null);
+    if (active.id !== over.id) {
+      const oldIndex = items.indexOf(active.id);
+      const newIndex = items.indexOf(over.id);
+
+      if (newIndex !== oldIndex) {
+        const newItems = arrayMove(items, oldIndex, newIndex);
+
+        const updatedStatus = statusList.find(
+          (status) => status.id === active.id
+        );
+        if (updatedStatus) {
+          const updatedStatusData = {
+            ...updatedStatus,
+            position: newIndex + 1,
+          };
+
+          try {
+            await handleUpdateStatus(updatedStatusData);
+            setItems(newItems);
+          } catch (error) {
+            console.error("Error updating status position:", error);
+          }
+        }
+      }
+    }
   };
 
   return (
@@ -103,46 +160,33 @@ const ProjectSettingsDialog = () => {
               </Typography>
             </Toolbar>
           </AppBar>
-
-          <List>
-            {statusList?.map((status) => {
-              return (
-                <ListItem
-                  key={status.id}
-                  secondaryAction={
-                    <>
-                      <IconButton
-                        onClick={() => handleEditStatus(status)}
-                        aria-label="Edit Status"
-                      >
-                        {!statusLoading && <EditTwoToneIcon />}
-                        {statusLoading && (
-                          <CircularProgress size={25} sx={{ marginRight: 1 }} />
-                        )}
-                      </IconButton>
-                      <IconButton
-                        onClick={() => handleRemoveStatus(status.id)}
-                        aria-label="Delete Status"
-                      >
-                        {!statusLoading && <DeleteOutlineOutlinedIcon />}
-                        {statusLoading && (
-                          <CircularProgress size={25} sx={{ marginRight: 1 }} />
-                        )}
-                      </IconButton>
-                    </>
-                  }
-                >
-                  <ListItemIcon>
-                    <DragHandleIcon />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={status.title}
-                    sx={{ paddingRight: "6rem" }}
-                  />
-                </ListItem>
-              );
-            })}
-          </List>
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={items}
+              strategy={verticalListSortingStrategy}
+            >
+              <List sx={{ p: 0 }}>
+                {items.map((id) => {
+                  const status = statusList.find((s) => s.id === id);
+                  return status ? (
+                    <SortableStatus
+                      key={status.id}
+                      status={status}
+                      statusLoading={statusLoading}
+                      handleEditStatus={() => handleEditStatus(status)}
+                      handleRemoveStatus={() => handleRemoveStatus(status.id)}
+                      active={activeId === status.id}
+                    />
+                  ) : null;
+                })}
+              </List>
+            </SortableContext>
+          </DndContext>
         </Paper>
         <Box sx={{ flexGrow: "1" }} />
       </Box>

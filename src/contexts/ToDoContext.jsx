@@ -39,7 +39,7 @@ export const ToDoProvider = ({ children }) => {
         enqueueSnackbar(errorResponse.message, { variant: "error" });
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
     setIsLoading(false);
   };
@@ -56,7 +56,7 @@ export const ToDoProvider = ({ children }) => {
         enqueueSnackbar(errorResponse.message, { variant: "error" });
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
     setFormLoading(false);
   };
@@ -75,7 +75,7 @@ export const ToDoProvider = ({ children }) => {
         enqueueSnackbar(errorResponse.message, { variant: "error" });
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
     setStatusLoading(false);
   };
@@ -85,18 +85,13 @@ export const ToDoProvider = ({ children }) => {
     try {
       const response = await updateStatus(updatedStatus);
       if (response.ok) {
-        const result = await response.json();
-        setStatusList((prevStatusList) =>
-          prevStatusList.map((status) =>
-            status.id === result.id ? result : status
-          )
-        );
+        handleGetStatusList();
       } else if (!response.ok) {
         const errorResponse = await response.json();
         enqueueSnackbar(errorResponse.message, { variant: "error" });
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
     setStatusLoading(false);
   };
@@ -126,7 +121,7 @@ export const ToDoProvider = ({ children }) => {
         enqueueSnackbar(errorResponse.message, { variant: "error" });
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
     setIsLoading(false);
   };
@@ -143,7 +138,7 @@ export const ToDoProvider = ({ children }) => {
         enqueueSnackbar(errorResponse.message, { variant: "error" });
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
     setFormLoading(false);
   };
@@ -162,7 +157,7 @@ export const ToDoProvider = ({ children }) => {
         enqueueSnackbar(errorResponse.message, { variant: "error" });
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
     setToDoLoading(false);
   };
@@ -181,7 +176,7 @@ export const ToDoProvider = ({ children }) => {
         enqueueSnackbar(errorResponse.message, { variant: "error" });
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
     setToDoLoading(false);
   };
