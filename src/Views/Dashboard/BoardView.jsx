@@ -4,10 +4,22 @@ import { useTheme } from "@mui/material/styles";
 import ToDoCard from "../../components/ToDoCard";
 import ToDoContext from "../../contexts/ToDoContext";
 import LoadingStatusBoardView from "../../components/loading/LoadingStatusBoardView";
+import { useGetStatusList } from "../../hooks/status";
 
 const BoardView = () => {
   const theme = useTheme();
-  const { filteredToDoList, statusList, isLoading } = useContext(ToDoContext);
+  const { filteredToDoList } = useContext(ToDoContext);
+  const { data: statusList, isLoading, isError, error } = useGetStatusList();
+  console.log(
+    "Data:",
+    statusList,
+    "Is Loading:",
+    isLoading,
+    "Is Error:",
+    isError,
+    "Error:",
+    error
+  );
 
   const filterToDosByStatus = (status) => {
     return filteredToDoList.filter((toDo) => toDo.statusId === status.id);

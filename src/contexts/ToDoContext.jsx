@@ -27,22 +27,22 @@ export const ToDoProvider = ({ children }) => {
 
   const [statusList, setStatusList] = useState([]);
 
-  const handleGetStatusList = async () => {
-    setIsLoading(true);
-    try {
-      const response = await getStatusList();
-      if (response.ok) {
-        const data = await response.json();
-        setStatusList(data);
-      } else if (!response.ok) {
-        const errorResponse = await response.json();
-        enqueueSnackbar(errorResponse.message, { variant: "error" });
-      }
-    } catch (err) {
-      console.error(err);
-    }
-    setIsLoading(false);
-  };
+  // const handleGetStatusList = async () => {
+  //   setIsLoading(true);
+  //   try {
+  //     const response = await getStatusList();
+  //     if (response.ok) {
+  //       const data = await response.json();
+  //       setStatusList(data);
+  //     } else if (!response.ok) {
+  //       const errorResponse = await response.json();
+  //       enqueueSnackbar(errorResponse.message, { variant: "error" });
+  //     }
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  //   setIsLoading(false);
+  // };
 
   const handleCreateStatus = async (statusFormData) => {
     setFormLoading(true);
@@ -85,7 +85,7 @@ export const ToDoProvider = ({ children }) => {
     try {
       const response = await updateStatus(updatedStatus);
       if (response.ok) {
-        handleGetStatusList();
+        // handleGetStatusList();
       } else if (!response.ok) {
         const errorResponse = await response.json();
         enqueueSnackbar(errorResponse.message, { variant: "error" });
@@ -241,7 +241,7 @@ export const ToDoProvider = ({ children }) => {
     defaultNewStatus,
     handleRemoveStatus,
     handleUpdateStatus,
-    handleGetStatusList,
+    // handleGetStatusList,
     isLoading,
     setIsLoading,
     handleCreateStatus,

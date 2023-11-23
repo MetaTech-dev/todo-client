@@ -1,6 +1,6 @@
 export const getStatusList = async () => {
   const response = await fetch("http://localhost:3000/status");
-  return response;
+  return response.json();
 };
 
 export const createStatus = async (status) => {
