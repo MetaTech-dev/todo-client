@@ -13,8 +13,12 @@ import { blueGrey } from "@mui/material/colors";
 import router from "./router";
 import AppSettingsContext from "./contexts/AppSettingsContext";
 import { SnackbarProvider } from "notistack";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 function App() {
+  const queryClient = new QueryClient();
+
   const { isDarkMode } = useContext(AppSettingsContext);
 
   const theme = createTheme({
@@ -30,17 +34,20 @@ function App() {
   });
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <ToDoProvider>
-            <SnackbarProvider maxSnack={1}>
-              <RouterProvider router={router} />
-            </SnackbarProvider>
-          </ToDoProvider>
-        </LocalizationProvider>
-      </CssBaseline>
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <ToDoProvider>
+              <SnackbarProvider maxSnack={1}>
+                <RouterProvider router={router} />
+                <ReactQueryDevtools initialIsOpen={false} />
+              </SnackbarProvider>
+            </ToDoProvider>
+          </LocalizationProvider>
+        </CssBaseline>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
 
