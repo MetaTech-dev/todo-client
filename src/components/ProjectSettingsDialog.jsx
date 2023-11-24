@@ -28,6 +28,8 @@ import {
 import Slide from "@mui/material/Slide";
 import CloseIcon from "@mui/icons-material/Close";
 import SortableStatus from "./SortableStatus";
+import { useGetStatusList } from "../hooks/status";
+import { enqueueSnackbar } from "notistack";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -37,7 +39,7 @@ const ProjectSettingsDialog = () => {
     isProjectSettingsDialogOpen,
     setIsProjectSettingsDialogOpen,
     setIsStatusFormDialogOpen,
-    statusList,
+    // statusList,
     handleRemoveStatus,
     statusLoading,
     setStatusFormData,
@@ -47,9 +49,25 @@ const ProjectSettingsDialog = () => {
   const [items, setItems] = useState([]);
   const [activeId, setActiveId] = useState(null);
 
+  const {
+    data: statusList,
+    isPending: statusPending,
+    isError: statusFailed,
+    error: statusError,
+  } = useGetStatusList();
+
   useEffect(() => {
-    setItems(statusList.map((status) => status.id));
-  }, [statusList]);
+    if (statusFailed) {
+      enqueueSnackbar(
+        statusError.message || "An error occurred fetching statuses",
+        { variant: "error" }
+      );
+    }
+  }, [statusFailed, statusError]);
+
+  useEffect(() => {
+    if (!statusPending) setItems(statusList.map((status) => status.id));
+  }, [statusList, statusPending]);
 
   const sensors = useSensors(
     useSensor(PointerSensor),

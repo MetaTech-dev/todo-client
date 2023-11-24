@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ToDoContext from "../contexts/ToDoContext";
 import {
   Box,
@@ -16,22 +16,39 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
-import AppSettingsContext from "../contexts/AppSettingsContext";
 import dayjs from "dayjs";
+import { enqueueSnackbar } from "notistack";
+import { useGetStatusList } from "../hooks/status";
 
 const ToDoForm = () => {
   const {
     handleCreateToDo,
     defaultNewToDo,
-    statusList,
+    // statusList,
     handleUpdateToDo,
     toDoFormData,
     setToDoFormData,
     isToDoFormDialogOpen,
     setIsToDoFormDialogOpen,
+    formLoading,
   } = useContext(ToDoContext);
 
-  const { formLoading } = useContext(AppSettingsContext);
+  const {
+    data: statusList,
+    isPending: statusPending,
+    isError: statusFailed,
+    error: statusError,
+  } = useGetStatusList();
+  console.log("statusList", statusList);
+
+  useEffect(() => {
+    if (statusFailed) {
+      enqueueSnackbar(
+        statusError.message || "An error occurred fetching statuses",
+        { variant: "error" }
+      );
+    }
+  }, [statusFailed, statusError]);
 
   const toDoFormTitle = (toDo) => {
     return !toDo.id ? "New ToDo:" : "Update ToDo:";

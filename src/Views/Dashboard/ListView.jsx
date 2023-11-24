@@ -1,12 +1,14 @@
 import { Box } from "@mui/system";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import dayjs from "dayjs";
 import ToDoContext from "../../contexts/ToDoContext";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import { CircularProgress, Typography } from "@mui/material";
+import { useGetStatusList } from "../../hooks/status";
+import { enqueueSnackbar } from "notistack";
 
 const ListView = () => {
   const {
@@ -14,9 +16,25 @@ const ListView = () => {
     handleRemoveToDo,
     setToDoFormData,
     setIsToDoFormDialogOpen,
-    statusList,
+    // statusList,
     toDoLoading,
   } = useContext(ToDoContext);
+
+  const {
+    data: statusList,
+    isPending: statusPending,
+    isError: statusFailed,
+    error: statusError,
+  } = useGetStatusList();
+
+  useEffect(() => {
+    if (statusFailed) {
+      enqueueSnackbar(
+        statusError.message || "An error occurred fetching statuses",
+        { variant: "error" }
+      );
+    }
+  }, [statusFailed, statusError]);
 
   const getStatusTitle = (statusId) => {
     const status = statusList.find((status) => status.id === statusId);
