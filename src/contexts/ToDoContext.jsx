@@ -61,24 +61,24 @@ export const ToDoProvider = ({ children }) => {
   //   setFormLoading(false);
   // };
 
-  const handleRemoveStatus = async (id) => {
-    setStatusLoading(true);
-    try {
-      const response = await removeStatus(id);
-      if (response.ok) {
-        setStatusList((prevStatusList) =>
-          prevStatusList.filter((status) => status.id !== id)
-        );
-        enqueueSnackbar("Status deleted successfully", { variant: "success" });
-      } else {
-        const errorResponse = await response.json();
-        enqueueSnackbar(errorResponse.message, { variant: "error" });
-      }
-    } catch (err) {
-      console.error(err);
-    }
-    setStatusLoading(false);
-  };
+  // const handleRemoveStatus = async (id) => {
+  //   setStatusLoading(true);
+  //   try {
+  //     const response = await removeStatus(id);
+  //     if (response.ok) {
+  //       setStatusList((prevStatusList) =>
+  //         prevStatusList.filter((status) => status.id !== id)
+  //       );
+  //       enqueueSnackbar("Status deleted successfully", { variant: "success" });
+  //     } else {
+  //       const errorResponse = await response.json();
+  //       enqueueSnackbar(errorResponse.message, { variant: "error" });
+  //     }
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  //   setStatusLoading(false);
+  // };
 
   const handleUpdateStatus = async (updatedStatus) => {
     setStatusLoading(true);
@@ -239,7 +239,7 @@ export const ToDoProvider = ({ children }) => {
     statusFormData,
     setStatusFormData,
     defaultNewStatus,
-    handleRemoveStatus,
+    // handleRemoveStatus,
     handleUpdateStatus,
     // handleGetStatusList,
     isLoading,

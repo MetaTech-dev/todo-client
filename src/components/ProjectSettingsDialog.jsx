@@ -28,7 +28,7 @@ import {
 import Slide from "@mui/material/Slide";
 import CloseIcon from "@mui/icons-material/Close";
 import SortableStatus from "./SortableStatus";
-import { useGetStatusList } from "../hooks/status";
+import { useGetStatusList, useRemoveStatus } from "../hooks/status";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -39,7 +39,7 @@ const ProjectSettingsDialog = () => {
     setIsProjectSettingsDialogOpen,
     setIsStatusFormDialogOpen,
     // statusList,
-    handleRemoveStatus,
+    // handleRemoveStatus,
     statusLoading,
     setStatusFormData,
     handleUpdateStatus,
@@ -49,6 +49,8 @@ const ProjectSettingsDialog = () => {
   const [activeId, setActiveId] = useState(null);
 
   const { data: statusList, isPending: statusListPending } = useGetStatusList();
+
+  const { mutate: removeStatusMutation } = useRemoveStatus();
 
   useEffect(() => {
     if (!statusListPending) setItems(statusList.map((status) => status.id));
@@ -182,7 +184,7 @@ const ProjectSettingsDialog = () => {
                       status={status}
                       statusLoading={statusLoading}
                       handleEditStatus={() => handleEditStatus(status)}
-                      handleRemoveStatus={() => handleRemoveStatus(status.id)}
+                      handleRemoveStatus={() => removeStatusMutation(status.id)}
                       active={activeId === status.id}
                     />
                   ) : null;

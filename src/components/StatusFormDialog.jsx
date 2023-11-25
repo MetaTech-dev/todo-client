@@ -27,12 +27,7 @@ const StatusFormDialog = () => {
 
   const [showWarning, setShowWarning] = useState("");
 
-  const {
-    mutate: createStatusMutation,
-    isPending: createStatusPending,
-    isError: createStatusFailed,
-    error: createStatusError,
-  } = useCreateStatus();
+  const { mutate: createStatusMutation } = useCreateStatus();
 
   const handleClose = () => {
     setIsStatusFormDialogOpen(false);
