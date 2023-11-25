@@ -20,14 +20,11 @@ const Dashboard = () => {
     setIsToDoFormDialogOpen,
     setIsToDoFormNew,
     setIsProjectSettingsDialogOpen,
-    // handleGetStatusList,
     handleGetToDoList,
   } = useContext(ToDoContext);
 
   useEffect(() => {
-    // handleGetStatusList();
     handleGetToDoList();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleToDoFormOpen = () => {

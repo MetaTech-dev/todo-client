@@ -28,7 +28,11 @@ import {
 import Slide from "@mui/material/Slide";
 import CloseIcon from "@mui/icons-material/Close";
 import SortableStatus from "./SortableStatus";
-import { useGetStatusList, useRemoveStatus } from "../hooks/status";
+import {
+  useGetStatusList,
+  useRemoveStatus,
+  useUpdateStatus,
+} from "../hooks/status";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -38,11 +42,7 @@ const ProjectSettingsDialog = () => {
     isProjectSettingsDialogOpen,
     setIsProjectSettingsDialogOpen,
     setIsStatusFormDialogOpen,
-    // statusList,
-    // handleRemoveStatus,
-    statusLoading,
     setStatusFormData,
-    handleUpdateStatus,
   } = useContext(ToDoContext);
 
   const [items, setItems] = useState([]);
@@ -51,6 +51,8 @@ const ProjectSettingsDialog = () => {
   const { data: statusList, isPending: statusListPending } = useGetStatusList();
 
   const { mutate: removeStatusMutation } = useRemoveStatus();
+
+  const { mutate: updateStatusMutation } = useUpdateStatus();
 
   useEffect(() => {
     if (!statusListPending) setItems(statusList.map((status) => status.id));
@@ -92,7 +94,7 @@ const ProjectSettingsDialog = () => {
           };
 
           try {
-            await handleUpdateStatus(updatedStatusData);
+            await updateStatusMutation(updatedStatusData);
             setItems(newItems);
           } catch (error) {
             console.error("Error updating status position:", error);
@@ -182,7 +184,6 @@ const ProjectSettingsDialog = () => {
                     <SortableStatus
                       key={status.id}
                       status={status}
-                      statusLoading={statusLoading}
                       handleEditStatus={() => handleEditStatus(status)}
                       handleRemoveStatus={() => removeStatusMutation(status.id)}
                       active={activeId === status.id}

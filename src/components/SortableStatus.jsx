@@ -1,6 +1,5 @@
 import {
   Card,
-  CircularProgress,
   IconButton,
   ListItem,
   ListItemIcon,
@@ -15,7 +14,6 @@ import { CSS } from "@dnd-kit/utilities";
 const SortableStatus = ({
   active,
   status,
-  statusLoading,
   handleEditStatus,
   handleRemoveStatus,
 }) => {
@@ -42,19 +40,13 @@ const SortableStatus = ({
               onClick={() => handleEditStatus(status)}
               aria-label="Edit Status"
             >
-              {!statusLoading && <EditTwoToneIcon />}
-              {statusLoading && (
-                <CircularProgress size={25} sx={{ marginRight: 1 }} />
-              )}
+              <EditTwoToneIcon />
             </IconButton>
             <IconButton
               onClick={() => handleRemoveStatus(status.id)}
               aria-label="Delete Status"
             >
-              {!statusLoading && <DeleteOutlineOutlinedIcon />}
-              {statusLoading && (
-                <CircularProgress size={25} sx={{ marginRight: 1 }} />
-              )}
+              <DeleteOutlineOutlinedIcon />
             </IconButton>
           </>
         }

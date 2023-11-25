@@ -23,7 +23,6 @@ const ToDoForm = () => {
   const {
     handleCreateToDo,
     defaultNewToDo,
-    // statusList,
     handleUpdateToDo,
     toDoFormData,
     setToDoFormData,

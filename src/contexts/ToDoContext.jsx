@@ -3,14 +3,9 @@ import StatusFormDialog from "../components/StatusFormDialog";
 import ToDoFormDialog from "../components/ToDoFormDialog";
 import ProjectSettingsDialog from "../components/ProjectSettingsDialog";
 import { useDebounce } from "../utils/useDebounce";
-import {
-  // getStatusList,
-  // createStatus,
-  removeStatus,
-  updateStatus,
-} from "../api/status";
 import { getToDoList, createToDo, removeToDo, updateToDo } from "../api/toDo";
 import { enqueueSnackbar } from "notistack";
+import { useGetStatusList } from "../hooks/status";
 
 const ToDoContext = createContext();
 export default ToDoContext;
@@ -20,83 +15,13 @@ export const ToDoProvider = ({ children }) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
-  const [statusLoading, setStatusLoading] = useState(false);
   const [toDoLoading, setToDoLoading] = useState(false);
 
   // STATUS SECTION
 
-  const [statusList, setStatusList] = useState([]);
-
-  // const handleGetStatusList = async () => {
-  //   setIsLoading(true);
-  //   try {
-  //     const response = await getStatusList();
-  //     if (response.ok) {
-  //       const data = await response.json();
-  //       setStatusList(data);
-  //     } else if (!response.ok) {
-  //       const errorResponse = await response.json();
-  //       enqueueSnackbar(errorResponse.message, { variant: "error" });
-  //     }
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  //   setIsLoading(false);
-  // };
-
-  // const handleCreateStatus = async (statusFormData) => {
-  //   setFormLoading(true);
-  //   try {
-  //     const response = await createStatus(statusFormData);
-  //     if (response.ok) {
-  //       const data = await response.json();
-  //       setStatusList((prev) => [...prev, data]);
-  //     } else if (!response.ok) {
-  //       const errorResponse = await response.json();
-  //       enqueueSnackbar(errorResponse.message, { variant: "error" });
-  //     }
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  //   setFormLoading(false);
-  // };
-
-  // const handleRemoveStatus = async (id) => {
-  //   setStatusLoading(true);
-  //   try {
-  //     const response = await removeStatus(id);
-  //     if (response.ok) {
-  //       setStatusList((prevStatusList) =>
-  //         prevStatusList.filter((status) => status.id !== id)
-  //       );
-  //       enqueueSnackbar("Status deleted successfully", { variant: "success" });
-  //     } else {
-  //       const errorResponse = await response.json();
-  //       enqueueSnackbar(errorResponse.message, { variant: "error" });
-  //     }
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  //   setStatusLoading(false);
-  // };
-
-  const handleUpdateStatus = async (updatedStatus) => {
-    setStatusLoading(true);
-    try {
-      const response = await updateStatus(updatedStatus);
-      if (response.ok) {
-        // handleGetStatusList();
-      } else if (!response.ok) {
-        const errorResponse = await response.json();
-        enqueueSnackbar(errorResponse.message, { variant: "error" });
-      }
-    } catch (err) {
-      console.error(err);
-    }
-    setStatusLoading(false);
-  };
-
   const [isStatusFormDialogOpen, setIsStatusFormDialogOpen] = useState(false);
+
+  const { data: statusList } = useGetStatusList();
 
   const defaultNewStatus = {
     title: "",
@@ -218,7 +143,6 @@ export const ToDoProvider = ({ children }) => {
   const providerValue = {
     toDoList,
     filteredToDoList,
-    statusList,
     isToDoFormDialogOpen,
     setIsToDoFormDialogOpen,
     isToDoFormNew,
@@ -239,15 +163,9 @@ export const ToDoProvider = ({ children }) => {
     statusFormData,
     setStatusFormData,
     defaultNewStatus,
-    // handleRemoveStatus,
-    handleUpdateStatus,
-    // handleGetStatusList,
     isLoading,
     setIsLoading,
-    // handleCreateStatus,
     formLoading,
-    statusLoading,
-    setStatusLoading,
     toDoLoading,
     setToDoLoading,
   };

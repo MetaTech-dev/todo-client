@@ -16,7 +16,6 @@ const ListView = () => {
     handleRemoveToDo,
     setToDoFormData,
     setIsToDoFormDialogOpen,
-    // statusList,
     toDoLoading,
   } = useContext(ToDoContext);
 

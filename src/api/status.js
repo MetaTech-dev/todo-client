@@ -24,7 +24,6 @@ export const removeStatus = async (id) => {
   const response = await fetch(`http://localhost:3000/status/${id}`, {
     method: "DELETE",
   });
-  console.log("response", response);
   if (!response.ok) {
     const errorResponse = await response.json();
     throw new Error(errorResponse.message || "Failed to delete status");
@@ -39,5 +38,9 @@ export const updateStatus = async (status) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(status),
   });
-  return response;
+  if (!response.ok) {
+    const errorResponse = await response.json();
+    throw new Error(errorResponse.message || "Failed to update status");
+  }
+  return response.json();
 };

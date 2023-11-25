@@ -1,5 +1,10 @@
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
-import { createStatus, getStatusList, removeStatus } from "../api/status";
+import {
+  createStatus,
+  getStatusList,
+  removeStatus,
+  updateStatus,
+} from "../api/status";
 import { enqueueSnackbar } from "notistack";
 
 export const useGetStatusList = () => {
@@ -39,6 +44,21 @@ export const useRemoveStatus = () => {
     },
     onError: (error) => {
       enqueueSnackbar(error.message || "An error occurred removing status", {
+        variant: "error",
+      });
+    },
+  });
+};
+
+export const useUpdateStatus = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: updateStatus,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["statusList"] });
+    },
+    onError: (error) => {
+      enqueueSnackbar(error.message || "An error occurred updating status", {
         variant: "error",
       });
     },
