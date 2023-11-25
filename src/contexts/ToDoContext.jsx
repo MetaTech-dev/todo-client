@@ -4,8 +4,8 @@ import ToDoFormDialog from "../components/ToDoFormDialog";
 import ProjectSettingsDialog from "../components/ProjectSettingsDialog";
 import { useDebounce } from "../utils/useDebounce";
 import {
-  getStatusList,
-  createStatus,
+  // getStatusList,
+  // createStatus,
   removeStatus,
   updateStatus,
 } from "../api/status";
@@ -44,22 +44,22 @@ export const ToDoProvider = ({ children }) => {
   //   setIsLoading(false);
   // };
 
-  const handleCreateStatus = async (statusFormData) => {
-    setFormLoading(true);
-    try {
-      const response = await createStatus(statusFormData);
-      if (response.ok) {
-        const data = await response.json();
-        setStatusList((prev) => [...prev, data]);
-      } else if (!response.ok) {
-        const errorResponse = await response.json();
-        enqueueSnackbar(errorResponse.message, { variant: "error" });
-      }
-    } catch (err) {
-      console.error(err);
-    }
-    setFormLoading(false);
-  };
+  // const handleCreateStatus = async (statusFormData) => {
+  //   setFormLoading(true);
+  //   try {
+  //     const response = await createStatus(statusFormData);
+  //     if (response.ok) {
+  //       const data = await response.json();
+  //       setStatusList((prev) => [...prev, data]);
+  //     } else if (!response.ok) {
+  //       const errorResponse = await response.json();
+  //       enqueueSnackbar(errorResponse.message, { variant: "error" });
+  //     }
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  //   setFormLoading(false);
+  // };
 
   const handleRemoveStatus = async (id) => {
     setStatusLoading(true);
@@ -244,7 +244,7 @@ export const ToDoProvider = ({ children }) => {
     // handleGetStatusList,
     isLoading,
     setIsLoading,
-    handleCreateStatus,
+    // handleCreateStatus,
     formLoading,
     statusLoading,
     setStatusLoading,

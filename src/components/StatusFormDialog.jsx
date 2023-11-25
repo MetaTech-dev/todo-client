@@ -11,6 +11,7 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
+import { useCreateStatus } from "../hooks/status";
 
 const StatusFormDialog = () => {
   const {
@@ -20,11 +21,19 @@ const StatusFormDialog = () => {
     setStatusFormData,
     defaultNewStatus,
     handleUpdateStatus,
-    handleCreateStatus,
+    // handleCreateStatus,
     formLoading,
   } = useContext(ToDoContext);
 
   const [showWarning, setShowWarning] = useState("");
+
+  const {
+    mutate: createStatusMutation,
+    isPending: createStatusPending,
+    isError: createStatusFailed,
+    error: createStatusError,
+  } = useCreateStatus();
+
   const handleClose = () => {
     setIsStatusFormDialogOpen(false);
     setShowWarning("");
@@ -49,7 +58,7 @@ const StatusFormDialog = () => {
     if (trimmedTitle !== "") {
       if (trimmedTitle.length < 30) {
         if (!status.id) {
-          handleCreateStatus(statusFormData);
+          createStatusMutation(statusFormData);
         } else if (status.id) {
           handleUpdateStatus(statusFormData);
         }

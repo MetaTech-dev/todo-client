@@ -20,21 +20,7 @@ const ListView = () => {
     toDoLoading,
   } = useContext(ToDoContext);
 
-  const {
-    data: statusList,
-    isPending: statusPending,
-    isError: statusFailed,
-    error: statusError,
-  } = useGetStatusList();
-
-  useEffect(() => {
-    if (statusFailed) {
-      enqueueSnackbar(
-        statusError.message || "An error occurred fetching statuses",
-        { variant: "error" }
-      );
-    }
-  }, [statusFailed, statusError]);
+  const { data: statusList, isPending: statusPending } = useGetStatusList();
 
   const getStatusTitle = (statusId) => {
     const status = statusList.find((status) => status.id === statusId);

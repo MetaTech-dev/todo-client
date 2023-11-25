@@ -1,5 +1,9 @@
 export const getStatusList = async () => {
   const response = await fetch("http://localhost:3000/status");
+  if (!response.ok) {
+    const errorResponse = await response.json();
+    throw new Error(errorResponse.message || "Failed to fetch status list");
+  }
   return response.json();
 };
 
@@ -9,7 +13,11 @@ export const createStatus = async (status) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(status),
   });
-  return response;
+  if (!response.ok) {
+    const errorResponse = await response.json();
+    throw new Error(errorResponse.message || "Failed to create status");
+  }
+  return response.json();
 };
 
 export const removeStatus = async (id) => {

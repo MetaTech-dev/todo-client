@@ -17,7 +17,6 @@ import {
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
-import { enqueueSnackbar } from "notistack";
 import { useGetStatusList } from "../hooks/status";
 
 const ToDoForm = () => {
@@ -33,22 +32,7 @@ const ToDoForm = () => {
     formLoading,
   } = useContext(ToDoContext);
 
-  const {
-    data: statusList,
-    isPending: statusPending,
-    isError: statusFailed,
-    error: statusError,
-  } = useGetStatusList();
-  console.log("statusList", statusList);
-
-  useEffect(() => {
-    if (statusFailed) {
-      enqueueSnackbar(
-        statusError.message || "An error occurred fetching statuses",
-        { variant: "error" }
-      );
-    }
-  }, [statusFailed, statusError]);
+  const { data: statusList } = useGetStatusList();
 
   const toDoFormTitle = (toDo) => {
     return !toDo.id ? "New ToDo:" : "Update ToDo:";

@@ -10,21 +10,7 @@ import { enqueueSnackbar } from "notistack";
 const BoardView = () => {
   const theme = useTheme();
   const { filteredToDoList } = useContext(ToDoContext);
-  const {
-    data: statusList,
-    isPending: statusPending,
-    isError: statusFailed,
-    error: statusError,
-  } = useGetStatusList();
-
-  useEffect(() => {
-    if (statusFailed) {
-      enqueueSnackbar(
-        statusError.message || "An error occurred fetching statuses",
-        { variant: "error" }
-      );
-    }
-  }, [statusFailed, statusError]);
+  const { data: statusList, isPending: statusPending } = useGetStatusList();
 
   const filterToDosByStatus = (status) => {
     return filteredToDoList.filter((toDo) => toDo.statusId === status.id);
