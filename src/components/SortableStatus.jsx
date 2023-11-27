@@ -12,7 +12,8 @@ import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import { CSS } from "@dnd-kit/utilities";
 
 const SortableStatus = ({
-  active,
+  activeGroup,
+  activeTile,
   status,
   handleEditStatus,
   handleRemoveStatus,
@@ -31,7 +32,11 @@ const SortableStatus = ({
       ref={setNodeRef}
       style={style}
       {...attributes}
-      elevation={active ? 20 : 3}
+      elevation={activeTile ? 20 : 3}
+      sx={{
+        mt: activeGroup ? 0.4 : 0.2,
+        transition: "all .1s ease",
+      }}
     >
       <ListItem
         secondaryAction={

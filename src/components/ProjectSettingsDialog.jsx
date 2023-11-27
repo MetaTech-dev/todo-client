@@ -186,7 +186,8 @@ const ProjectSettingsDialog = () => {
                       status={status}
                       handleEditStatus={() => handleEditStatus(status)}
                       handleRemoveStatus={() => removeStatusMutation(status.id)}
-                      active={activeId === status.id}
+                      activeTile={activeId === status.id}
+                      activeGroup={activeId}
                     />
                   ) : null;
                 })}

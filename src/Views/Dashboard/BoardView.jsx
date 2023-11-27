@@ -1,11 +1,10 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { Box, Card, Paper, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import ToDoCard from "../../components/ToDoCard";
 import ToDoContext from "../../contexts/ToDoContext";
 import LoadingStatusBoardView from "../../components/loading/LoadingStatusBoardView";
 import { useGetStatusList } from "../../hooks/status";
-import { enqueueSnackbar } from "notistack";
 
 const BoardView = () => {
   const theme = useTheme();
@@ -28,6 +27,7 @@ const BoardView = () => {
       }}
     >
       {!statusPending &&
+        filteredToDoList &&
         statusList?.map((status) => {
           return (
             <Box
@@ -75,14 +75,14 @@ const BoardView = () => {
                   p: 1,
                 }}
               >
-                {filterToDosByStatus(status).map((toDo) => {
+                {filterToDosByStatus(status)?.map((toDo) => {
                   return <ToDoCard toDo={toDo} key={toDo.id} />;
                 })}
               </Paper>
             </Box>
           );
         })}
-      {statusPending && (
+      {(statusPending || !filteredToDoList) && (
         <>
           <LoadingStatusBoardView key={1} />
           <LoadingStatusBoardView key={2} />

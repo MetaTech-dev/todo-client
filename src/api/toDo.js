@@ -1,8 +1,10 @@
 export const getToDoList = async () => {
   const response = await fetch("http://localhost:3000/toDo");
-  //   const data = await response.json();
-  //   return data;
-  return response;
+  if (!response.ok) {
+    const errorResponse = await response.json();
+    throw new Error(errorResponse.message || "Failed to fetch toDo list");
+  }
+  return response.json();
 };
 
 export const createToDo = async (toDo) => {
@@ -11,17 +13,23 @@ export const createToDo = async (toDo) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(toDo),
   });
-  //   const data = await response.json();
-  //   return data;
-  return response;
+  if (!response.ok) {
+    const errorResponse = await response.json();
+    throw new Error(errorResponse.message || "Failed to create toDo");
+  }
+  return response.json();
 };
 
 export const removeToDo = async (id) => {
   const response = await fetch(`http://localhost:3000/toDo/${id}`, {
     method: "DELETE",
   });
-  //   return true;
-  return response;
+  if (!response.ok) {
+    const errorResponse = await response.json();
+    throw new Error(errorResponse.message || "Failed to delete toDo");
+  } else if (response.ok) {
+    return true;
+  }
 };
 
 export const updateToDo = async (toDo) => {
@@ -30,7 +38,9 @@ export const updateToDo = async (toDo) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(toDo),
   });
-  //   const data = await response.json();
-  //   return data;
-  return response;
+  if (!response.ok) {
+    const errorResponse = await response.json();
+    throw new Error(errorResponse.message || "Failed to update toDo");
+  }
+  return response.json();
 };

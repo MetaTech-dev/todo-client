@@ -13,10 +13,10 @@ import { useContext } from "react";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+import { useRemoveToDo } from "../hooks/toDo";
 
 const ToDoCard = ({ toDo }) => {
-  const { handleRemoveToDo, setToDoFormData, setIsToDoFormDialogOpen } =
-    useContext(ToDoContext);
+  const { setToDoFormData, setIsToDoFormDialogOpen } = useContext(ToDoContext);
 
   const formatDate = (date) => {
     const dayjsDate = dayjs(date);
@@ -28,13 +28,15 @@ const ToDoCard = ({ toDo }) => {
   const formattedCreatedDate = formatDate(toDo.createdDate);
   const formattedDueDate = formatDate(toDo.dueDate);
 
+  const { mutate: removeToDoMutation } = useRemoveToDo();
+
   const handleEdit = () => {
     setToDoFormData(toDo);
     setIsToDoFormDialogOpen(true);
   };
 
   const handleDelete = () => {
-    handleRemoveToDo(toDo.id);
+    removeToDoMutation(toDo.id);
   };
 
   const getPriorityColor = () => {

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import ToDoContext from "../contexts/ToDoContext";
 import {
   Box,
@@ -18,12 +18,11 @@ import {
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import { useGetStatusList } from "../hooks/status";
+import { useCreateToDo, useUpdateToDo } from "../hooks/toDo";
 
 const ToDoForm = () => {
   const {
-    handleCreateToDo,
     defaultNewToDo,
-    handleUpdateToDo,
     toDoFormData,
     setToDoFormData,
     isToDoFormDialogOpen,
@@ -32,6 +31,10 @@ const ToDoForm = () => {
   } = useContext(ToDoContext);
 
   const { data: statusList } = useGetStatusList();
+
+  const { mutate: createToDoMutation } = useCreateToDo();
+
+  const { mutate: updateToDoMutation } = useUpdateToDo();
 
   const toDoFormTitle = (toDo) => {
     return !toDo.id ? "New ToDo:" : "Update ToDo:";
@@ -59,9 +62,9 @@ const ToDoForm = () => {
 
     if (trimmedTitle !== "" && trimmedDescription !== "") {
       if (!toDo.id) {
-        handleCreateToDo(toDoFormData);
+        createToDoMutation(toDoFormData);
       } else if (toDo.id) {
-        handleUpdateToDo(toDoFormData);
+        updateToDoMutation(toDoFormData);
       }
       setIsToDoFormDialogOpen(false);
       setToDoFormData(defaultNewToDo);

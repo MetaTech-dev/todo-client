@@ -1,6 +1,6 @@
 import { Box } from "@mui/system";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import dayjs from "dayjs";
 import ToDoContext from "../../contexts/ToDoContext";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
@@ -8,18 +8,19 @@ import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import { CircularProgress, Typography } from "@mui/material";
 import { useGetStatusList } from "../../hooks/status";
-import { enqueueSnackbar } from "notistack";
+import { useRemoveToDo } from "../../hooks/toDo";
 
 const ListView = () => {
   const {
     filteredToDoList,
-    handleRemoveToDo,
     setToDoFormData,
     setIsToDoFormDialogOpen,
     toDoLoading,
   } = useContext(ToDoContext);
 
-  const { data: statusList, isPending: statusPending } = useGetStatusList();
+  const { data: statusList } = useGetStatusList();
+
+  const { mutate: removeToDoMutation } = useRemoveToDo();
 
   const getStatusTitle = (statusId) => {
     const status = statusList.find((status) => status.id === statusId);
@@ -142,7 +143,7 @@ const ListView = () => {
               )
             }
             label="Delete"
-            onClick={() => handleRemoveToDo(toDo.id)}
+            onClick={() => removeToDoMutation(toDo.id)}
             color="inherit"
             aria-label="Delete ToDo"
           />,

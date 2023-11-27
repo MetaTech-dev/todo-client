@@ -3,9 +3,8 @@ import StatusFormDialog from "../components/StatusFormDialog";
 import ToDoFormDialog from "../components/ToDoFormDialog";
 import ProjectSettingsDialog from "../components/ProjectSettingsDialog";
 import { useDebounce } from "../utils/useDebounce";
-import { getToDoList, createToDo, removeToDo, updateToDo } from "../api/toDo";
-import { enqueueSnackbar } from "notistack";
 import { useGetStatusList } from "../hooks/status";
+import { useGetToDoList } from "../hooks/toDo";
 
 const ToDoContext = createContext();
 export default ToDoContext;
@@ -32,79 +31,7 @@ export const ToDoProvider = ({ children }) => {
 
   // TODO SECTION
 
-  const [toDoList, setToDoList] = useState([]);
-
-  const handleGetToDoList = async () => {
-    setIsLoading(true);
-    try {
-      const response = await getToDoList();
-      if (response.ok) {
-        const data = await response.json();
-        setToDoList(data);
-      } else if (!response.ok) {
-        const errorResponse = await response.json();
-        enqueueSnackbar(errorResponse.message, { variant: "error" });
-      }
-    } catch (err) {
-      console.error(err);
-    }
-    setIsLoading(false);
-  };
-
-  const handleCreateToDo = async (toDoFormData) => {
-    setFormLoading(true);
-    try {
-      const response = await createToDo(toDoFormData);
-      if (response.ok) {
-        const data = await response.json();
-        setToDoList((prev) => [...prev, data]);
-      } else if (!response.ok) {
-        const errorResponse = await response.json();
-        enqueueSnackbar(errorResponse.message, { variant: "error" });
-      }
-    } catch (err) {
-      console.error(err);
-    }
-    setFormLoading(false);
-  };
-
-  const handleRemoveToDo = async (id) => {
-    setToDoLoading(true);
-    try {
-      const response = await removeToDo(id);
-      if (response.ok) {
-        setToDoList((prevToDoList) =>
-          prevToDoList.filter((toDo) => toDo.id !== id)
-        );
-        enqueueSnackbar("ToDo deleted successfully", { variant: "success" });
-      } else if (!response.ok) {
-        const errorResponse = await response.json();
-        enqueueSnackbar(errorResponse.message, { variant: "error" });
-      }
-    } catch (err) {
-      console.error(err);
-    }
-    setToDoLoading(false);
-  };
-
-  const handleUpdateToDo = async (updatedToDo) => {
-    setToDoLoading(true);
-    try {
-      const response = await updateToDo(updatedToDo);
-      if (response.ok) {
-        const result = await response.json();
-        setToDoList((prevToDoList) =>
-          prevToDoList.map((toDo) => (toDo.id === result.id ? result : toDo))
-        );
-      } else if (!response.ok) {
-        const errorResponse = await response.json();
-        enqueueSnackbar(errorResponse.message, { variant: "error" });
-      }
-    } catch (err) {
-      console.error(err);
-    }
-    setToDoLoading(false);
-  };
+  const { data: toDoList } = useGetToDoList();
 
   const [isToDoFormDialogOpen, setIsToDoFormDialogOpen] = useState(false);
   const [isToDoFormNew, setIsToDoFormNew] = useState(true);
@@ -152,10 +79,6 @@ export const ToDoProvider = ({ children }) => {
     setToDoFormData,
     isStatusFormDialogOpen,
     setIsStatusFormDialogOpen,
-    handleGetToDoList,
-    handleCreateToDo,
-    handleUpdateToDo,
-    handleRemoveToDo,
     searchQuery,
     handleChangeSearchQuery,
     isProjectSettingsDialogOpen,
