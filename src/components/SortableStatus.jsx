@@ -34,7 +34,7 @@ const SortableStatus = ({
       {...attributes}
       elevation={activeTile ? 20 : 3}
       sx={{
-        mt: activeGroup ? 0.4 : 0.2,
+        mt: activeGroup ? 0.4 : 0,
         transition: "all .1s ease",
       }}
     >
