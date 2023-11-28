@@ -14,20 +14,20 @@ import {
 import { useCreateStatus, useUpdateStatus } from "../hooks/status";
 
 const StatusFormDialog = () => {
-  const {
-    setIsStatusFormDialogOpen,
-    isStatusFormDialogOpen,
-    statusFormData,
-    setStatusFormData,
-    defaultNewStatus,
-    formLoading,
-  } = useContext(ToDoContext);
+  const { setIsStatusFormDialogOpen, isStatusFormDialogOpen, formLoading } =
+    useContext(ToDoContext);
+
+  const [statusFormData, setStatusFormData] = useState();
 
   const [showWarning, setShowWarning] = useState("");
 
   const { mutate: createStatus } = useCreateStatus();
 
   const { mutate: updateStatus } = useUpdateStatus();
+
+  const defaultNewStatus = {
+    title: "",
+  };
 
   const handleClose = () => {
     setIsStatusFormDialogOpen(false);
@@ -44,7 +44,7 @@ const StatusFormDialog = () => {
   };
 
   const statusFormTitle = (status) => {
-    return !status.id ? "New Status:" : "Edit Status:";
+    return !status?.id ? "New Status:" : "Edit Status:";
   };
 
   const handleSubmit = (status) => {
@@ -89,7 +89,7 @@ const StatusFormDialog = () => {
             type="text"
             fullWidth
             variant="standard"
-            value={statusFormData.title}
+            value={statusFormData?.title}
             onChange={handleInputChange}
           />
         </DialogContent>

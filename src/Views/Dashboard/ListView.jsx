@@ -7,18 +7,11 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import { CircularProgress, Typography } from "@mui/material";
-import { useGetStatusList } from "../../hooks/status";
 import { useRemoveToDo } from "../../hooks/toDo";
 
-const ListView = () => {
-  const {
-    filteredToDoList,
-    setToDoFormData,
-    setIsToDoFormDialogOpen,
-    toDoLoading,
-  } = useContext(ToDoContext);
-
-  const { data: statusList } = useGetStatusList();
+const ListView = ({ statusList, filteredToDoList }) => {
+  const { setToDoFormData, setIsToDoFormDialogOpen, toDoLoading } =
+    useContext(ToDoContext);
 
   const { mutate: removeToDo } = useRemoveToDo();
 

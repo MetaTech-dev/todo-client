@@ -1,16 +1,10 @@
-import { useContext } from "react";
 import { Box, Card, Paper, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import ToDoCard from "../../components/ToDoCard";
-import ToDoContext from "../../contexts/ToDoContext";
 import LoadingStatusBoardView from "../../components/loading/LoadingStatusBoardView";
-import { useGetStatusList } from "../../hooks/status";
 
-const BoardView = () => {
+const BoardView = ({ statusList, isStatusListPending, filteredToDoList }) => {
   const theme = useTheme();
-  const { filteredToDoList } = useContext(ToDoContext);
-  const { data: statusList, isPending: isStatusListPending } =
-    useGetStatusList();
 
   const filterToDosByStatus = (status) => {
     return filteredToDoList.filter((toDo) => toDo.statusId === status.id);

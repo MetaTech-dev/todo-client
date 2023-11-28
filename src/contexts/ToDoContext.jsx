@@ -10,22 +10,12 @@ const ToDoContext = createContext();
 export default ToDoContext;
 
 export const ToDoProvider = ({ children }) => {
-  //Loading States
-
-  // const [isLoading, setIsLoading] = useState(false);
-  const [formLoading, setFormLoading] = useState(false);
-  // const [toDoLoading, setToDoLoading] = useState(false);
-
   // STATUS SECTION
 
   const [isStatusFormDialogOpen, setIsStatusFormDialogOpen] = useState(false);
 
   const { data: statusList } = useGetStatusList();
 
-  const defaultNewStatus = {
-    title: "",
-  };
-  const [statusFormData, setStatusFormData] = useState(defaultNewStatus);
   const [isProjectSettingsDialogOpen, setIsProjectSettingsDialogOpen] =
     useState(false);
 
@@ -83,10 +73,6 @@ export const ToDoProvider = ({ children }) => {
     handleChangeSearchQuery,
     isProjectSettingsDialogOpen,
     setIsProjectSettingsDialogOpen,
-    statusFormData,
-    setStatusFormData,
-    defaultNewStatus,
-    formLoading,
   };
 
   return (
