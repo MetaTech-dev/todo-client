@@ -28,7 +28,7 @@ const ToDoCard = ({ toDo }) => {
   const formattedCreatedDate = formatDate(toDo.createdDate);
   const formattedDueDate = formatDate(toDo.dueDate);
 
-  const { mutate: removeToDoMutation } = useRemoveToDo();
+  const { mutate: removeToDo } = useRemoveToDo();
 
   const handleEdit = () => {
     setToDoFormData(toDo);
@@ -36,7 +36,7 @@ const ToDoCard = ({ toDo }) => {
   };
 
   const handleDelete = () => {
-    removeToDoMutation(toDo.id);
+    removeToDo(toDo.id);
   };
 
   const getPriorityColor = () => {
