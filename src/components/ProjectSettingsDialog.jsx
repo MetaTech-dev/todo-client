@@ -48,15 +48,16 @@ const ProjectSettingsDialog = () => {
   const [items, setItems] = useState([]);
   const [activeId, setActiveId] = useState(null);
 
-  const { data: statusList, isPending: statusListPending } = useGetStatusList();
+  const { data: statusList, isPending: isStatusListPending } =
+    useGetStatusList();
 
-  const { mutate: removeStatusMutation } = useRemoveStatus();
+  const { mutate: removeStatus } = useRemoveStatus();
 
-  const { mutate: updateStatusMutation } = useUpdateStatus();
+  const { mutate: updateStatus } = useUpdateStatus();
 
   useEffect(() => {
-    if (!statusListPending) setItems(statusList.map((status) => status.id));
-  }, [statusList, statusListPending]);
+    if (!isStatusListPending) setItems(statusList.map((status) => status.id));
+  }, [statusList, isStatusListPending]);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -94,7 +95,7 @@ const ProjectSettingsDialog = () => {
           };
 
           try {
-            await updateStatusMutation(updatedStatusData);
+            await updateStatus(updatedStatusData);
             setItems(newItems);
           } catch (error) {
             console.error("Error updating status position:", error);
@@ -185,7 +186,7 @@ const ProjectSettingsDialog = () => {
                       key={status.id}
                       status={status}
                       handleEditStatus={() => handleEditStatus(status)}
-                      handleRemoveStatus={() => removeStatusMutation(status.id)}
+                      handleRemoveStatus={() => removeStatus(status.id)}
                       activeTile={activeId === status.id}
                       activeGroup={activeId}
                     />

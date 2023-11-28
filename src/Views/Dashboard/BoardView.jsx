@@ -9,7 +9,8 @@ import { useGetStatusList } from "../../hooks/status";
 const BoardView = () => {
   const theme = useTheme();
   const { filteredToDoList } = useContext(ToDoContext);
-  const { data: statusList, isPending: statusPending } = useGetStatusList();
+  const { data: statusList, isPending: isStatusListPending } =
+    useGetStatusList();
 
   const filterToDosByStatus = (status) => {
     return filteredToDoList.filter((toDo) => toDo.statusId === status.id);
@@ -26,8 +27,9 @@ const BoardView = () => {
         pt: 1,
       }}
     >
-      {!statusPending &&
+      {!isStatusListPending &&
         filteredToDoList &&
+        statusList &&
         statusList?.map((status) => {
           return (
             <Box
@@ -82,7 +84,7 @@ const BoardView = () => {
             </Box>
           );
         })}
-      {(statusPending || !filteredToDoList) && (
+      {(isStatusListPending || !filteredToDoList) && (
         <>
           <LoadingStatusBoardView key={1} />
           <LoadingStatusBoardView key={2} />

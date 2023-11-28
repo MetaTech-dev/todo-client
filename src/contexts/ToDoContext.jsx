@@ -12,9 +12,9 @@ export default ToDoContext;
 export const ToDoProvider = ({ children }) => {
   //Loading States
 
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
-  const [toDoLoading, setToDoLoading] = useState(false);
+  // const [toDoLoading, setToDoLoading] = useState(false);
 
   // STATUS SECTION
 
@@ -86,11 +86,7 @@ export const ToDoProvider = ({ children }) => {
     statusFormData,
     setStatusFormData,
     defaultNewStatus,
-    isLoading,
-    setIsLoading,
     formLoading,
-    toDoLoading,
-    setToDoLoading,
   };
 
   return (

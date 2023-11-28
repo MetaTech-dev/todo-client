@@ -1,16 +1,16 @@
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import {
-  createStatus,
-  getStatusList,
-  removeStatus,
-  updateStatus,
+  requestCreateStatus,
+  requestGetStatusList,
+  requestRemoveStatus,
+  requestUpdateStatus,
 } from "../api/status";
 import { enqueueSnackbar } from "notistack";
 
 export const useGetStatusList = () => {
   return useQuery({
     queryKey: ["statusList"],
-    queryFn: getStatusList,
+    queryFn: requestGetStatusList,
     onError: (error) => {
       enqueueSnackbar(error.message || "An error occurred fetching statuses", {
         variant: "error",
@@ -22,7 +22,7 @@ export const useGetStatusList = () => {
 export const useCreateStatus = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: createStatus,
+    mutationFn: requestCreateStatus,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["statusList"] });
     },
@@ -37,7 +37,7 @@ export const useCreateStatus = () => {
 export const useRemoveStatus = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: removeStatus,
+    mutationFn: requestRemoveStatus,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["statusList"] });
       enqueueSnackbar("Status removed successfully", { variant: "success" });
@@ -53,7 +53,7 @@ export const useRemoveStatus = () => {
 export const useUpdateStatus = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: updateStatus,
+    mutationFn: requestUpdateStatus,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["statusList"] });
     },

@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ToDoContext from "../contexts/ToDoContext";
 import {
   Box,
@@ -32,13 +32,17 @@ const ToDoForm = () => {
 
   const { data: statusList } = useGetStatusList();
 
-  const { mutate: createToDoMutation } = useCreateToDo();
+  const { mutate: createToDo, isPending, isSuccess } = useCreateToDo();
 
-  const { mutate: updateToDoMutation } = useUpdateToDo();
+  const { mutate: updateToDo } = useUpdateToDo();
 
   const toDoFormTitle = (toDo) => {
     return !toDo.id ? "New ToDo:" : "Update ToDo:";
   };
+
+  useEffect(() => {
+    console.log("isSuccess", isSuccess);
+  }, [isSuccess]);
 
   const [showWarning, setShowWarning] = useState(false);
 
@@ -62,9 +66,9 @@ const ToDoForm = () => {
 
     if (trimmedTitle !== "" && trimmedDescription !== "") {
       if (!toDo.id) {
-        createToDoMutation(toDoFormData);
+        createToDo(toDoFormData);
       } else if (toDo.id) {
-        updateToDoMutation(toDoFormData);
+        updateToDo(toDoFormData);
       }
       setIsToDoFormDialogOpen(false);
       setToDoFormData(defaultNewToDo);

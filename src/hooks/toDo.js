@@ -1,11 +1,16 @@
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
-import { createToDo, getToDoList, removeToDo, updateToDo } from "../api/toDo";
+import {
+  requestCreateToDo,
+  requestGetToDoList,
+  requestRemoveToDo,
+  requestUpdateToDo,
+} from "../api/toDo";
 import { enqueueSnackbar } from "notistack";
 
 export const useGetToDoList = () => {
   return useQuery({
     queryKey: ["toDoList"],
-    queryFn: getToDoList,
+    queryFn: requestGetToDoList,
     onError: (error) => {
       enqueueSnackbar(error.message || "An error occurred fetching toDos", {
         variant: "error",
@@ -17,7 +22,7 @@ export const useGetToDoList = () => {
 export const useCreateToDo = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: createToDo,
+    mutationFn: requestCreateToDo,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["toDoList"] });
     },
@@ -32,7 +37,7 @@ export const useCreateToDo = () => {
 export const useRemoveToDo = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: removeToDo,
+    mutationFn: requestRemoveToDo,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["toDoList"] });
       enqueueSnackbar("ToDo removed successfully", { variant: "success" });
@@ -48,7 +53,7 @@ export const useRemoveToDo = () => {
 export const useUpdateToDo = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: updateToDo,
+    mutationFn: requestUpdateToDo,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["toDoList"] });
     },

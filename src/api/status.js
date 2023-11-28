@@ -1,4 +1,4 @@
-export const getStatusList = async () => {
+export const requestGetStatusList = async () => {
   const response = await fetch("http://localhost:3000/status");
   if (!response.ok) {
     const errorResponse = await response.json();
@@ -7,7 +7,7 @@ export const getStatusList = async () => {
   return response.json();
 };
 
-export const createStatus = async (status) => {
+export const requestCreateStatus = async (status) => {
   const response = await fetch("http://localhost:3000/status", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -20,7 +20,7 @@ export const createStatus = async (status) => {
   return response.json();
 };
 
-export const removeStatus = async (id) => {
+export const requestRemoveStatus = async (id) => {
   const response = await fetch(`http://localhost:3000/status/${id}`, {
     method: "DELETE",
   });
@@ -32,7 +32,7 @@ export const removeStatus = async (id) => {
   }
 };
 
-export const updateStatus = async (status) => {
+export const requestUpdateStatus = async (status) => {
   const response = await fetch(`http://localhost:3000/status/${status.id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },

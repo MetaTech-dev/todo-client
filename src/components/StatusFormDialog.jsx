@@ -25,9 +25,9 @@ const StatusFormDialog = () => {
 
   const [showWarning, setShowWarning] = useState("");
 
-  const { mutate: createStatusMutation } = useCreateStatus();
+  const { mutate: createStatus } = useCreateStatus();
 
-  const { mutate: updateStatusMutation } = useUpdateStatus();
+  const { mutate: updateStatus } = useUpdateStatus();
 
   const handleClose = () => {
     setIsStatusFormDialogOpen(false);
@@ -53,9 +53,9 @@ const StatusFormDialog = () => {
     if (trimmedTitle !== "") {
       if (trimmedTitle.length < 30) {
         if (!status.id) {
-          createStatusMutation(statusFormData);
+          createStatus(statusFormData);
         } else if (status.id) {
-          updateStatusMutation(statusFormData);
+          updateStatus(statusFormData);
         }
         handleClose();
       } else {

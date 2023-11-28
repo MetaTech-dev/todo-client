@@ -20,11 +20,11 @@ const ListView = () => {
 
   const { data: statusList } = useGetStatusList();
 
-  const { mutate: removeToDoMutation } = useRemoveToDo();
+  const { mutate: removeToDo } = useRemoveToDo();
 
   const getStatusTitle = (statusId) => {
-    const status = statusList.find((status) => status.id === statusId);
-    return status ? status.title : "Unknown Status";
+    const status = statusList?.find((status) => status.id === statusId);
+    return status ? status?.title : "Unknown Status";
   };
 
   const getPriorityColor = (priority) => {
@@ -143,7 +143,7 @@ const ListView = () => {
               )
             }
             label="Delete"
-            onClick={() => removeToDoMutation(toDo.id)}
+            onClick={() => removeToDo(toDo.id)}
             color="inherit"
             aria-label="Delete ToDo"
           />,

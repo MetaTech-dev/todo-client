@@ -1,4 +1,4 @@
-export const getToDoList = async () => {
+export const requestGetToDoList = async () => {
   const response = await fetch("http://localhost:3000/toDo");
   if (!response.ok) {
     const errorResponse = await response.json();
@@ -7,7 +7,7 @@ export const getToDoList = async () => {
   return response.json();
 };
 
-export const createToDo = async (toDo) => {
+export const requestCreateToDo = async (toDo) => {
   const response = await fetch("http://localhost:3000/toDo", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -20,7 +20,7 @@ export const createToDo = async (toDo) => {
   return response.json();
 };
 
-export const removeToDo = async (id) => {
+export const requestRemoveToDo = async (id) => {
   const response = await fetch(`http://localhost:3000/toDo/${id}`, {
     method: "DELETE",
   });
@@ -32,7 +32,7 @@ export const removeToDo = async (id) => {
   }
 };
 
-export const updateToDo = async (toDo) => {
+export const requestUpdateToDo = async (toDo) => {
   const response = await fetch(`http://localhost:3000/toDo/${toDo.id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
