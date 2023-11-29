@@ -14,20 +14,20 @@ import {
 import { useCreateStatus, useUpdateStatus } from "../hooks/status";
 
 const StatusFormDialog = () => {
-  const { setIsStatusFormDialogOpen, isStatusFormDialogOpen, formLoading } =
-    useContext(ToDoContext);
-
-  const [statusFormData, setStatusFormData] = useState();
+  const {
+    setIsStatusFormDialogOpen,
+    isStatusFormDialogOpen,
+    statusFormData,
+    setStatusFormData,
+    defaultNewStatus,
+    formLoading,
+  } = useContext(ToDoContext);
 
   const [showWarning, setShowWarning] = useState("");
 
   const { mutate: createStatus } = useCreateStatus();
 
   const { mutate: updateStatus } = useUpdateStatus();
-
-  const defaultNewStatus = {
-    title: "",
-  };
 
   const handleClose = () => {
     setIsStatusFormDialogOpen(false);

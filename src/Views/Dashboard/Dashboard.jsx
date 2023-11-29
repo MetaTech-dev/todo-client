@@ -18,7 +18,7 @@ import { useGetToDoList } from "../../hooks/toDo";
 import { useDebounce } from "../../utils/useDebounce";
 
 const Dashboard = () => {
-  const { setIsToDoFormDialogOpen, setIsProjectSettingsDialogOpen } =
+  const { setIsProjectSettingsDialogOpen, setIsToDoFormDialogOpen } =
     useContext(ToDoContext);
 
   const { data: statusList, isPending: isStatusListPending } =
@@ -47,6 +47,8 @@ const Dashboard = () => {
     }
   }, [toDoList, debouncedSearchQuery]);
 
+  // DIALOG SECTION
+
   const handleToDoFormOpen = () => {
     setIsToDoFormDialogOpen(true);
   };
@@ -54,6 +56,8 @@ const Dashboard = () => {
   const handleProjectSettingsDialogOpen = () => {
     setIsProjectSettingsDialogOpen(true);
   };
+
+  // VIEW STATE SECTION
 
   const [viewState, setViewState] = useState("board");
   const handleViewState = (event, newViewState) => {

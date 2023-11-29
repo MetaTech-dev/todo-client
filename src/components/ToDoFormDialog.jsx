@@ -17,8 +17,8 @@ import {
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
-import { useGetStatusList } from "../hooks/status";
 import { useCreateToDo, useUpdateToDo } from "../hooks/toDo";
+import { useGetStatusList } from "../hooks/status";
 
 const ToDoForm = () => {
   const {
@@ -39,10 +39,6 @@ const ToDoForm = () => {
   const toDoFormTitle = (toDo) => {
     return !toDo.id ? "New ToDo:" : "Update ToDo:";
   };
-
-  useEffect(() => {
-    console.log("isSuccess", isSuccess);
-  }, [isSuccess]);
 
   const [showWarning, setShowWarning] = useState(false);
 
