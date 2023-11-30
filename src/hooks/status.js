@@ -6,6 +6,7 @@ import {
   requestUpdateStatus,
 } from "../api/status";
 import { enqueueSnackbar } from "notistack";
+import { v4 as uuid } from "uuid";
 
 export const useGetStatusList = () => {
   return useQuery({
@@ -21,12 +22,23 @@ export const useGetStatusList = () => {
 
 export const useCreateStatus = () => {
   const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: requestCreateStatus,
+    onMutate: async (status) => {
+      await queryClient.cancelQueries({ queryKey: ["statusList"] });
+      const previousStatusList = queryClient.getQueryData(["statusList"]);
+      queryClient.setQueryData(["statusList"], (old) => [
+        ...old,
+        { ...status, id: uuid() },
+      ]);
+      return { previousStatusList };
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["statusList"] });
     },
-    onError: (error) => {
+    onError: (error, status, context) => {
+      queryClient.setQueryData(["statusList"], context.previousStatusList);
       enqueueSnackbar(error.message || "An error occurred creating status", {
         variant: "error",
       });
@@ -38,11 +50,21 @@ export const useRemoveStatus = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: requestRemoveStatus,
+    onMutate: async (id) => {
+      await queryClient.cancelQueries({ queryKey: ["statusList"] });
+      const previousStatusList = queryClient.getQueryData(["statusList"]);
+      queryClient.setQueryData(
+        ["statusList"],
+        previousStatusList.filter((status) => status.id !== id)
+      );
+      return { previousStatusList };
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["statusList"] });
       enqueueSnackbar("Status removed successfully", { variant: "success" });
     },
-    onError: (error) => {
+    onError: (error, removedStatus, context) => {
+      queryClient.setQueryData(["statusList"], context.previousStatusList);
       enqueueSnackbar(error.message || "An error occurred removing status", {
         variant: "error",
       });
@@ -54,10 +76,27 @@ export const useUpdateStatus = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: requestUpdateStatus,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["statusList"] });
+    onMutate: async (updatedStatus) => {
+      await queryClient.cancelQueries({
+        queryKey: ["statusList", updatedStatus.id],
+      });
+      const previousStatus = queryClient.getQueryData([
+        "statusList",
+        updatedStatus.id,
+      ]);
+      queryClient.setQueryData(["statusList", updatedStatus.id], updatedStatus);
+      return { previousStatus, updatedStatus };
     },
-    onError: (error) => {
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["statusList"],
+      });
+    },
+    onError: (error, updatedStatus, context) => {
+      queryClient.setQueryData(
+        ["statusList", updatedStatus.id],
+        context.previousStatus
+      );
       enqueueSnackbar(error.message || "An error occurred updating status", {
         variant: "error",
       });
