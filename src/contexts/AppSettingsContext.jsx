@@ -4,7 +4,10 @@ const AppSettingsContext = createContext();
 export default AppSettingsContext;
 
 export const AppSettingsProvider = ({ children }) => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const isPrefersDark = window.matchMedia(
+    "(prefers-color-scheme: dark)"
+  ).matches;
+  const [isDarkMode, setIsDarkMode] = useState(isPrefersDark);
   const toggleDarkMode = () => setIsDarkMode((prev) => !prev);
 
   const providerValue = {
