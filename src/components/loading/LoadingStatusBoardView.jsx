@@ -34,7 +34,7 @@ const LoadingStatusBoardView = (key) => {
       <Paper
         elevation={10}
         sx={{
-          backgroundColor: "neutral",
+          backgroundColor: "neutral.main",
           minWidth: theme.spacing(40),
           overflowY: "auto",
           flexGrow: 1,

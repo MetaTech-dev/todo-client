@@ -132,7 +132,7 @@ const ProjectSettingsDialog = () => {
         color="inherit"
         sx={{
           display: "flex",
-          backgroundColor: "neutral",
+          backgroundColor: "neutral.main",
           mb: 2,
         }}
       >
@@ -151,7 +151,7 @@ const ProjectSettingsDialog = () => {
         <Paper elevation={6}>
           <AppBar
             elevation={6}
-            sx={{ position: "static", backgroundColor: "neutral" }}
+            sx={{ position: "static", backgroundColor: "neutral.main" }}
           >
             <Toolbar>
               <Typography
@@ -159,7 +159,7 @@ const ProjectSettingsDialog = () => {
                 component="div"
                 sx={{
                   textAlign: "center",
-                  color: "secondary.main",
+                  color: "neutral.contrastText",
                   opacity: "0.9",
                 }}
               >

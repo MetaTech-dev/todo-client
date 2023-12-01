@@ -101,7 +101,7 @@ const Dashboard = () => {
         overflow: "hidden",
       }}
     >
-      <AppBar position="static" sx={{ backgroundColor: "neutral" }}>
+      <AppBar position="static" sx={{ backgroundColor: "neutral.main" }}>
         <Toolbar id="dashboard-toolbar" variant="dense" color="inherit">
           <Button
             variant="contained"
