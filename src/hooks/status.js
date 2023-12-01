@@ -25,19 +25,19 @@ export const useCreateStatus = () => {
 
   return useMutation({
     mutationFn: requestCreateStatus,
-    onMutate: async (status) => {
+    onMutate: async (newStatus) => {
       await queryClient.cancelQueries({ queryKey: ["statusList"] });
       const previousStatusList = queryClient.getQueryData(["statusList"]);
       queryClient.setQueryData(["statusList"], (old) => [
         ...old,
-        { ...status, id: uuid() },
+        { ...newStatus, id: uuid() },
       ]);
       return { previousStatusList };
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["statusList"] });
     },
-    onError: (error, status, context) => {
+    onError: (error, newStatus, context) => {
       queryClient.setQueryData(["statusList"], context.previousStatusList);
       enqueueSnackbar(error.message || "An error occurred creating status", {
         variant: "error",
