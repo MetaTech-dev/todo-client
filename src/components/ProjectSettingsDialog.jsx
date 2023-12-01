@@ -48,16 +48,15 @@ const ProjectSettingsDialog = () => {
   const [items, setItems] = useState([]);
   const [activeId, setActiveId] = useState(null);
 
-  const { data: statusList, isPending: isStatusListPending } =
-    useGetStatusList();
+  const { data: statusList } = useGetStatusList();
 
   const { mutate: removeStatus } = useRemoveStatus();
 
   const { mutate: updateStatus } = useUpdateStatus();
 
   useEffect(() => {
-    if (!isStatusListPending) setItems(statusList.map((status) => status.id));
-  }, [statusList, isStatusListPending]);
+    if (statusList) setItems(statusList.map((status) => status.id));
+  }, [statusList]);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
