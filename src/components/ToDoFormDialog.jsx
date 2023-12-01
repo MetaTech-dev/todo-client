@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from "react";
 import ToDoContext from "../contexts/ToDoContext";
 import {
   Box,
-  Button,
   Dialog,
   DialogActions,
   DialogContent,
@@ -13,9 +12,9 @@ import {
   Select,
   TextField,
   Alert,
-  CircularProgress,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
+import LoadingButton from "@mui/lab/LoadingButton";
 import dayjs from "dayjs";
 import { useCreateToDo, useUpdateToDo } from "../hooks/toDo";
 import { useGetStatusList } from "../hooks/status";
@@ -27,25 +26,28 @@ const ToDoForm = () => {
     setToDoFormData,
     isToDoFormDialogOpen,
     setIsToDoFormDialogOpen,
-    formLoading,
   } = useContext(ToDoContext);
+
+  const [showWarning, setShowWarning] = useState("");
 
   const { data: statusList } = useGetStatusList();
 
-  const { mutate: createToDo, isPending, isSuccess } = useCreateToDo();
+  const {
+    mutate: createToDo,
+    isPending: isCreateToDoPending,
+    isSuccess: isCreateToDoSuccess,
+  } = useCreateToDo();
 
-  const { mutate: updateToDo } = useUpdateToDo();
-
-  const toDoFormTitle = (toDo) => {
-    return !toDo.id ? "New ToDo:" : "Update ToDo:";
-  };
-
-  const [showWarning, setShowWarning] = useState(false);
+  const {
+    mutate: updateToDo,
+    isPending: isUpdateToDoPending,
+    isSuccess: isUpdateToDoSuccess,
+  } = useUpdateToDo();
 
   const handleClose = () => {
     setIsToDoFormDialogOpen(false);
-    setToDoFormData(defaultNewToDo);
     setShowWarning(false);
+    setToDoFormData(defaultNewToDo);
   };
 
   const handleInputChange = (event) => {
@@ -55,6 +57,16 @@ const ToDoForm = () => {
       [name]: value,
     }));
   };
+
+  const toDoFormTitle = (toDo) => {
+    return !toDo.id ? "New ToDo:" : "Update ToDo:";
+  };
+
+  useEffect(() => {
+    if (isCreateToDoSuccess || isUpdateToDoSuccess) {
+      handleClose();
+    }
+  }, [isCreateToDoSuccess, isUpdateToDoSuccess]);
 
   const handleSubmit = (toDo) => {
     const trimmedTitle = toDoFormData.title.trim();
@@ -168,10 +180,12 @@ const ToDoForm = () => {
           </FormControl>
         </DialogContent>
         <DialogActions>
-          {!formLoading && <Button type="submit">Submit</Button>}
-          {formLoading && (
-            <CircularProgress size={25} sx={{ marginRight: 2 }} />
-          )}
+          <LoadingButton
+            loading={isCreateToDoPending || isUpdateToDoPending}
+            type="submit"
+          >
+            Submit
+          </LoadingButton>
         </DialogActions>
       </Box>
     </Dialog>
