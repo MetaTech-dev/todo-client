@@ -1,16 +1,16 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ToDoContext from "../contexts/ToDoContext";
 import {
   Alert,
   Box,
-  Button,
-  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   TextField,
 } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
+import { useCreateStatus, useUpdateStatus } from "../hooks/status";
 
 const StatusFormDialog = () => {
   const {
@@ -19,12 +19,22 @@ const StatusFormDialog = () => {
     statusFormData,
     setStatusFormData,
     defaultNewStatus,
-    handleUpdateStatus,
-    handleCreateStatus,
-    formLoading,
   } = useContext(ToDoContext);
 
   const [showWarning, setShowWarning] = useState("");
+
+  const {
+    mutate: createStatus,
+    isPending: isCreateStatusPending,
+    isSuccess: isCreateStatusSuccess,
+  } = useCreateStatus();
+
+  const {
+    mutate: updateStatus,
+    isPending: isUpdateStatusPending,
+    isSuccess: isUpdateStatusSuccess,
+  } = useUpdateStatus();
+
   const handleClose = () => {
     setIsStatusFormDialogOpen(false);
     setShowWarning("");
@@ -40,8 +50,14 @@ const StatusFormDialog = () => {
   };
 
   const statusFormTitle = (status) => {
-    return !status.id ? "New Status:" : "Edit Status:";
+    return !status?.id ? "New Status:" : "Edit Status:";
   };
+
+  useEffect(() => {
+    if (isCreateStatusSuccess || isUpdateStatusSuccess) {
+      handleClose();
+    }
+  }, [isCreateStatusSuccess, isUpdateStatusSuccess]);
 
   const handleSubmit = (status) => {
     const trimmedTitle = statusFormData.title.trim();
@@ -49,11 +65,10 @@ const StatusFormDialog = () => {
     if (trimmedTitle !== "") {
       if (trimmedTitle.length < 30) {
         if (!status.id) {
-          handleCreateStatus(statusFormData);
+          createStatus(statusFormData);
         } else if (status.id) {
-          handleUpdateStatus(statusFormData);
+          updateStatus(statusFormData);
         }
-        handleClose();
       } else {
         setShowWarning("Status title can't be more than 30 characters");
       }
@@ -85,15 +100,17 @@ const StatusFormDialog = () => {
             type="text"
             fullWidth
             variant="standard"
-            value={statusFormData.title}
+            value={statusFormData?.title}
             onChange={handleInputChange}
           />
         </DialogContent>
         <DialogActions>
-          {!formLoading && <Button type="submit">Submit</Button>}
-          {formLoading && (
-            <CircularProgress size={25} sx={{ marginRight: 1 }} />
-          )}
+          <LoadingButton
+            loading={isCreateStatusPending || isUpdateStatusPending}
+            type="submit"
+          >
+            Submit
+          </LoadingButton>
         </DialogActions>
       </Box>
     </Dialog>

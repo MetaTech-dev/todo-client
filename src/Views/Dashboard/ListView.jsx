@@ -7,20 +7,17 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import { CircularProgress, Typography } from "@mui/material";
+import { useRemoveToDo } from "../../hooks/toDo";
 
-const ListView = () => {
-  const {
-    filteredToDoList,
-    handleRemoveToDo,
-    setToDoFormData,
-    setIsToDoFormDialogOpen,
-    statusList,
-    toDoLoading,
-  } = useContext(ToDoContext);
+const ListView = ({ statusList, filteredToDoList }) => {
+  const { setToDoFormData, setIsToDoFormDialogOpen, toDoLoading } =
+    useContext(ToDoContext);
+
+  const { mutate: removeToDo } = useRemoveToDo();
 
   const getStatusTitle = (statusId) => {
-    const status = statusList.find((status) => status.id === statusId);
-    return status ? status.title : "Unknown Status";
+    const status = statusList?.find((status) => status.id === statusId);
+    return status ? status?.title : "Unknown Status";
   };
 
   const getPriorityColor = (priority) => {
@@ -139,7 +136,7 @@ const ListView = () => {
               )
             }
             label="Delete"
-            onClick={() => handleRemoveToDo(toDo.id)}
+            onClick={() => removeToDo(toDo.id)}
             color="inherit"
             aria-label="Delete ToDo"
           />,

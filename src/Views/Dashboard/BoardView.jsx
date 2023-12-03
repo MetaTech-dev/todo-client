@@ -1,13 +1,10 @@
-import { useContext } from "react";
-import { Box, Card, Paper, Typography } from "@mui/material";
+import { AppBar, Box, Card, Paper, Toolbar, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import ToDoCard from "../../components/ToDoCard";
-import ToDoContext from "../../contexts/ToDoContext";
 import LoadingStatusBoardView from "../../components/loading/LoadingStatusBoardView";
 
-const BoardView = () => {
+const BoardView = ({ statusList, isStatusListPending, filteredToDoList }) => {
   const theme = useTheme();
-  const { filteredToDoList, statusList, isLoading } = useContext(ToDoContext);
 
   const filterToDosByStatus = (status) => {
     return filteredToDoList.filter((toDo) => toDo.statusId === status.id);
@@ -24,7 +21,9 @@ const BoardView = () => {
         pt: 1,
       }}
     >
-      {!isLoading &&
+      {!isStatusListPending &&
+        filteredToDoList &&
+        statusList &&
         statusList?.map((status) => {
           return (
             <Box
@@ -38,48 +37,43 @@ const BoardView = () => {
                 maxWidth: theme.spacing(40),
               }}
             >
-              <Card
-                className="statusTitle"
-                elevation={5}
-                sx={{
-                  alignSelf: "center",
-                  width: "fit-content",
-                  maxWidth: theme.spacing(40),
-                  marginBottom: 1,
-                  flexShrink: 0,
-                  pl: 1.5,
-                  pr: 1.5,
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontWeight: "450",
-                    fontSize: "22px",
-                    opacity: ".8",
-                    textAlign: "center",
-                  }}
-                >
-                  {status.title}
-                </Typography>
-              </Card>
               <Paper
                 elevation={10}
                 sx={{
-                  backgroundColor: "neutral",
+                  backgroundColor: "neutral.main",
                   minWidth: theme.spacing(40),
                   overflowY: "auto",
                   flexGrow: 1,
-                  p: 1,
+                  // p: 1,
                 }}
               >
-                {filterToDosByStatus(status).map((toDo) => {
+                <AppBar
+                  position="static"
+                  elevation={13}
+                  sx={{ mb: 1, borderRadius: "3px" }}
+                  color="primary"
+                >
+                  <Toolbar variant="dense" color="inherit">
+                    <Typography
+                      sx={{
+                        fontWeight: "450",
+                        fontSize: "22px",
+                        opacity: ".8",
+                        textAlign: "center",
+                      }}
+                    >
+                      {status.title}
+                    </Typography>
+                  </Toolbar>
+                </AppBar>
+                {filterToDosByStatus(status)?.map((toDo) => {
                   return <ToDoCard toDo={toDo} key={toDo.id} />;
                 })}
               </Paper>
             </Box>
           );
         })}
-      {isLoading && (
+      {(isStatusListPending || !filteredToDoList) && (
         <>
           <LoadingStatusBoardView key={1} />
           <LoadingStatusBoardView key={2} />

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 import {
   AppBar,
   Box,
@@ -13,31 +13,51 @@ import BoardView from "./BoardView";
 import ToDoContext from "../../contexts/ToDoContext";
 import ListView from "./ListView";
 import SettingsIcon from "@mui/icons-material/Settings";
+import { useGetStatusList } from "../../hooks/status";
+import { useGetToDoList } from "../../hooks/toDo";
+import { useDebounce } from "../../utils/useDebounce";
 
 const Dashboard = () => {
-  const {
-    handleChangeSearchQuery,
-    setIsToDoFormDialogOpen,
-    setIsToDoFormNew,
-    setIsProjectSettingsDialogOpen,
-    handleGetStatusList,
-    handleGetToDoList,
-  } = useContext(ToDoContext);
+  const { setIsProjectSettingsDialogOpen, setIsToDoFormDialogOpen } =
+    useContext(ToDoContext);
 
-  useEffect(() => {
-    handleGetStatusList();
-    handleGetToDoList();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const { data: statusList, isPending: isStatusListPending } =
+    useGetStatusList();
+
+  const { data: toDoList } = useGetToDoList();
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const handleChangeSearchQuery = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
+
+  const filteredToDoList = useMemo(() => {
+    if (debouncedSearchQuery === "") {
+      return toDoList;
+    } else {
+      return toDoList.filter((toDo) =>
+        Object.values(toDo).some((value) =>
+          String(value)
+            .toLowerCase()
+            .includes(debouncedSearchQuery.toLowerCase())
+        )
+      );
+    }
+  }, [toDoList, debouncedSearchQuery]);
+
+  // DIALOG SECTION
 
   const handleToDoFormOpen = () => {
     setIsToDoFormDialogOpen(true);
-    setIsToDoFormNew(true);
   };
 
   const handleProjectSettingsDialogOpen = () => {
     setIsProjectSettingsDialogOpen(true);
   };
+
+  // VIEW STATE SECTION
 
   const [viewState, setViewState] = useState("board");
   const handleViewState = (event, newViewState) => {
@@ -46,16 +66,29 @@ const Dashboard = () => {
   const getViewState = () => {
     switch (viewState) {
       case "board":
-        return <BoardView />;
+        return (
+          <BoardView
+            statusList={statusList}
+            isStatusListPending={isStatusListPending}
+            filteredToDoList={filteredToDoList}
+          />
+        );
       case "list":
-        return <ListView />;
+        return (
+          <ListView
+            statusList={statusList}
+            filteredToDoList={filteredToDoList}
+          />
+        );
       default:
-        return <BoardView />;
+        return (
+          <BoardView
+            statusList={statusList}
+            isStatusListPending={isStatusListPending}
+            filteredToDoList={filteredToDoList}
+          />
+        );
     }
-  };
-
-  const handleSearchFieldChange = (e) => {
-    handleChangeSearchQuery(e.target.value);
   };
 
   return (
@@ -68,7 +101,7 @@ const Dashboard = () => {
         overflow: "hidden",
       }}
     >
-      <AppBar position="static" sx={{ backgroundColor: "neutral" }}>
+      <AppBar position="static" sx={{ backgroundColor: "neutral.main" }}>
         <Toolbar id="dashboard-toolbar" variant="dense" color="inherit">
           <Button
             variant="contained"
@@ -92,7 +125,7 @@ const Dashboard = () => {
                 backgroundColor: "white",
               },
             }}
-            onChange={handleSearchFieldChange}
+            onChange={handleChangeSearchQuery}
           />
           <ToggleButtonGroup
             size="small"

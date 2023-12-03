@@ -1,6 +1,5 @@
 import {
   Card,
-  CircularProgress,
   IconButton,
   ListItem,
   ListItemIcon,
@@ -13,9 +12,9 @@ import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import { CSS } from "@dnd-kit/utilities";
 
 const SortableStatus = ({
-  active,
+  activeGroup,
+  activeTile,
   status,
-  statusLoading,
   handleEditStatus,
   handleRemoveStatus,
 }) => {
@@ -33,7 +32,11 @@ const SortableStatus = ({
       ref={setNodeRef}
       style={style}
       {...attributes}
-      elevation={active ? 20 : 3}
+      elevation={activeTile ? 20 : 3}
+      sx={{
+        mt: activeGroup ? 0.4 : 0,
+        transition: "all .1s ease",
+      }}
     >
       <ListItem
         secondaryAction={
@@ -42,19 +45,13 @@ const SortableStatus = ({
               onClick={() => handleEditStatus(status)}
               aria-label="Edit Status"
             >
-              {!statusLoading && <EditTwoToneIcon />}
-              {statusLoading && (
-                <CircularProgress size={25} sx={{ marginRight: 1 }} />
-              )}
+              <EditTwoToneIcon />
             </IconButton>
             <IconButton
               onClick={() => handleRemoveStatus(status.id)}
               aria-label="Delete Status"
             >
-              {!statusLoading && <DeleteOutlineOutlinedIcon />}
-              {statusLoading && (
-                <CircularProgress size={25} sx={{ marginRight: 1 }} />
-              )}
+              <DeleteOutlineOutlinedIcon />
             </IconButton>
           </>
         }

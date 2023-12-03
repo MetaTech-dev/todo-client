@@ -28,6 +28,11 @@ import {
 import Slide from "@mui/material/Slide";
 import CloseIcon from "@mui/icons-material/Close";
 import SortableStatus from "./SortableStatus";
+import {
+  useGetStatusList,
+  useRemoveStatus,
+  useUpdateStatus,
+} from "../hooks/status";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -37,18 +42,20 @@ const ProjectSettingsDialog = () => {
     isProjectSettingsDialogOpen,
     setIsProjectSettingsDialogOpen,
     setIsStatusFormDialogOpen,
-    statusList,
-    handleRemoveStatus,
-    statusLoading,
     setStatusFormData,
-    handleUpdateStatus,
   } = useContext(ToDoContext);
 
   const [items, setItems] = useState([]);
   const [activeId, setActiveId] = useState(null);
 
+  const { data: statusList } = useGetStatusList();
+
+  const { mutate: removeStatus } = useRemoveStatus();
+
+  const { mutate: updateStatus } = useUpdateStatus();
+
   useEffect(() => {
-    setItems(statusList.map((status) => status.id));
+    if (statusList) setItems(statusList.map((status) => status.id));
   }, [statusList]);
 
   const sensors = useSensors(
@@ -87,7 +94,7 @@ const ProjectSettingsDialog = () => {
           };
 
           try {
-            await handleUpdateStatus(updatedStatusData);
+            await updateStatus(updatedStatusData);
             setItems(newItems);
           } catch (error) {
             console.error("Error updating status position:", error);
@@ -125,7 +132,7 @@ const ProjectSettingsDialog = () => {
         color="inherit"
         sx={{
           display: "flex",
-          backgroundColor: "neutral",
+          backgroundColor: "neutral.main",
           mb: 2,
         }}
       >
@@ -144,7 +151,7 @@ const ProjectSettingsDialog = () => {
         <Paper elevation={6}>
           <AppBar
             elevation={6}
-            sx={{ position: "static", backgroundColor: "neutral" }}
+            sx={{ position: "static", backgroundColor: "neutral.main" }}
           >
             <Toolbar>
               <Typography
@@ -152,7 +159,7 @@ const ProjectSettingsDialog = () => {
                 component="div"
                 sx={{
                   textAlign: "center",
-                  color: "secondary.main",
+                  color: "neutral.contrastText",
                   opacity: "0.9",
                 }}
               >
@@ -177,10 +184,10 @@ const ProjectSettingsDialog = () => {
                     <SortableStatus
                       key={status.id}
                       status={status}
-                      statusLoading={statusLoading}
                       handleEditStatus={() => handleEditStatus(status)}
-                      handleRemoveStatus={() => handleRemoveStatus(status.id)}
-                      active={activeId === status.id}
+                      handleRemoveStatus={() => removeStatus(status.id)}
+                      activeTile={activeId === status.id}
+                      activeGroup={activeId}
                     />
                   ) : null;
                 })}
