@@ -13,10 +13,15 @@ import { useContext } from "react";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
-import { useRemoveToDo } from "../hooks/toDo";
 
 const ToDoCard = ({ toDo }) => {
-  const { setToDoFormData, setIsToDoFormDialogOpen } = useContext(ToDoContext);
+  const {
+    setToDoFormData,
+    setIsToDoFormDialogOpen,
+    setIsDeleteConfirmationDialogOpen,
+    setDeleteConfirmationItem,
+    setDeleteConfirmationItemType,
+  } = useContext(ToDoContext);
 
   const formatDate = (date) => {
     const dayjsDate = dayjs(date);
@@ -28,15 +33,15 @@ const ToDoCard = ({ toDo }) => {
   const formattedCreatedDate = formatDate(toDo.createdDate);
   const formattedDueDate = formatDate(toDo.dueDate);
 
-  const { mutate: removeToDo } = useRemoveToDo();
-
   const handleEdit = () => {
     setToDoFormData(toDo);
     setIsToDoFormDialogOpen(true);
   };
 
-  const handleDelete = () => {
-    removeToDo(toDo.id);
+  const handleDeleteClick = (item, itemType) => {
+    setDeleteConfirmationItemType(itemType);
+    setDeleteConfirmationItem(item);
+    setIsDeleteConfirmationDialogOpen(true);
   };
 
   const getPriorityColor = () => {
@@ -83,10 +88,14 @@ const ToDoCard = ({ toDo }) => {
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Typography>
             <b>Priority:</b> {toDo.priority}{" "}
-            <FiberManualRecordIcon
-              sx={{ fontSize: "small", color: getPriorityColor() }}
-            />
           </Typography>
+          <FiberManualRecordIcon
+            sx={{
+              fontSize: "small",
+              color: getPriorityColor(),
+              ml: 0.5,
+            }}
+          />
           <Box sx={{ flexGrow: 1 }} />
           <CardActions sx={{ p: 0 }}>
             <IconButton
@@ -100,7 +109,7 @@ const ToDoCard = ({ toDo }) => {
             <IconButton
               size="small"
               color="inherit"
-              onClick={() => handleDelete()}
+              onClick={() => handleDeleteClick(toDo, "toDo")}
               aria-label="Delete ToDo"
             >
               <DeleteOutlineOutlinedIcon />

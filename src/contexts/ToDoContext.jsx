@@ -3,6 +3,7 @@ import StatusFormDialog from "../components/StatusFormDialog";
 import ToDoFormDialog from "../components/ToDoFormDialog";
 import ProjectSettingsDialog from "../components/ProjectSettingsDialog";
 import { useGetStatusList } from "../hooks/status";
+import DeleteConfirmationDialog from "../components/DeleteConfirmationDialog";
 
 const ToDoContext = createContext();
 export default ToDoContext;
@@ -37,6 +38,14 @@ export const ToDoProvider = ({ children }) => {
 
   const [toDoFormData, setToDoFormData] = useState(defaultNewToDo);
 
+  // DELETE DIALOG SECTION
+
+  const [isDeleteConfirmationDialogOpen, setIsDeleteConfirmationDialogOpen] =
+    useState(false);
+  const [deleteConfirmationItem, setDeleteConfirmationItem] = useState(null);
+  const [deleteConfirmationItemType, setDeleteConfirmationItemType] =
+    useState("");
+
   const providerValue = {
     isToDoFormDialogOpen,
     setIsToDoFormDialogOpen,
@@ -50,6 +59,12 @@ export const ToDoProvider = ({ children }) => {
     setIsStatusFormDialogOpen,
     isProjectSettingsDialogOpen,
     setIsProjectSettingsDialogOpen,
+    isDeleteConfirmationDialogOpen,
+    setIsDeleteConfirmationDialogOpen,
+    deleteConfirmationItem,
+    setDeleteConfirmationItem,
+    deleteConfirmationItemType,
+    setDeleteConfirmationItemType,
   };
 
   return (
@@ -58,6 +73,7 @@ export const ToDoProvider = ({ children }) => {
       <ToDoFormDialog />
       <StatusFormDialog />
       <ProjectSettingsDialog />
+      <DeleteConfirmationDialog />
     </ToDoContext.Provider>
   );
 };
