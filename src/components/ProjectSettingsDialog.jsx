@@ -28,11 +28,7 @@ import {
 import Slide from "@mui/material/Slide";
 import CloseIcon from "@mui/icons-material/Close";
 import SortableStatus from "./SortableStatus";
-import {
-  useGetStatusList,
-  useRemoveStatus,
-  useUpdateStatus,
-} from "../hooks/status";
+import { useGetStatusList, useUpdateStatus } from "../hooks/status";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -43,14 +39,15 @@ const ProjectSettingsDialog = () => {
     setIsProjectSettingsDialogOpen,
     setIsStatusFormDialogOpen,
     setStatusFormData,
+    setDeleteConfirmationItemType,
+    setDeleteConfirmationItem,
+    setIsDeleteConfirmationDialogOpen,
   } = useContext(ToDoContext);
 
   const [items, setItems] = useState([]);
   const [activeId, setActiveId] = useState(null);
 
   const { data: statusList } = useGetStatusList();
-
-  const { mutate: removeStatus } = useRemoveStatus();
 
   const { mutate: updateStatus } = useUpdateStatus();
 
@@ -68,6 +65,12 @@ const ProjectSettingsDialog = () => {
   const handleEditStatus = (status) => {
     setStatusFormData(status);
     setIsStatusFormDialogOpen(true);
+  };
+
+  const handleDeleteClick = (item, itemType) => {
+    setDeleteConfirmationItemType(itemType);
+    setDeleteConfirmationItem(item);
+    setIsDeleteConfirmationDialogOpen(true);
   };
 
   const handleDragStart = (event) => {
@@ -185,7 +188,9 @@ const ProjectSettingsDialog = () => {
                       key={status.id}
                       status={status}
                       handleEditStatus={() => handleEditStatus(status)}
-                      handleRemoveStatus={() => removeStatus(status.id)}
+                      handleRemoveStatus={() =>
+                        handleDeleteClick(status, "status")
+                      }
                       activeTile={activeId === status.id}
                       activeGroup={activeId}
                     />
