@@ -5,7 +5,7 @@ import {
   DialogContent,
   DialogContentText,
 } from "@mui/material";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import ToDoContext from "../contexts/ToDoContext";
 import { useRemoveToDo } from "../hooks/toDo";
 import { LoadingButton } from "@mui/lab";
@@ -21,11 +21,17 @@ const DeleteConfirmationDialog = () => {
     setDeleteConfirmationItem,
   } = useContext(ToDoContext);
 
-  const { mutate: removeToDo, isPending: isRemoveToDoPending } =
-    useRemoveToDo();
+  const {
+    mutate: removeToDo,
+    isPending: isRemoveToDoPending,
+    isSuccess: isRemoveToDoSuccess,
+  } = useRemoveToDo();
 
-  const { mutate: removeStatus, isPending: isRemoveStatusPending } =
-    useRemoveStatus();
+  const {
+    mutate: removeStatus,
+    isPending: isRemoveStatusPending,
+    isSuccess: isRemoveStatusSuccess,
+  } = useRemoveStatus();
 
   const handleClose = () => {
     setIsDeleteConfirmationDialogOpen(false);
@@ -39,8 +45,13 @@ const DeleteConfirmationDialog = () => {
     } else if (deleteConfirmationItemType === "status") {
       removeStatus(deleteConfirmationItem.id);
     }
-    setIsDeleteConfirmationDialogOpen(false);
   };
+
+  useEffect(() => {
+    if (isRemoveToDoSuccess || isRemoveStatusSuccess) {
+      handleClose();
+    }
+  }, [isRemoveToDoSuccess, isRemoveStatusSuccess]);
 
   return (
     <Dialog open={isDeleteConfirmationDialogOpen} onClose={handleClose}>
