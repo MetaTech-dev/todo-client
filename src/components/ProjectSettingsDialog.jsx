@@ -66,12 +66,15 @@ const ProjectSettingsDialog = () => {
     }
 
     const draggedStatusId = event.draggableId;
+    console.log("draggedStatusId", draggedStatusId);
     const newPosition = event.destination.index + 1;
+    console.log("newPosition", newPosition);
+    console.log("statusList", statusList);
 
     const draggedStatus = statusList.find(
-      (status) => status.id === draggedStatusId
+      (status) => status.id === parseInt(draggedStatusId)
     );
-
+    console.log("draggedStatus", draggedStatus);
     if (draggedStatus) {
       await updateStatus({
         id: parseInt(draggedStatusId),
