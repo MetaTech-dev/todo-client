@@ -30,7 +30,7 @@ export const useCreateStatus = () => {
       const previousStatusList = queryClient.getQueryData(["statusList"]);
       queryClient.setQueryData(["statusList"], (old) => [
         ...old,
-        { ...newStatus, id: uuid() },
+        { ...newStatus, id: uuid(), position: previousStatusList.length + 1 },
       ]);
       return { previousStatusList };
     },
