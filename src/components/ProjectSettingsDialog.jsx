@@ -14,7 +14,11 @@ import ToDoContext from "../contexts/ToDoContext";
 import Slide from "@mui/material/Slide";
 import CloseIcon from "@mui/icons-material/Close";
 import StatusCard from "./StatusCard";
-import { useGetStatusList, useUpdateStatus } from "../hooks/status";
+import {
+  useGetStatusList,
+  useUpdateStatus,
+  useUpdateStatusList,
+} from "../hooks/status";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 
 const Transition = forwardRef(function Transition(props, ref) {
@@ -36,7 +40,9 @@ const ProjectSettingsDialog = () => {
 
   const [activeId, setActiveId] = useState(null);
 
-  const { mutate: updateStatus } = useUpdateStatus();
+  // const { mutate: updateStatus } = useUpdateStatus();
+
+  const { mutate: updateStatusList } = useUpdateStatusList();
 
   const handleEditStatus = (status) => {
     setStatusFormData(status);
@@ -55,7 +61,7 @@ const ProjectSettingsDialog = () => {
     }
   };
 
-  const handleDragEnd = async (event) => {
+  const handleDragEnd = (event) => {
     if (!event.destination) {
       setActiveId(null);
       return;
@@ -66,20 +72,32 @@ const ProjectSettingsDialog = () => {
     }
 
     const draggedStatusId = event.draggableId;
-
+    const startingPosition = event.source.index + 1;
     const newPosition = event.destination.index + 1;
 
-    const draggedStatus = statusList.find(
-      (status) => status.id === parseInt(draggedStatusId)
-    );
-
-    if (draggedStatus) {
-      await updateStatus({
-        id: parseInt(draggedStatusId),
-        position: newPosition,
-        title: draggedStatus.title,
-      });
-    }
+    const updatedStatusList = statusList.map((status) => {
+      if (status.id.toString() === draggedStatusId) {
+        return { id: status.id, position: newPosition };
+      } else {
+        let adjustedPosition = status.position;
+        if (
+          startingPosition < newPosition &&
+          adjustedPosition <= newPosition &&
+          adjustedPosition > startingPosition
+        ) {
+          adjustedPosition -= 1;
+        } else if (
+          startingPosition > newPosition &&
+          adjustedPosition >= newPosition &&
+          adjustedPosition < startingPosition
+        ) {
+          adjustedPosition += 1;
+        }
+        return { id: status.id, position: adjustedPosition };
+      }
+    });
+    console.log("updatedStatusList", updatedStatusList);
+    updateStatusList(updatedStatusList);
 
     setActiveId(null);
   };

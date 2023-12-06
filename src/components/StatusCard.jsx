@@ -22,7 +22,7 @@ const StatusCard = ({
     <Draggable draggableId={status.id.toString()} index={index}>
       {(provided) => (
         <Card
-          // key={status.id}
+          key={status.id}
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
