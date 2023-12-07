@@ -1,4 +1,5 @@
 import {
+  Box,
   Card,
   IconButton,
   ListItem,
@@ -11,7 +12,6 @@ import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import { Draggable } from "react-beautiful-dnd";
 
 const StatusCard = ({
-  activeGroup,
   activeTile,
   status,
   handleEditStatus,
@@ -25,7 +25,6 @@ const StatusCard = ({
           key={status.id}
           ref={provided.innerRef}
           {...provided.draggableProps}
-          {...provided.dragHandleProps}
           elevation={activeTile ? 20 : 3}
         >
           <ListItem
@@ -46,9 +45,13 @@ const StatusCard = ({
               </>
             }
           >
-            <ListItemIcon>
-              <DragHandleIcon sx={{ cursor: "grabbing" }} />
+            <ListItemIcon
+              {...provided.dragHandleProps}
+              sx={{ minWidth: "auto", mr: 2 }}
+            >
+              <DragHandleIcon />
             </ListItemIcon>
+
             <ListItemText
               primary={status.title}
               sx={{ paddingRight: "6rem" }}

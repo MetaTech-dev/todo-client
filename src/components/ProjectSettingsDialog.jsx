@@ -9,16 +9,12 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { useContext, forwardRef, useState, useEffect } from "react";
+import { useContext, forwardRef, useState } from "react";
 import ToDoContext from "../contexts/ToDoContext";
 import Slide from "@mui/material/Slide";
 import CloseIcon from "@mui/icons-material/Close";
 import StatusCard from "./StatusCard";
-import {
-  useGetStatusList,
-  useUpdateStatus,
-  useUpdateStatusList,
-} from "../hooks/status";
+import { useGetStatusList, useUpdateStatusList } from "../hooks/status";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 
 const Transition = forwardRef(function Transition(props, ref) {
@@ -39,8 +35,6 @@ const ProjectSettingsDialog = () => {
     useGetStatusList();
 
   const [activeId, setActiveId] = useState(null);
-
-  // const { mutate: updateStatus } = useUpdateStatus();
 
   const { mutate: updateStatusList } = useUpdateStatusList();
 
@@ -87,33 +81,6 @@ const ProjectSettingsDialog = () => {
     );
 
     updateStatusList(draggedStatuses);
-
-    // const draggedStatusId = event.draggableId;
-    // const startingPosition = event.source.index + 1;
-    // const newPosition = event.destination.index + 1;
-
-    // const updatedStatusList = statusList.map((status) => {
-    //   if (status.id.toString() === draggedStatusId) {
-    //     return { id: status.id, position: newPosition };
-    //   } else {
-    //     let adjustedPosition = status.position;
-    //     if (
-    //       startingPosition < newPosition &&
-    //       adjustedPosition <= newPosition &&
-    //       adjustedPosition > startingPosition
-    //     ) {
-    //       adjustedPosition -= 1;
-    //     } else if (
-    //       startingPosition > newPosition &&
-    //       adjustedPosition >= newPosition &&
-    //       adjustedPosition < startingPosition
-    //     ) {
-    //       adjustedPosition += 1;
-    //     }
-    //     return { id: status.id, position: adjustedPosition };
-    //   }
-    // });
-    // updateStatusList(updatedStatusList);
 
     setActiveId(null);
   };
@@ -205,7 +172,6 @@ const ProjectSettingsDialog = () => {
                           activeTile={
                             activeId?.toString() === status.id.toString()
                           }
-                          activeGroup={activeId}
                         />
                       );
                     })}
