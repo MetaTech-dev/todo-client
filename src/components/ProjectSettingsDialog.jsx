@@ -55,10 +55,19 @@ const ProjectSettingsDialog = () => {
     setIsDeleteConfirmationDialogOpen(true);
   };
 
+  const reorder = (list, startIndex, endIndex) => {
+    const result = Array.from(list);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+
+    return result.map((item, index) => ({
+      ...item,
+      position: index + 1,
+    }));
+  };
+
   const handleDragStart = (event) => {
-    if (event.active) {
-      setActiveId(event.active.id);
-    }
+    setActiveId(event.draggableId);
   };
 
   const handleDragEnd = (event) => {
@@ -71,33 +80,40 @@ const ProjectSettingsDialog = () => {
       return;
     }
 
-    const draggedStatusId = event.draggableId;
-    const startingPosition = event.source.index + 1;
-    const newPosition = event.destination.index + 1;
+    const draggedStatuses = reorder(
+      statusList,
+      event.source.index,
+      event.destination.index
+    );
 
-    const updatedStatusList = statusList.map((status) => {
-      if (status.id.toString() === draggedStatusId) {
-        return { id: status.id, position: newPosition };
-      } else {
-        let adjustedPosition = status.position;
-        if (
-          startingPosition < newPosition &&
-          adjustedPosition <= newPosition &&
-          adjustedPosition > startingPosition
-        ) {
-          adjustedPosition -= 1;
-        } else if (
-          startingPosition > newPosition &&
-          adjustedPosition >= newPosition &&
-          adjustedPosition < startingPosition
-        ) {
-          adjustedPosition += 1;
-        }
-        return { id: status.id, position: adjustedPosition };
-      }
-    });
-    console.log("updatedStatusList", updatedStatusList);
-    updateStatusList(updatedStatusList);
+    updateStatusList(draggedStatuses);
+
+    // const draggedStatusId = event.draggableId;
+    // const startingPosition = event.source.index + 1;
+    // const newPosition = event.destination.index + 1;
+
+    // const updatedStatusList = statusList.map((status) => {
+    //   if (status.id.toString() === draggedStatusId) {
+    //     return { id: status.id, position: newPosition };
+    //   } else {
+    //     let adjustedPosition = status.position;
+    //     if (
+    //       startingPosition < newPosition &&
+    //       adjustedPosition <= newPosition &&
+    //       adjustedPosition > startingPosition
+    //     ) {
+    //       adjustedPosition -= 1;
+    //     } else if (
+    //       startingPosition > newPosition &&
+    //       adjustedPosition >= newPosition &&
+    //       adjustedPosition < startingPosition
+    //     ) {
+    //       adjustedPosition += 1;
+    //     }
+    //     return { id: status.id, position: adjustedPosition };
+    //   }
+    // });
+    // updateStatusList(updatedStatusList);
 
     setActiveId(null);
   };
@@ -177,7 +193,7 @@ const ProjectSettingsDialog = () => {
                 >
                   {isStatusListSuccess &&
                     statusList.map((status) => {
-                      return status ? (
+                      return (
                         <StatusCard
                           key={status.id}
                           status={status}
@@ -186,10 +202,12 @@ const ProjectSettingsDialog = () => {
                           handleRemoveStatus={() =>
                             handleDeleteClick(status, "status")
                           }
-                          activeTile={activeId === status.id}
+                          activeTile={
+                            activeId?.toString() === status.id.toString()
+                          }
                           activeGroup={activeId}
                         />
-                      ) : null;
+                      );
                     })}
                   {provided.placeholder}
                 </List>
