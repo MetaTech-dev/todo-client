@@ -113,7 +113,7 @@ const BoardView = ({
                   }}
                 >
                   <AppBar
-                    position="static"
+                    position="sticky"
                     elevation={13}
                     sx={{ mb: 1, borderRadius: "3px" }}
                     color="primary"
