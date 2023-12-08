@@ -3,9 +3,9 @@ import { useTheme } from "@mui/material/styles";
 import ToDoCard from "../../components/ToDoCard";
 import LoadingStatusBoardView from "../../components/loading/LoadingStatusBoardView";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import { useUpdateToDo, useUpdateToDoList } from "../../hooks/toDo";
-import { useEffect, useState } from "react";
-import { set } from "date-fns";
+import { useUpdateToDoList } from "../../hooks/toDo";
+import { useContext, useEffect, useState } from "react";
+import AppSettingsContext from "../../contexts/AppSettingsContext";
 
 const BoardView = ({
   statusList,
@@ -14,6 +14,8 @@ const BoardView = ({
   toDoList,
 }) => {
   const theme = useTheme();
+
+  const { isDarkMode } = useContext(AppSettingsContext);
 
   const { mutate: updateToDoList } = useUpdateToDoList();
 
@@ -64,6 +66,14 @@ const BoardView = ({
     setActiveId(null);
   };
 
+  const handleBorder = () => {
+    if (isDarkMode && isDragging) {
+      return "1px solid white";
+    } else if (!isDarkMode && isDragging) {
+      return "1px solid black";
+    }
+  };
+
   return (
     <Box
       id="board-view-container"
@@ -99,6 +109,7 @@ const BoardView = ({
                     minWidth: theme.spacing(40),
                     overflowY: "auto",
                     flexGrow: 1,
+                    ":hover": { border: handleBorder() },
                   }}
                 >
                   <AppBar
