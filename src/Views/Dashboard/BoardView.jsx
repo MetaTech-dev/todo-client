@@ -3,12 +3,17 @@ import { useTheme } from "@mui/material/styles";
 import ToDoCard from "../../components/ToDoCard";
 import LoadingStatusBoardView from "../../components/loading/LoadingStatusBoardView";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import { useUpdateToDo } from "../../hooks/toDo";
+import { useUpdateToDo, useUpdateToDoList } from "../../hooks/toDo";
 
-const BoardView = ({ statusList, isStatusListPending, filteredToDoList }) => {
+const BoardView = ({
+  statusList,
+  isStatusListPending,
+  filteredToDoList,
+  toDoList,
+}) => {
   const theme = useTheme();
 
-  const { mutate: updateToDo } = useUpdateToDo();
+  const { mutate: updateToDoList } = useUpdateToDoList();
 
   const filterToDosByStatus = (status) => {
     return filteredToDoList.filter((toDo) => toDo.statusId === status.id);
@@ -42,7 +47,19 @@ const BoardView = ({ statusList, isStatusListPending, filteredToDoList }) => {
       return;
 
     const statusId = parseInt(destination.droppableId);
-    updateToDo({ id: parseInt(draggableId), statusId: statusId });
+
+    const updatedToDo = toDoList.find(
+      (toDo) => toDo.id === parseInt(draggableId)
+    );
+    if (!updatedToDo) return;
+
+    updatedToDo.statusId = statusId;
+
+    const updatedToDoList = toDoList.map((toDo) =>
+      toDo.id === parseInt(draggableId) ? updatedToDo : toDo
+    );
+
+    updateToDoList(updatedToDoList);
   };
 
   return (

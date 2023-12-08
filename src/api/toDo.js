@@ -44,3 +44,16 @@ export const requestUpdateToDo = async (toDo) => {
   }
   return response.json();
 };
+
+export const requestUpdateToDoList = async (toDoList) => {
+  const response = await fetch(`http://localhost:3000/toDo`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(toDoList),
+  });
+  if (!response.ok) {
+    const errorResponse = await response.json();
+    throw new Error(errorResponse.message || "Failed to update toDo list");
+  }
+  return response.json();
+};

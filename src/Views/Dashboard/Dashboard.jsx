@@ -71,6 +71,7 @@ const Dashboard = () => {
             statusList={statusList}
             isStatusListPending={isStatusListPending}
             filteredToDoList={filteredToDoList}
+            toDoList={toDoList}
           />
         );
       case "list":
