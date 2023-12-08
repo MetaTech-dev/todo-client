@@ -9,13 +9,13 @@ import {
 import CardActions from "@mui/material/CardActions";
 import dayjs from "dayjs";
 import ToDoContext from "../contexts/ToDoContext";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import { Draggable } from "react-beautiful-dnd";
 
-const ToDoCard = ({ toDo, index }) => {
+const ToDoCard = ({ toDo, index, activeCard, isDragging }) => {
   const {
     setToDoFormData,
     setIsToDoFormDialogOpen,
@@ -23,6 +23,16 @@ const ToDoCard = ({ toDo, index }) => {
     setDeleteConfirmationItem,
     setDeleteConfirmationItemType,
   } = useContext(ToDoContext);
+
+  const [isStatic, setIsStatic] = useState(false);
+
+  useEffect(() => {
+    if (isDragging && !activeCard) {
+      setIsStatic(true);
+    } else if (!isDragging || activeCard) {
+      setIsStatic(false);
+    }
+  }, [isDragging, activeCard]);
 
   const formatDate = (date) => {
     const dayjsDate = dayjs(date);
@@ -65,7 +75,9 @@ const ToDoCard = ({ toDo, index }) => {
       return toDo.description;
     }
   };
-  // console.log("draggableId", toDo.id.toString());
+
+  const cardElevation = isStatic && isDragging ? 0 : activeCard ? 5 : 3;
+
   return (
     <Draggable draggableId={toDo.id.toString()} index={index}>
       {(provided) => (
@@ -73,10 +85,11 @@ const ToDoCard = ({ toDo, index }) => {
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          elevation={3}
+          elevation={cardElevation}
           sx={(theme) => ({
             maxWidth: theme.spacing(40),
             marginBottom: 1,
+            opacity: isStatic ? 0.4 : 1,
           })}
         >
           <CardContent sx={{ p: 1.5, "&:last-child": { paddingBottom: 1 } }}>

@@ -169,7 +169,7 @@ const ProjectSettingsDialog = () => {
                           handleRemoveStatus={() =>
                             handleDeleteClick(status, "status")
                           }
-                          activeTile={
+                          activeCard={
                             activeId?.toString() === status.id.toString()
                           }
                         />

@@ -11,7 +11,7 @@ import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import { Draggable } from "react-beautiful-dnd";
 
 const StatusCard = ({
-  activeTile,
+  activeCard,
   status,
   handleEditStatus,
   handleRemoveStatus,
@@ -24,7 +24,7 @@ const StatusCard = ({
           key={status.id}
           ref={provided.innerRef}
           {...provided.draggableProps}
-          elevation={activeTile ? 20 : 3}
+          elevation={activeCard ? 20 : 3}
         >
           <ListItem
             secondaryAction={

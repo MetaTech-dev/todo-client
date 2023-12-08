@@ -4,6 +4,8 @@ import ToDoCard from "../../components/ToDoCard";
 import LoadingStatusBoardView from "../../components/loading/LoadingStatusBoardView";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { useUpdateToDo, useUpdateToDoList } from "../../hooks/toDo";
+import { useEffect, useState } from "react";
+import { set } from "date-fns";
 
 const BoardView = ({
   statusList,
@@ -19,32 +21,29 @@ const BoardView = ({
     return filteredToDoList.filter((toDo) => toDo.statusId === status.id);
   };
 
-  // const move = (source, destination, droppableSource, droppableDestination) => {
-  //   const sourceClone = Array.from(source);
-  //   const destClone = Array.from(destination);
-  //   const [removed] = sourceClone.splice(droppableSource.index, 1);
+  const [activeId, setActiveId] = useState(null);
+  const [isDragging, setIsDragging] = useState(false);
 
-  //   destClone.splice(droppableDestination.index, 0, removed);
-
-  //   const result = {};
-  //   result[droppableSource.droppableId] = sourceClone;
-  //   result[droppableDestination.droppableId] = destClone;
-
-  //   console.log("result", result);
-
-  //   return result;
-  // };
-
-  const handleDragStart = (event) => {};
+  const handleDragStart = (event) => {
+    setIsDragging(true);
+    setActiveId(event.draggableId);
+  };
 
   const handleDragEnd = (event) => {
     const { destination, source, draggableId } = event;
-    if (!destination) return;
+    if (!destination) {
+      setIsDragging(false);
+      setActiveId(null);
+      return;
+    }
     if (
       destination.droppableId === source.droppableId &&
       destination.index === source.index
-    )
+    ) {
+      setIsDragging(false);
+      setActiveId(null);
       return;
+    }
 
     const statusId = parseInt(destination.droppableId);
 
@@ -60,6 +59,9 @@ const BoardView = ({
     );
 
     updateToDoList(updatedToDoList);
+
+    setIsDragging(false);
+    setActiveId(null);
   };
 
   return (
@@ -127,7 +129,15 @@ const BoardView = ({
                       >
                         {filterToDosByStatus(status)?.map((toDo, index) => {
                           return (
-                            <ToDoCard toDo={toDo} key={toDo.id} index={index} />
+                            <ToDoCard
+                              toDo={toDo}
+                              key={toDo.id}
+                              index={index}
+                              activeCard={
+                                activeId?.toString() === toDo.id.toString()
+                              }
+                              isDragging={isDragging}
+                            />
                           );
                         })}
                         {provided.placeholder}
