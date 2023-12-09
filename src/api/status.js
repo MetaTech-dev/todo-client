@@ -44,3 +44,16 @@ export const requestUpdateStatus = async (status) => {
   }
   return response.json();
 };
+
+export const requestUpdateStatusList = async (statusList) => {
+  const response = await fetch(`http://localhost:3000/status`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(statusList),
+  });
+  if (!response.ok) {
+    const errorResponse = await response.json();
+    throw new Error(errorResponse.message || "Failed to update status list");
+  }
+  return response.json();
+};

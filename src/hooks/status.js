@@ -4,6 +4,7 @@ import {
   requestGetStatusList,
   requestRemoveStatus,
   requestUpdateStatus,
+  requestUpdateStatusList,
 } from "../api/status";
 import { enqueueSnackbar } from "notistack";
 import { v4 as uuid } from "uuid";
@@ -30,7 +31,7 @@ export const useCreateStatus = () => {
       const previousStatusList = queryClient.getQueryData(["statusList"]);
       queryClient.setQueryData(["statusList"], (old) => [
         ...old,
-        { ...newStatus, id: uuid() },
+        { ...newStatus, id: uuid(), position: previousStatusList.length + 1 },
       ]);
       return { previousStatusList };
     },
@@ -100,6 +101,35 @@ export const useUpdateStatus = () => {
       enqueueSnackbar(error.message || "An error occurred updating status", {
         variant: "error",
       });
+    },
+  });
+};
+
+export const useUpdateStatusList = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: requestUpdateStatusList,
+    onMutate: async (updatedStatusList) => {
+      await queryClient.cancelQueries({
+        queryKey: ["statusList"],
+      });
+      const previousStatusList = queryClient.getQueryData(["statusList"]);
+      queryClient.setQueryData(["statusList"], updatedStatusList);
+      return { previousStatusList, updatedStatusList };
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["statusList"],
+      });
+    },
+    onError: (error, updatedStatusList, context) => {
+      queryClient.setQueryData(["statusList"], context.previousStatusList);
+      enqueueSnackbar(
+        error.message || "An error occurred updating status list",
+        {
+          variant: "error",
+        }
+      );
     },
   });
 };

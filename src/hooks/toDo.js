@@ -4,6 +4,7 @@ import {
   requestGetToDoList,
   requestRemoveToDo,
   requestUpdateToDo,
+  requestUpdateToDoList,
 } from "../api/toDo";
 import { enqueueSnackbar } from "notistack";
 import { v4 as uuid } from "uuid";
@@ -95,6 +96,28 @@ export const useUpdateToDo = () => {
         context.previousToDo
       );
       enqueueSnackbar(error.message || "An error occurred updating toDo", {
+        variant: "error",
+      });
+    },
+  });
+};
+
+export const useUpdateToDoList = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: requestUpdateToDoList,
+    onMutate: async (updatedToDoList) => {
+      await queryClient.cancelQueries({ queryKey: ["toDoList"] });
+      const previousToDoList = queryClient.getQueryData(["toDoList"]);
+      queryClient.setQueryData(["toDoList"], updatedToDoList);
+      return { previousToDoList };
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["toDoList"] });
+    },
+    onError: (error, updatedToDoList, context) => {
+      queryClient.setQueryData(["toDoList"], context.previousToDoList);
+      enqueueSnackbar(error.message || "An error occurred updating toDo list", {
         variant: "error",
       });
     },

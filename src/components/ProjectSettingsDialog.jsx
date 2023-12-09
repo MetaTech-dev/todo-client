@@ -9,26 +9,13 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { useContext, forwardRef, useState, useEffect } from "react";
+import { useContext, forwardRef, useState } from "react";
 import ToDoContext from "../contexts/ToDoContext";
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-} from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
 import Slide from "@mui/material/Slide";
 import CloseIcon from "@mui/icons-material/Close";
-import SortableStatus from "./SortableStatus";
-import { useGetStatusList, useUpdateStatus } from "../hooks/status";
+import StatusCard from "./StatusCard";
+import { useGetStatusList, useUpdateStatusList } from "../hooks/status";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -44,23 +31,12 @@ const ProjectSettingsDialog = () => {
     setIsDeleteConfirmationDialogOpen,
   } = useContext(ToDoContext);
 
-  const [items, setItems] = useState([]);
+  const { data: statusList, isSuccess: isStatusListSuccess } =
+    useGetStatusList();
+
   const [activeId, setActiveId] = useState(null);
 
-  const { data: statusList } = useGetStatusList();
-
-  const { mutate: updateStatus } = useUpdateStatus();
-
-  useEffect(() => {
-    if (statusList) setItems(statusList.map((status) => status.id));
-  }, [statusList]);
-
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
+  const { mutate: updateStatusList } = useUpdateStatusList();
 
   const handleEditStatus = (status) => {
     setStatusFormData(status);
@@ -73,38 +49,40 @@ const ProjectSettingsDialog = () => {
     setIsDeleteConfirmationDialogOpen(true);
   };
 
-  const handleDragStart = (event) => {
-    setActiveId(event.active.id);
+  const reorder = (list, startIndex, endIndex) => {
+    const result = Array.from(list);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+
+    return result.map((item, index) => ({
+      ...item,
+      position: index + 1,
+    }));
   };
 
-  const handleDragEnd = async (event) => {
-    const { active, over } = event;
-    setActiveId(null);
-    if (active.id !== over.id) {
-      const oldIndex = items.indexOf(active.id);
-      const newIndex = items.indexOf(over.id);
+  const handleDragStart = (event) => {
+    setActiveId(event.draggableId);
+  };
 
-      if (newIndex !== oldIndex) {
-        const newItems = arrayMove(items, oldIndex, newIndex);
-
-        const updatedStatus = statusList.find(
-          (status) => status.id === active.id
-        );
-        if (updatedStatus) {
-          const updatedStatusData = {
-            ...updatedStatus,
-            position: newIndex + 1,
-          };
-
-          try {
-            await updateStatus(updatedStatusData);
-            setItems(newItems);
-          } catch (error) {
-            console.error("Error updating status position:", error);
-          }
-        }
-      }
+  const handleDragEnd = (event) => {
+    if (!event.destination) {
+      setActiveId(null);
+      return;
     }
+    if (event.destination.index === event.source.index) {
+      setActiveId(null);
+      return;
+    }
+
+    const draggedStatuses = reorder(
+      statusList,
+      event.source.index,
+      event.destination.index
+    );
+
+    updateStatusList(draggedStatuses);
+
+    setActiveId(null);
   };
 
   return (
@@ -148,7 +126,6 @@ const ProjectSettingsDialog = () => {
           Create ToDo Status
         </Button>
       </Toolbar>
-
       <Box sx={{ display: "flex" }}>
         <Box sx={{ flexGrow: "1" }} />
         <Paper elevation={6}>
@@ -170,35 +147,39 @@ const ProjectSettingsDialog = () => {
               </Typography>
             </Toolbar>
           </AppBar>
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
+          <DragDropContext
             onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
           >
-            <SortableContext
-              items={items}
-              strategy={verticalListSortingStrategy}
-            >
-              <List sx={{ p: 0 }}>
-                {items.map((id) => {
-                  const status = statusList.find((s) => s.id === id);
-                  return status ? (
-                    <SortableStatus
-                      key={status.id}
-                      status={status}
-                      handleEditStatus={() => handleEditStatus(status)}
-                      handleRemoveStatus={() =>
-                        handleDeleteClick(status, "status")
-                      }
-                      activeTile={activeId === status.id}
-                      activeGroup={activeId}
-                    />
-                  ) : null;
-                })}
-              </List>
-            </SortableContext>
-          </DndContext>
+            <Droppable droppableId="status-list">
+              {(provided) => (
+                <List
+                  sx={{ p: 0 }}
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                >
+                  {isStatusListSuccess &&
+                    statusList.map((status) => {
+                      return (
+                        <StatusCard
+                          key={status.id}
+                          status={status}
+                          index={status.position - 1}
+                          handleEditStatus={() => handleEditStatus(status)}
+                          handleRemoveStatus={() =>
+                            handleDeleteClick(status, "status")
+                          }
+                          activeCard={
+                            activeId?.toString() === status.id.toString()
+                          }
+                        />
+                      );
+                    })}
+                  {provided.placeholder}
+                </List>
+              )}
+            </Droppable>
+          </DragDropContext>
         </Paper>
         <Box sx={{ flexGrow: "1" }} />
       </Box>
