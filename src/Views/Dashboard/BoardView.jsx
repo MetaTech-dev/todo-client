@@ -4,8 +4,7 @@ import ToDoCard from "../../components/ToDoCard";
 import LoadingStatusBoardView from "../../components/loading/LoadingStatusBoardView";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { useUpdateToDoList } from "../../hooks/toDo";
-import { useContext, useEffect, useState } from "react";
-import AppSettingsContext from "../../contexts/AppSettingsContext";
+import { useState } from "react";
 
 const BoardView = ({
   statusList,
@@ -14,8 +13,6 @@ const BoardView = ({
   toDoList,
 }) => {
   const theme = useTheme();
-
-  const { isDarkMode } = useContext(AppSettingsContext);
 
   const { mutate: updateToDoList } = useUpdateToDoList();
 
@@ -66,14 +63,7 @@ const BoardView = ({
     setActiveId(null);
   };
 
-  const handleBorder = () => {
-    if (isDarkMode && isDragging) {
-      return "1px solid white";
-    } else if (!isDarkMode && isDragging) {
-      return "1px solid black";
-    }
-  };
-
+  console.log(theme.palette.neutral.contrastBorder);
   return (
     <Box
       id="board-view-container"
@@ -81,6 +71,7 @@ const BoardView = ({
         display: "flex",
         flexGrow: 1,
         overflowX: "auto",
+        overflowY: "hidden",
         justifyContent: "flex-start",
         pt: 1,
       }}
@@ -107,15 +98,19 @@ const BoardView = ({
                   sx={{
                     backgroundColor: "neutral.main",
                     minWidth: theme.spacing(40),
-                    overflowY: "auto",
+                    overflowY: "hidden",
+                    display: "flex",
                     flexGrow: 1,
-                    ":hover": { border: handleBorder() },
+                    flexDirection: "column",
+                    ":hover": {
+                      border: isDragging ? `1px solid #808080` : "none",
+                    },
                   }}
                 >
                   <AppBar
-                    position="sticky"
+                    position="static"
                     elevation={13}
-                    sx={{ mb: 1, borderRadius: "3px" }}
+                    sx={{ mb: 1, borderRadius: "3px", flexShrink: 1 }}
                     color="primary"
                   >
                     <Toolbar variant="dense" color="inherit">
@@ -136,7 +131,7 @@ const BoardView = ({
                       <Box
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        sx={{ minHeight: "100%" }}
+                        sx={{ flexGrow: 1, overflowY: "auto" }}
                       >
                         {filterToDosByStatus(status)?.map((toDo, index) => {
                           return (
