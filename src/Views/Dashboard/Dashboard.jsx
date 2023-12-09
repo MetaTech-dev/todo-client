@@ -112,22 +112,22 @@ const Dashboard = () => {
           >
             New ToDo
           </Button>
-          <Box sx={{ flexGrow: 1 }} />
-
+          <Box sx={{ flexGrow: 0.05 }} />
           <TextField
             id="outlined-search"
-            label="Search field"
-            variant="outlined"
+            label="Search ToDos"
+            variant="filled"
             type="search"
             size="small"
             sx={{
               marginRight: "1rem",
-              "& .MuiInputBase-root": {
-                backgroundColor: "white",
-              },
+              // "& .MuiInputBase-root": {
+              //   backgroundColor: "white",
+              // },
             }}
             onChange={handleChangeSearchQuery}
           />
+          <Box sx={{ flexGrow: 1 }} />
           <ToggleButtonGroup
             size="small"
             value={viewState}

@@ -53,17 +53,17 @@ const ListView = ({ statusList, filteredToDoList }) => {
 
   const rows = filteredToDoList;
   const columns = [
-    { field: "title", headerName: "Title", width: 150, editable: true },
+    { field: "title", headerName: "Title", flex: 0.75, editable: false },
     {
       field: "description",
       headerName: "Description",
-      width: 500,
-      editable: true,
+      flex: 2,
+      editable: false,
     },
     {
       field: "status",
       headerName: "Status",
-      width: 110,
+      flex: 0.4,
       editable: false,
       renderCell: (params) => {
         const statusTitle = getStatusTitle(params.row.statusId);
@@ -73,7 +73,7 @@ const ListView = ({ statusList, filteredToDoList }) => {
     {
       field: "createdDate",
       headerName: "Created At",
-      width: 130,
+      flex: 0.4,
       type: "date",
       valueGetter: (params) => dayjs(params.row.createdDate).toDate(),
       valueFormatter: (params) =>
@@ -85,7 +85,7 @@ const ListView = ({ statusList, filteredToDoList }) => {
     {
       field: "dueDate",
       headerName: "Due Date",
-      width: 130,
+      flex: 0.4,
       type: "date",
       valueGetter: (params) => dayjs(params.row.dueDate).toDate(),
       valueFormatter: (params) =>
@@ -97,7 +97,7 @@ const ListView = ({ statusList, filteredToDoList }) => {
     {
       field: "priority",
       headerName: "Priority",
-      width: 90,
+      flex: 0.3,
       renderCell: (params) => (
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Typography sx={{ paddingRight: "0.5rem" }}>
@@ -117,7 +117,7 @@ const ListView = ({ statusList, filteredToDoList }) => {
       field: "actions",
       type: "actions",
       headerName: "Actions",
-      width: 100,
+      flex: 0.25,
       cellClassName: "actions",
       getActions: (params) => {
         const toDo = params.row;
