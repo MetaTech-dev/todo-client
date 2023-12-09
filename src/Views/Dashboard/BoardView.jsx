@@ -73,7 +73,6 @@ const BoardView = ({
         overflowX: "auto",
         overflowY: "hidden",
         justifyContent: "flex-start",
-        pt: 1,
       }}
     >
       <DragDropContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
@@ -110,7 +109,10 @@ const BoardView = ({
                   <AppBar
                     position="static"
                     elevation={13}
-                    sx={{ mb: 1, borderRadius: "3px", flexShrink: 1 }}
+                    sx={{
+                      borderRadius: "3px",
+                      flexShrink: 1,
+                    }}
                     color="primary"
                   >
                     <Toolbar variant="dense" color="inherit">
@@ -131,7 +133,7 @@ const BoardView = ({
                       <Box
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        sx={{ flexGrow: 1, overflowY: "auto" }}
+                        sx={{ flexGrow: 1, overflowY: "auto", pt: 1 }}
                       >
                         {filterToDosByStatus(status)?.map((toDo, index) => {
                           return (
