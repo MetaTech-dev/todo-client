@@ -112,11 +112,11 @@ const Dashboard = () => {
           >
             New ToDo
           </Button>
-          <Box sx={{ flexGrow: 0.05 }} />
+          <Box sx={{ flexGrow: 0.03 }} />
           <TextField
             id="outlined-search"
             label="Search ToDos"
-            variant="filled"
+            variant="outlined"
             type="search"
             size="small"
             sx={{
