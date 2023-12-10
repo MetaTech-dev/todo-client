@@ -70,7 +70,7 @@ const BoardView = ({
       sx={{
         display: "flex",
         flexGrow: 1,
-        m: 1,
+        p: 1,
         gap: 1,
         overflowX: "auto",
         overflowY: "hidden",
