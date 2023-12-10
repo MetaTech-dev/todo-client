@@ -24,7 +24,8 @@ const StatusCard = ({
           key={status.id}
           ref={provided.innerRef}
           {...provided.draggableProps}
-          elevation={activeCard ? 5 : 3}
+          elevation={activeCard ? 5 : 1}
+          sx={{ mt: 1 }}
         >
           <ListItem
             secondaryAction={

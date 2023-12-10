@@ -122,7 +122,7 @@ const ProjectSettingsDialog = () => {
       <Box sx={{ display: "flex", justifyContent: "center" }}>
         <Paper elevation={1}>
           <AppBar
-            elevation={3}
+            elevation={1}
             sx={{ position: "static", backgroundColor: "neutral.main" }}
           >
             <Toolbar>

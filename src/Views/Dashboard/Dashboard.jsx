@@ -112,10 +112,10 @@ const Dashboard = () => {
             variant="contained"
             size="small"
             onClick={() => handleToDoFormOpen()}
-            sx={{ mr: 3 }}
           >
             New ToDo
           </Button>
+          <Box sx={{ flexGrow: 0.03 }} />
           <TextField
             id="outlined-search"
             placeholder="Search ToDos"
@@ -123,6 +123,7 @@ const Dashboard = () => {
             type="search"
             size="small"
             onChange={handleChangeSearchQuery}
+            inputProps={{ style: { padding: "0.33rem" } }}
           />
           <Box sx={{ flexGrow: 1 }} />
           <ToggleButtonGroup
