@@ -102,30 +102,28 @@ const Dashboard = () => {
         overflow: "hidden",
       }}
     >
-      <AppBar position="static" sx={{ backgroundColor: "neutral.main" }}>
+      <AppBar
+        position="static"
+        sx={{ backgroundColor: "neutral.main" }}
+        elevation={1}
+      >
         <Toolbar id="dashboard-toolbar" variant="dense" color="inherit">
           <Button
             variant="contained"
             size="small"
             onClick={() => handleToDoFormOpen()}
-            sx={{ marginRight: "1rem" }}
           >
             New ToDo
           </Button>
           <Box sx={{ flexGrow: 0.03 }} />
           <TextField
             id="outlined-search"
-            label="Search ToDos"
+            placeholder="Search ToDos"
             variant="outlined"
             type="search"
             size="small"
-            sx={{
-              marginRight: "1rem",
-              // "& .MuiInputBase-root": {
-              //   backgroundColor: "white",
-              // },
-            }}
             onChange={handleChangeSearchQuery}
+            inputProps={{ style: { padding: "0.33rem" } }}
           />
           <Box sx={{ flexGrow: 1 }} />
           <ToggleButtonGroup

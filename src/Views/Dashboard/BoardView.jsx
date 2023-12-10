@@ -70,6 +70,8 @@ const BoardView = ({
       sx={{
         display: "flex",
         flexGrow: 1,
+        p: 1,
+        gap: 1,
         overflowX: "auto",
         overflowY: "hidden",
         justifyContent: "flex-start",
@@ -81,79 +83,67 @@ const BoardView = ({
           statusList &&
           statusList?.map((status) => {
             return (
-              <Box
-                className="status-column"
+              <Paper
+                elevation={2}
                 key={status.id}
                 sx={{
+                  backgroundColor: "neutral.main",
+                  minWidth: theme.spacing(40),
+                  overflowY: "hidden",
                   display: "flex",
-                  flexDirection: "column",
                   flexGrow: 1,
-                  m: 1,
+                  flexDirection: "column",
+                  ":hover": {
+                    border: isDragging ? `1px solid #808080` : "none",
+                  },
                   maxWidth: theme.spacing(40),
                 }}
               >
-                <Paper
-                  elevation={10}
+                <AppBar
+                  position="static"
+                  elevation={1}
                   sx={{
-                    backgroundColor: "neutral.main",
-                    minWidth: theme.spacing(40),
-                    overflowY: "hidden",
-                    display: "flex",
-                    flexGrow: 1,
-                    flexDirection: "column",
-                    ":hover": {
-                      border: isDragging ? `1px solid #808080` : "none",
-                    },
+                    borderRadius: "3px",
                   }}
+                  color="primary"
                 >
-                  <AppBar
-                    position="static"
-                    elevation={13}
-                    sx={{
-                      borderRadius: "3px",
-                      flexShrink: 1,
-                    }}
-                    color="primary"
-                  >
-                    <Toolbar variant="dense" color="inherit">
-                      <Typography
-                        sx={{
-                          fontWeight: "450",
-                          fontSize: "22px",
-                          opacity: ".8",
-                          textAlign: "center",
-                        }}
-                      >
-                        {status.title}
-                      </Typography>
-                    </Toolbar>
-                  </AppBar>
-                  <Droppable droppableId={status.id.toString()} key={status.id}>
-                    {(provided) => (
-                      <Box
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                        sx={{ flexGrow: 1, overflowY: "auto", pt: 1 }}
-                      >
-                        {filterToDosByStatus(status)?.map((toDo, index) => {
-                          return (
-                            <ToDoCard
-                              toDo={toDo}
-                              key={toDo.id}
-                              index={index}
-                              activeCard={
-                                activeId?.toString() === toDo.id.toString()
-                              }
-                              isDragging={isDragging}
-                            />
-                          );
-                        })}
-                        {provided.placeholder}
-                      </Box>
-                    )}
-                  </Droppable>
-                </Paper>
-              </Box>
+                  <Toolbar variant="dense" color="inherit">
+                    <Typography
+                      sx={{
+                        fontWeight: "450",
+                        fontSize: "22px",
+                        opacity: ".8",
+                      }}
+                    >
+                      {status.title}
+                    </Typography>
+                  </Toolbar>
+                </AppBar>
+                <Droppable droppableId={status.id.toString()} key={status.id}>
+                  {(provided) => (
+                    <Box
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                      sx={{ flexGrow: 1, overflowY: "auto", pt: 1 }}
+                    >
+                      {filterToDosByStatus(status)?.map((toDo, index) => {
+                        return (
+                          <ToDoCard
+                            toDo={toDo}
+                            key={toDo.id}
+                            index={index}
+                            activeCard={
+                              activeId?.toString() === toDo.id.toString()
+                            }
+                            isDragging={isDragging}
+                          />
+                        );
+                      })}
+                      {provided.placeholder}
+                    </Box>
+                  )}
+                </Droppable>
+              </Paper>
             );
           })}
         {(isStatusListPending || !filteredToDoList) && (

@@ -18,7 +18,7 @@ const LoadingStatusBoardView = (key) => {
     >
       <Card
         className="statusTitle"
-        elevation={5}
+        elevation={1}
         sx={{
           alignSelf: "center",
           width: "fit-content",
@@ -32,7 +32,7 @@ const LoadingStatusBoardView = (key) => {
         <CircularProgress size={25} sx={{ marginRight: 1 }} />
       </Card>
       <Paper
-        elevation={10}
+        elevation={1}
         sx={{
           backgroundColor: "neutral.main",
           minWidth: theme.spacing(40),

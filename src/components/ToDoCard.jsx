@@ -76,7 +76,7 @@ const ToDoCard = ({ toDo, index, activeCard, isDragging }) => {
     }
   };
 
-  const cardElevation = isStatic && isDragging ? 0 : activeCard ? 5 : 3;
+  const cardElevation = isStatic && isDragging ? 0 : activeCard ? 5 : 1;
 
   return (
     <Draggable draggableId={toDo.id.toString()} index={index}>
