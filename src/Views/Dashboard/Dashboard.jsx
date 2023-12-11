@@ -105,7 +105,7 @@ const Dashboard = () => {
       <AppBar
         position="static"
         sx={{ backgroundColor: "neutral.main" }}
-        elevation={1}
+        elevation={4}
       >
         <Toolbar id="dashboard-toolbar" variant="dense" color="inherit">
           <Button

@@ -101,7 +101,7 @@ const BoardView = ({
               >
                 <AppBar
                   position="static"
-                  elevation={1}
+                  elevation={2}
                   sx={{
                     borderRadius: "3px",
                   }}
