@@ -92,7 +92,7 @@ const ProjectSettingsDialog = () => {
       onClose={() => setIsProjectSettingsDialogOpen(false)}
       TransitionComponent={Transition}
     >
-      <AppBar elevation={6} sx={{ position: "relative" }}>
+      <AppBar elevation={1} position="static">
         <Toolbar>
           <IconButton
             edge="start"
@@ -107,30 +107,22 @@ const ProjectSettingsDialog = () => {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Toolbar
-        id="project-settings-toolbar"
-        variant="dense"
-        color="inherit"
-        sx={{
-          display: "flex",
-          backgroundColor: "neutral.main",
-          mb: 2,
-        }}
-      >
-        <Button
-          color="inherit"
-          variant="contained"
-          size="small"
-          onClick={() => setIsStatusFormDialogOpen(true)}
-        >
-          Create ToDo Status
-        </Button>
-      </Toolbar>
-      <Box sx={{ display: "flex" }}>
-        <Box sx={{ flexGrow: "1" }} />
-        <Paper elevation={6}>
+      <AppBar position="static" color="neutral" sx={{ mb: 2 }} elevation={1}>
+        <Toolbar id="project-settings-toolbar" variant="dense">
+          <Button
+            color="inherit"
+            variant="contained"
+            size="small"
+            onClick={() => setIsStatusFormDialogOpen(true)}
+          >
+            Create ToDo Status
+          </Button>
+        </Toolbar>
+      </AppBar>
+      <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <Paper elevation={1}>
           <AppBar
-            elevation={6}
+            elevation={1}
             sx={{ position: "static", backgroundColor: "neutral.main" }}
           >
             <Toolbar>
@@ -181,7 +173,6 @@ const ProjectSettingsDialog = () => {
             </Droppable>
           </DragDropContext>
         </Paper>
-        <Box sx={{ flexGrow: "1" }} />
       </Box>
     </Dialog>
   );

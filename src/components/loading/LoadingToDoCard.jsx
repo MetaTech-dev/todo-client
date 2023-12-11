@@ -10,7 +10,7 @@ import {
 const LoadingToDoCard = () => {
   return (
     <Card
-      elevation={3}
+      elevation={1}
       sx={(theme) => ({
         maxWidth: theme.spacing(40),
       })}
