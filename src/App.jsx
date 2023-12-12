@@ -11,15 +11,17 @@ import { RouterProvider } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { blueGrey, grey } from "@mui/material/colors";
 import router from "./router";
-import AppSettingsContext from "./contexts/AppSettingsContext";
+import AppContext from "./contexts/AppContext";
 import { SnackbarProvider } from "notistack";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import LoadingUser from "./components/loading/LoadingUser";
 
 function App() {
   const [queryClient] = useState(() => new QueryClient());
 
-  const { isDarkMode } = useContext(AppSettingsContext);
+  const { isDarkMode, isAuthenticated, isLoadingAuthUser } =
+    useContext(AppContext);
 
   const theme = createTheme({
     palette: {
@@ -40,7 +42,8 @@ function App() {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <ToDoProvider>
               <SnackbarProvider maxSnack={1}>
-                <RouterProvider router={router} />
+                {isLoadingAuthUser && <LoadingUser />}
+                {!isLoadingAuthUser && <RouterProvider router={router} />}
                 <ReactQueryDevtools initialIsOpen={false} />
               </SnackbarProvider>
             </ToDoProvider>

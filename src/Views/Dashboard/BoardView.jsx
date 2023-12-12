@@ -63,7 +63,6 @@ const BoardView = ({
     setActiveId(null);
   };
 
-  console.log(theme.palette.neutral.contrastBorder);
   return (
     <Box
       id="board-view-container"
