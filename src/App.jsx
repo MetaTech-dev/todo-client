@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CssBaseline } from "@mui/material";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
@@ -12,7 +12,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { blueGrey, grey } from "@mui/material/colors";
 import router from "./router";
 import AppContext from "./contexts/AppContext";
-import { SnackbarProvider } from "notistack";
+import { SnackbarProvider, enqueueSnackbar } from "notistack";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import LoadingUser from "./components/loading/LoadingUser";
@@ -20,7 +20,7 @@ import LoadingUser from "./components/loading/LoadingUser";
 function App() {
   const [queryClient] = useState(() => new QueryClient());
 
-  const { isDarkMode, isAuthenticated, isLoadingAuthUser } =
+  const { authError, isDarkMode, isAuthenticated, isLoadingAuthUser } =
     useContext(AppContext);
 
   const theme = createTheme({
@@ -34,6 +34,14 @@ function App() {
       },
     },
   });
+
+  useEffect(() => {
+    if (authError) {
+      enqueueSnackbar(authError.message, {
+        variant: "error",
+      });
+    }
+  }, [authError]);
 
   return (
     <QueryClientProvider client={queryClient}>
