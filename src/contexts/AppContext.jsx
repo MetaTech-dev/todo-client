@@ -5,7 +5,11 @@ const AppContext = createContext();
 export default AppContext;
 
 export const AppSettingsProvider = ({ children }) => {
-  const { isAuthenticated, isLoading: isLoadingAuthUser } = useAuth0();
+  const {
+    isAuthenticated,
+    isLoading: isLoadingAuthUser,
+    loginWithRedirect,
+  } = useAuth0();
 
   const isPrefersDark = window.matchMedia(
     "(prefers-color-scheme: dark)"
@@ -13,11 +17,11 @@ export const AppSettingsProvider = ({ children }) => {
   const [isDarkMode, setIsDarkMode] = useState(isPrefersDark);
   const toggleDarkMode = () => setIsDarkMode((prev) => !prev);
 
-  // useEffect(() => {
-  //   if (!isLoadingAuthUser) {
-  //     return <div>HI IT IS LOAD TIME</div>;
-  //   }
-  // }, [isAuthenticated, isLoadingAuthUser]);
+  useEffect(() => {
+    if (!isLoadingAuthUser && !isAuthenticated) {
+      loginWithRedirect();
+    }
+  }, [isAuthenticated, isLoadingAuthUser]);
 
   const providerValue = {
     isDarkMode,
