@@ -28,9 +28,20 @@ const Header = () => {
           ToDo
         </Typography>
         <Box sx={{ flexGrow: 1 }} />
-        <Button color="inherit" onClick={() => loginWithRedirect()}>
-          Login
-        </Button>
+        {isAuthenticated ? (
+          <Button
+            color="inherit"
+            onClick={() =>
+              logout({ logoutParams: { returnTo: window.location.origin } })
+            }
+          >
+            Log Out
+          </Button>
+        ) : (
+          <Button color="inherit" onClick={() => loginWithRedirect()}>
+            Login
+          </Button>
+        )}
         <IconButton
           onClick={() => toggleDarkMode()}
           color="inherit"
