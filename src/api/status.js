@@ -1,5 +1,9 @@
-export const requestGetStatusList = async () => {
-  const response = await fetch("http://localhost:3000/status");
+export const requestGetStatusList = async ({ accessToken }) => {
+  const response = await fetch("http://localhost:3000/status", {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
   if (!response.ok) {
     const errorResponse = await response.json();
     throw new Error(errorResponse.message || "Failed to fetch status list");
@@ -7,10 +11,13 @@ export const requestGetStatusList = async () => {
   return response.json();
 };
 
-export const requestCreateStatus = async (status) => {
+export const requestCreateStatus = async ({ status, accessToken }) => {
   const response = await fetch("http://localhost:3000/status", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
     body: JSON.stringify(status),
   });
   if (!response.ok) {
@@ -20,9 +27,12 @@ export const requestCreateStatus = async (status) => {
   return response.json();
 };
 
-export const requestRemoveStatus = async (id) => {
+export const requestRemoveStatus = async ({ id, accessToken }) => {
   const response = await fetch(`http://localhost:3000/status/${id}`, {
     method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
   });
   if (!response.ok) {
     const errorResponse = await response.json();
@@ -32,10 +42,13 @@ export const requestRemoveStatus = async (id) => {
   }
 };
 
-export const requestUpdateStatus = async (status) => {
+export const requestUpdateStatus = async ({ status, accessToken }) => {
   const response = await fetch(`http://localhost:3000/status/${status.id}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
     body: JSON.stringify(status),
   });
   if (!response.ok) {
@@ -45,10 +58,13 @@ export const requestUpdateStatus = async (status) => {
   return response.json();
 };
 
-export const requestUpdateStatusList = async (statusList) => {
+export const requestUpdateStatusList = async ({ statusList, accessToken }) => {
   const response = await fetch(`http://localhost:3000/status`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
     body: JSON.stringify(statusList),
   });
   if (!response.ok) {
