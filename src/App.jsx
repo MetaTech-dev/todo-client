@@ -1,4 +1,5 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 import { CssBaseline } from "@mui/material";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
@@ -11,15 +12,18 @@ import { RouterProvider } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { blueGrey, grey } from "@mui/material/colors";
 import router from "./router";
-import AppSettingsContext from "./contexts/AppSettingsContext";
-import { SnackbarProvider } from "notistack";
+import AppContext from "./contexts/AppContext";
+import { SnackbarProvider, enqueueSnackbar } from "notistack";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import LoadingUser from "./components/loading/LoadingUser";
 
 function App() {
   const [queryClient] = useState(() => new QueryClient());
 
-  const { isDarkMode } = useContext(AppSettingsContext);
+  const { isDarkMode } = useContext(AppContext);
+
+  const { error: authError, isLoading: isLoadingAuthUser } = useAuth0();
 
   const theme = createTheme({
     palette: {
@@ -33,6 +37,14 @@ function App() {
     },
   });
 
+  useEffect(() => {
+    if (authError) {
+      enqueueSnackbar(authError.message, {
+        variant: "error",
+      });
+    }
+  }, [authError]);
+
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
@@ -40,6 +52,7 @@ function App() {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <ToDoProvider>
               <SnackbarProvider maxSnack={1}>
+                {/* {isLoadingAuthUser && <LoadingUser />} */}
                 <RouterProvider router={router} />
                 <ReactQueryDevtools initialIsOpen={false} />
               </SnackbarProvider>

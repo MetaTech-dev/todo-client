@@ -1,5 +1,9 @@
-export const requestGetToDoList = async () => {
-  const response = await fetch("http://localhost:3000/toDo");
+export const requestGetToDoList = async ({ accessToken }) => {
+  const response = await fetch("http://localhost:3000/toDo", {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
   if (!response.ok) {
     const errorResponse = await response.json();
     throw new Error(errorResponse.message || "Failed to fetch toDo list");
@@ -7,10 +11,13 @@ export const requestGetToDoList = async () => {
   return response.json();
 };
 
-export const requestCreateToDo = async (toDo) => {
+export const requestCreateToDo = async ({ toDo, accessToken }) => {
   const response = await fetch("http://localhost:3000/toDo", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
     body: JSON.stringify(toDo),
   });
   if (!response.ok) {
@@ -20,9 +27,12 @@ export const requestCreateToDo = async (toDo) => {
   return response.json();
 };
 
-export const requestRemoveToDo = async (id) => {
+export const requestRemoveToDo = async ({ id, accessToken }) => {
   const response = await fetch(`http://localhost:3000/toDo/${id}`, {
     method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
   });
   if (!response.ok) {
     const errorResponse = await response.json();
@@ -32,10 +42,13 @@ export const requestRemoveToDo = async (id) => {
   }
 };
 
-export const requestUpdateToDo = async (toDo) => {
+export const requestUpdateToDo = async ({ toDo, accessToken }) => {
   const response = await fetch(`http://localhost:3000/toDo/${toDo.id}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
     body: JSON.stringify(toDo),
   });
   if (!response.ok) {
@@ -45,10 +58,13 @@ export const requestUpdateToDo = async (toDo) => {
   return response.json();
 };
 
-export const requestUpdateToDoList = async (toDoList) => {
+export const requestUpdateToDoList = async ({ toDoList, accessToken }) => {
   const response = await fetch(`http://localhost:3000/toDo`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
     body: JSON.stringify(toDoList),
   });
   if (!response.ok) {

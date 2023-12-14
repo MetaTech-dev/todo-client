@@ -1,17 +1,19 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import { Toolbar, Box, IconButton, Typography } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import MenuIcon from "@mui/icons-material/Menu";
 import Button from "@mui/material/Button";
 import { useContext } from "react";
-import DarkModeContext from "../contexts/AppSettingsContext";
+import DarkModeContext from "../contexts/AppContext";
 import BedtimeOutlinedIcon from "@mui/icons-material/BedtimeOutlined";
 import BedtimeOffOutlinedIcon from "@mui/icons-material/BedtimeOffOutlined";
 
 const Header = () => {
   const { isDarkMode, toggleDarkMode } = useContext(DarkModeContext);
+  const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
 
   return (
-    <AppBar position="static" elevation={1}>
+    <AppBar position="static" elevation={2}>
       <Toolbar>
         <IconButton
           size="large"
@@ -26,7 +28,20 @@ const Header = () => {
           ToDo
         </Typography>
         <Box sx={{ flexGrow: 1 }} />
-        <Button color="inherit">Login</Button>
+        {isAuthenticated ? (
+          <Button
+            color="inherit"
+            onClick={() =>
+              logout({ logoutParams: { returnTo: window.location.origin } })
+            }
+          >
+            Log Out
+          </Button>
+        ) : (
+          <Button color="inherit" onClick={() => loginWithRedirect()}>
+            Login
+          </Button>
+        )}
         <IconButton
           onClick={() => toggleDarkMode()}
           color="inherit"

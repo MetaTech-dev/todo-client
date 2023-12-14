@@ -1,3 +1,4 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import {
   requestCreateStatus,
@@ -10,9 +11,14 @@ import { enqueueSnackbar } from "notistack";
 import { v4 as uuid } from "uuid";
 
 export const useGetStatusList = () => {
+  const { getAccessTokenSilently } = useAuth0();
+
   return useQuery({
     queryKey: ["statusList"],
-    queryFn: requestGetStatusList,
+    queryFn: async () => {
+      const accessToken = await getAccessTokenSilently();
+      return requestGetStatusList({ accessToken });
+    },
     onError: (error) => {
       enqueueSnackbar(error.message || "An error occurred fetching statuses", {
         variant: "error",
@@ -23,9 +29,13 @@ export const useGetStatusList = () => {
 
 export const useCreateStatus = () => {
   const queryClient = useQueryClient();
+  const { getAccessTokenSilently } = useAuth0();
 
   return useMutation({
-    mutationFn: requestCreateStatus,
+    mutationFn: async (status) => {
+      const accessToken = await getAccessTokenSilently();
+      return requestCreateStatus({ accessToken, status });
+    },
     onMutate: async (newStatus) => {
       await queryClient.cancelQueries({ queryKey: ["statusList"] });
       const previousStatusList = queryClient.getQueryData(["statusList"]);
@@ -49,8 +59,13 @@ export const useCreateStatus = () => {
 
 export const useRemoveStatus = () => {
   const queryClient = useQueryClient();
+  const { getAccessTokenSilently } = useAuth0();
+
   return useMutation({
-    mutationFn: requestRemoveStatus,
+    mutationFn: async (id) => {
+      const accessToken = await getAccessTokenSilently();
+      return requestRemoveStatus({ accessToken, id });
+    },
     onMutate: async (id) => {
       await queryClient.cancelQueries({ queryKey: ["statusList"] });
       const previousStatusList = queryClient.getQueryData(["statusList"]);
@@ -75,8 +90,13 @@ export const useRemoveStatus = () => {
 
 export const useUpdateStatus = () => {
   const queryClient = useQueryClient();
+  const { getAccessTokenSilently } = useAuth0();
+
   return useMutation({
-    mutationFn: requestUpdateStatus,
+    mutationFn: async (status) => {
+      const accessToken = await getAccessTokenSilently();
+      return requestUpdateStatus({ accessToken, status });
+    },
     onMutate: async (updatedStatus) => {
       await queryClient.cancelQueries({
         queryKey: ["statusList", updatedStatus.id],
@@ -107,8 +127,13 @@ export const useUpdateStatus = () => {
 
 export const useUpdateStatusList = () => {
   const queryClient = useQueryClient();
+  const { getAccessTokenSilently } = useAuth0();
+
   return useMutation({
-    mutationFn: requestUpdateStatusList,
+    mutationFn: async (statusList) => {
+      const accessToken = await getAccessTokenSilently();
+      return requestUpdateStatusList({ accessToken, statusList });
+    },
     onMutate: async (updatedStatusList) => {
       await queryClient.cancelQueries({
         queryKey: ["statusList"],
