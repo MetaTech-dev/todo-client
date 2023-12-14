@@ -6,7 +6,6 @@ export default AppContext;
 
 export const AppSettingsProvider = ({ children }) => {
   const {
-    error: authError,
     isAuthenticated,
     isLoading: isLoadingAuthUser,
     loginWithRedirect,
@@ -25,12 +24,9 @@ export const AppSettingsProvider = ({ children }) => {
   }, [isAuthenticated, isLoadingAuthUser]);
 
   const providerValue = {
-    authError,
     isDarkMode,
     setIsDarkMode,
     toggleDarkMode,
-    isAuthenticated,
-    isLoadingAuthUser,
   };
 
   return (

@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 import { CssBaseline } from "@mui/material";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
@@ -20,8 +21,9 @@ import LoadingUser from "./components/loading/LoadingUser";
 function App() {
   const [queryClient] = useState(() => new QueryClient());
 
-  const { authError, isDarkMode, isAuthenticated, isLoadingAuthUser } =
-    useContext(AppContext);
+  const { isDarkMode } = useContext(AppContext);
+
+  const { error: authError, isLoading: isLoadingAuthUser } = useAuth0();
 
   const theme = createTheme({
     palette: {
