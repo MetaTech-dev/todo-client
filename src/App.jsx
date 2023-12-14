@@ -39,6 +39,7 @@ function App() {
 
   useEffect(() => {
     if (authError) {
+      console.log("authError", authError);
       enqueueSnackbar(authError.message, {
         variant: "error",
       });
