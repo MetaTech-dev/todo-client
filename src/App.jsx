@@ -52,8 +52,8 @@ function App() {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <ToDoProvider>
               <SnackbarProvider maxSnack={1}>
-                {isLoadingAuthUser && <LoadingUser />}
-                {!isLoadingAuthUser && <RouterProvider router={router} />}
+                {/* {isLoadingAuthUser && <LoadingUser />} */}
+                <RouterProvider router={router} />
                 <ReactQueryDevtools initialIsOpen={false} />
               </SnackbarProvider>
             </ToDoProvider>
