@@ -13,7 +13,7 @@ root.render(
     clientId="mg6cH2lq8jIEpEzIqgdpP3G2pethhWJq"
     authorizationParams={{
       redirect_uri: window.location.origin,
-      audience: "https://metatech-todo-dev.us.auth0.com/api/v2/",
+      audience: "todo",
     }}
   >
     <AppSettingsProvider>
