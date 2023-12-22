@@ -1,4 +1,4 @@
-export const requestRoleList = async ({ accessToken }) => {
+export const requestGetRoleList = async ({ accessToken }) => {
   const response = await fetch(`http://localhost:3000/role`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
