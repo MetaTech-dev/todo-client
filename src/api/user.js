@@ -46,7 +46,6 @@ export const requestUpdateUserRoles = async ({
   userId,
   accessToken,
 }) => {
-  console.log("roles", roles);
   const response = await fetch(`http://localhost:3000/user/${userId}/role`, {
     method: "PUT",
     headers: {

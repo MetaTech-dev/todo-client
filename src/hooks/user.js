@@ -87,7 +87,6 @@ export const useUpdateUserRoles = () => {
 
   return useMutation({
     mutationFn: async ({ userId, roles }) => {
-      //   console.log("roles", roles);
       const accessToken = await getAccessTokenSilently();
       return requestUpdateUserRoles({ accessToken, roles, userId });
     },

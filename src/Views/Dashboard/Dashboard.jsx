@@ -16,12 +16,6 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import { useGetStatusList } from "../../hooks/status";
 import { useGetToDoList } from "../../hooks/toDo";
 import { useDebounce } from "../../utils/useDebounce";
-import {
-  useGetOneUser,
-  useGetUserList,
-  useUpdateUser,
-  useUpdateUserRoles,
-} from "../../hooks/user";
 
 const Dashboard = () => {
   const { setIsProjectSettingsDialogOpen, setIsToDoFormDialogOpen } =
@@ -33,28 +27,23 @@ const Dashboard = () => {
   ///testing section!!!!
   const { data: toDoList } = useGetToDoList();
 
-  const { data: userList } = useGetUserList();
-
-  const { data: user } = useGetOneUser("auth0|6577ca8e34659f99dd98d66b");
-  console.log("userList", userList);
-
   // const { mutate: updateUser } = useUpdateUser();
 
-  const { mutate: updateUserRole } = useUpdateUserRoles();
+  // const { mutate: updateUserRole } = useUpdateUserRoles();
 
-  const handleUpdate = () => {
-    // const body = {
-    //     name: "DEFINITELY ZAQ",
-    // };
-    // const userId = user?.user_id;
-    // if (user) {
-    //   updateUser({ userId, body });
-    // }
+  // const handleUpdate = () => {
+  // const body = {
+  //     name: "DEFINITELY ZAQ",
+  // };
+  // const userId = user?.user_id;
+  // if (user) {
+  //   updateUser({ userId, body });
+  // }
 
-    const roles = [`rol_bCQ2d2jO6kxIsQyI`];
-    const userId = "google-oauth2|102295201720803560500";
-    updateUserRole({ userId, roles });
-  };
+  //   const roles = [`rol_bCQ2d2jO6kxIsQyI`];
+  //   const userId = "google-oauth2|102295201720803560500";
+  //   updateUserRole({ userId, roles });
+  // };
 
   //end of testing section :)
 
@@ -147,7 +136,6 @@ const Dashboard = () => {
           >
             New ToDo
           </Button>
-          <Button onClick={() => handleUpdate()}>update</Button>
           <Box sx={{ flexGrow: 0.03 }} />
           <TextField
             id="outlined-search"
