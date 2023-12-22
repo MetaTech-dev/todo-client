@@ -32,15 +32,17 @@ const Dashboard = () => {
 
   const { data: user } = useGetOneUser("auth0|6577ca8e34659f99dd98d66b");
 
-  console.log("user", user);
+  // console.log("user", user);
 
   const { mutate: updateUser } = useUpdateUser();
 
   const handleUpdate = () => {
     const updatedData = {
+      user_id: user.user_id,
       name: "DEFINITELY ZAQ",
     };
-    updateUser({ user_id: user.user_id, updatedData });
+    updateUser(updatedData);
+    console.log("updatedData", updatedData);
   };
 
   //end of testing section :)

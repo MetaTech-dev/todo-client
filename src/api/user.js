@@ -24,14 +24,15 @@ export const requestGetOneUser = async ({ id, accessToken }) => {
   return response.json();
 };
 
-export const requestUpdateUser = async ({ user, updatedData, accessToken }) => {
-  const response = await fetch(`http://localhost:3000/user/${user?.user_id}`, {
+export const requestUpdateUser = async ({ user, accessToken }) => {
+  console.log("user", user);
+  const response = await fetch(`http://localhost:3000/user/${user.user_id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
     },
-    body: JSON.stringify(updatedData),
+    body: JSON.stringify(user),
   });
 
   if (!response.ok) {
