@@ -16,6 +16,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import { useGetStatusList } from "../../hooks/status";
 import { useGetToDoList } from "../../hooks/toDo";
 import { useDebounce } from "../../utils/useDebounce";
+import { useGetOneUser, useGetUserList, useUpdateUser } from "../../hooks/user";
 
 const Dashboard = () => {
   const { setIsProjectSettingsDialogOpen, setIsToDoFormDialogOpen } =
@@ -24,7 +25,25 @@ const Dashboard = () => {
   const { data: statusList, isPending: isStatusListPending } =
     useGetStatusList();
 
+  ///testing section!!!!
   const { data: toDoList } = useGetToDoList();
+
+  const { data: userList } = useGetUserList();
+
+  const { data: user } = useGetOneUser("auth0|6577ca8e34659f99dd98d66b");
+
+  console.log("user", user);
+
+  const { mutate: updateUser } = useUpdateUser();
+
+  const handleUpdate = () => {
+    const updatedData = {
+      name: "DEFINITELY ZAQ",
+    };
+    updateUser({ user_id: user.user_id, updatedData });
+  };
+
+  //end of testing section :)
 
   const [searchQuery, setSearchQuery] = useState("");
   const handleChangeSearchQuery = (e) => {
@@ -115,6 +134,7 @@ const Dashboard = () => {
           >
             New ToDo
           </Button>
+          <Button onClick={() => handleUpdate()}>update</Button>
           <Box sx={{ flexGrow: 0.03 }} />
           <TextField
             id="outlined-search"

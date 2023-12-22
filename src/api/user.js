@@ -1,4 +1,4 @@
-export const requestUserList = async ({ accessToken }) => {
+export const requestGetUserList = async ({ accessToken }) => {
   const response = await fetch(`http://localhost:3000/user`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -24,15 +24,16 @@ export const requestGetOneUser = async ({ id, accessToken }) => {
   return response.json();
 };
 
-export const requestUpdateUser = async ({ user, accessToken }) => {
-  const response = await fetch(`http://localhost:3000/user/${user.id}`, {
+export const requestUpdateUser = async ({ user, updatedData, accessToken }) => {
+  const response = await fetch(`http://localhost:3000/user/${user?.user_id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
     },
-    body: JSON.stringify(user),
+    body: JSON.stringify(updatedData),
   });
+
   if (!response.ok) {
     const errorResponse = await response.json();
     throw new Error(errorResponse.message || "Failed to update user");
@@ -41,14 +42,17 @@ export const requestUpdateUser = async ({ user, accessToken }) => {
 };
 
 export const requestUpdateUserRoles = async ({ user, accessToken }) => {
-  const response = await fetch(`http://localhost:3000/user/${user.id}/role`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-    body: JSON.stringify(user),
-  });
+  const response = await fetch(
+    `http://localhost:3000/user/${user.user_id}/role`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(user),
+    }
+  );
   if (!response.ok) {
     const errorResponse = await response.json();
     throw new Error(errorResponse.message || "Failed to update user roles");
