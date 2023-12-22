@@ -16,6 +16,8 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import { useGetStatusList } from "../../hooks/status";
 import { useGetToDoList } from "../../hooks/toDo";
 import { useDebounce } from "../../utils/useDebounce";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useGetOneUser } from "../../hooks/user";
 
 const Dashboard = () => {
   const { setIsProjectSettingsDialogOpen, setIsToDoFormDialogOpen } =
@@ -24,9 +26,15 @@ const Dashboard = () => {
   const { data: statusList, isPending: isStatusListPending } =
     useGetStatusList();
 
-  ///testing section!!!!
+  const { user } = useAuth0();
+
+  const { data: currentUser } = useGetOneUser(user?.sub);
+
+  const isAdmin = currentUser?.roles.some((role) => role.name === "Admin");
+
   const { data: toDoList } = useGetToDoList();
 
+  ///testing section!!!!
   // const { mutate: updateUser } = useUpdateUser();
 
   // const { mutate: updateUserRole } = useUpdateUserRoles();
@@ -157,13 +165,15 @@ const Dashboard = () => {
             <ToggleButton value="board">Board</ToggleButton>
             <ToggleButton value="list">List</ToggleButton>
           </ToggleButtonGroup>
-          <IconButton
-            aria-label="Open Project Settings"
-            onClick={() => handleProjectSettingsDialogOpen()}
-            sx={{ marginLeft: "1rem" }}
-          >
-            <SettingsIcon />
-          </IconButton>
+          {isAdmin && (
+            <IconButton
+              aria-label="Open Project Settings"
+              onClick={() => handleProjectSettingsDialogOpen()}
+              sx={{ marginLeft: "1rem" }}
+            >
+              <SettingsIcon />
+            </IconButton>
+          )}
         </Toolbar>
       </AppBar>
       {getViewState()}
