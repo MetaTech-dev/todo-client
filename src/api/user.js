@@ -41,18 +41,20 @@ export const requestUpdateUser = async ({ body, userId, accessToken }) => {
   return response.json();
 };
 
-export const requestUpdateUserRoles = async ({ user, accessToken }) => {
-  const response = await fetch(
-    `http://localhost:3000/user/${user.user_id}/role`,
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify(user),
-    }
-  );
+export const requestUpdateUserRoles = async ({
+  roles,
+  userId,
+  accessToken,
+}) => {
+  console.log("roles", roles);
+  const response = await fetch(`http://localhost:3000/user/${userId}/role`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify({ roleIds: roles }),
+  });
   if (!response.ok) {
     const errorResponse = await response.json();
     throw new Error(errorResponse.message || "Failed to update user roles");

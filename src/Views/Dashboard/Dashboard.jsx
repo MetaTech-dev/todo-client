@@ -16,7 +16,12 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import { useGetStatusList } from "../../hooks/status";
 import { useGetToDoList } from "../../hooks/toDo";
 import { useDebounce } from "../../utils/useDebounce";
-import { useGetOneUser, useGetUserList, useUpdateUser } from "../../hooks/user";
+import {
+  useGetOneUser,
+  useGetUserList,
+  useUpdateUser,
+  useUpdateUserRoles,
+} from "../../hooks/user";
 
 const Dashboard = () => {
   const { setIsProjectSettingsDialogOpen, setIsToDoFormDialogOpen } =
@@ -31,9 +36,11 @@ const Dashboard = () => {
   const { data: userList } = useGetUserList();
 
   const { data: user } = useGetOneUser("auth0|6577ca8e34659f99dd98d66b");
-  console.log("user", user);
+  console.log("userList", userList);
 
   // const { mutate: updateUser } = useUpdateUser();
+
+  const { mutate: updateUserRole } = useUpdateUserRoles();
 
   const handleUpdate = () => {
     // const body = {
@@ -43,6 +50,10 @@ const Dashboard = () => {
     // if (user) {
     //   updateUser({ userId, body });
     // }
+
+    const roles = [`rol_bCQ2d2jO6kxIsQyI`];
+    const userId = "google-oauth2|102295201720803560500";
+    updateUserRole({ userId, roles });
   };
 
   //end of testing section :)

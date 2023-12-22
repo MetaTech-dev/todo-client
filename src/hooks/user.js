@@ -80,3 +80,42 @@ export const useUpdateUser = () => {
     },
   });
 };
+
+export const useUpdateUserRoles = () => {
+  const queryClient = useQueryClient();
+  const { getAccessTokenSilently } = useAuth0();
+
+  return useMutation({
+    mutationFn: async ({ userId, roles }) => {
+      //   console.log("roles", roles);
+      const accessToken = await getAccessTokenSilently();
+      return requestUpdateUserRoles({ accessToken, roles, userId });
+    },
+    onMutate: async (updatedUser) => {
+      await queryClient.cancelQueries({
+        queryKey: ["user", updatedUser.user_id],
+      });
+      const previousUser = queryClient.getQueryData([
+        "user",
+        updatedUser.user_id,
+      ]);
+      queryClient.setQueryData(["user", updatedUser.user_id], updatedUser);
+      return { previousUser, updatedUser };
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["userList"] });
+    },
+    onError: (error, updatedUser, context) => {
+      queryClient.setQueryData(
+        ["userList", updatedUser.user_id],
+        context.previousUser
+      );
+      enqueueSnackbar(
+        error.message || "An error occurred updating user roles",
+        {
+          variant: "error",
+        }
+      );
+    },
+  });
+};
