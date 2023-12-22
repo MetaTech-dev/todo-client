@@ -31,18 +31,18 @@ const Dashboard = () => {
   const { data: userList } = useGetUserList();
 
   const { data: user } = useGetOneUser("auth0|6577ca8e34659f99dd98d66b");
+  console.log("user", user);
 
-  // console.log("user", user);
-
-  const { mutate: updateUser } = useUpdateUser();
+  // const { mutate: updateUser } = useUpdateUser();
 
   const handleUpdate = () => {
-    const updatedData = {
-      user_id: user.user_id,
-      name: "DEFINITELY ZAQ",
-    };
-    updateUser(updatedData);
-    console.log("updatedData", updatedData);
+    // const body = {
+    //     name: "DEFINITELY ZAQ",
+    // };
+    // const userId = user?.user_id;
+    // if (user) {
+    //   updateUser({ userId, body });
+    // }
   };
 
   //end of testing section :)

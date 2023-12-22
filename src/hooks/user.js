@@ -47,10 +47,13 @@ export const useUpdateUser = () => {
   const { getAccessTokenSilently } = useAuth0();
 
   return useMutation({
-    mutationFn: async (user) => {
+    mutationFn: async ({ userId, body }) => {
       const accessToken = await getAccessTokenSilently();
-      console.log("hook user", user);
-      return requestUpdateUser({ accessToken, user });
+      return requestUpdateUser({
+        userId,
+        accessToken,
+        body,
+      });
     },
     onMutate: async (updatedUser) => {
       await queryClient.cancelQueries({
