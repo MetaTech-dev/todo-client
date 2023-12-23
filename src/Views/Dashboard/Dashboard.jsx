@@ -16,6 +16,8 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import { useGetStatusList } from "../../hooks/status";
 import { useGetToDoList } from "../../hooks/toDo";
 import { useDebounce } from "../../utils/useDebounce";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useGetOneUser } from "../../hooks/user";
 
 const Dashboard = () => {
   const { setIsProjectSettingsDialogOpen, setIsToDoFormDialogOpen } =
@@ -24,7 +26,34 @@ const Dashboard = () => {
   const { data: statusList, isPending: isStatusListPending } =
     useGetStatusList();
 
+  const { user } = useAuth0();
+
+  const { data: currentUser } = useGetOneUser(user?.sub);
+
+  const isAdmin = currentUser?.roles.some((role) => role.name === "Admin");
+
   const { data: toDoList } = useGetToDoList();
+
+  ///testing section!!!!
+  // const { mutate: updateUser } = useUpdateUser();
+
+  // const { mutate: updateUserRole } = useUpdateUserRoles();
+
+  // const handleUpdate = () => {
+  // const body = {
+  //     name: "DEFINITELY ZAQ",
+  // };
+  // const userId = user?.user_id;
+  // if (user) {
+  //   updateUser({ userId, body });
+  // }
+
+  //   const roles = [`rol_bCQ2d2jO6kxIsQyI`];
+  //   const userId = "google-oauth2|102295201720803560500";
+  //   updateUserRole({ userId, roles });
+  // };
+
+  //end of testing section :)
 
   const [searchQuery, setSearchQuery] = useState("");
   const handleChangeSearchQuery = (e) => {
@@ -136,13 +165,15 @@ const Dashboard = () => {
             <ToggleButton value="board">Board</ToggleButton>
             <ToggleButton value="list">List</ToggleButton>
           </ToggleButtonGroup>
-          <IconButton
-            aria-label="Open Project Settings"
-            onClick={() => handleProjectSettingsDialogOpen()}
-            sx={{ marginLeft: "1rem" }}
-          >
-            <SettingsIcon />
-          </IconButton>
+          {isAdmin && (
+            <IconButton
+              aria-label="Open Project Settings"
+              onClick={() => handleProjectSettingsDialogOpen()}
+              sx={{ marginLeft: "1rem" }}
+            >
+              <SettingsIcon />
+            </IconButton>
+          )}
         </Toolbar>
       </AppBar>
       {getViewState()}
