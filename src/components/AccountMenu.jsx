@@ -8,6 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import DarkModeContext from "../contexts/AppContext";
 import { useAuth0 } from "@auth0/auth0-react";
 import BedtimeOutlinedIcon from "@mui/icons-material/BedtimeOutlined";
@@ -16,6 +17,7 @@ import BedtimeOffOutlinedIcon from "@mui/icons-material/BedtimeOffOutlined";
 const AccountMenu = () => {
   const { isDarkMode, toggleDarkMode } = useContext(DarkModeContext);
   const { isAuthenticated, loginWithRedirect, logout, user } = useAuth0();
+  const navigate = useNavigate();
 
   const getInitials = () => {
     return user?.name
@@ -29,6 +31,13 @@ const AccountMenu = () => {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleProfileClick = () => {
+    const userId = user?.sub;
+    if (user && userId) {
+      navigate(`/${userId}`);
+    }
   };
 
   return (
@@ -72,7 +81,7 @@ const AccountMenu = () => {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem>
+        <MenuItem onClick={handleProfileClick}>
           <Typography
             sx={{ p: "0px 8px 0px 8px", fontSize: 16, fontWeight: "500" }}
           >
