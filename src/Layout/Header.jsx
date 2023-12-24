@@ -6,6 +6,8 @@ import {
   Typography,
   Avatar,
   Tooltip,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -28,6 +30,10 @@ const Header = () => {
   };
 
   const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <AppBar position="static" elevation={2}>
@@ -53,27 +59,76 @@ const Header = () => {
             <Avatar src={user?.picture || null}>{getInitials()}</Avatar>
           </IconButton>
         </Tooltip>
-        {/* {isAuthenticated ? (
-          <Button
-            color="inherit"
-            onClick={() =>
-              logout({ logoutParams: { returnTo: window.location.origin } })
-            }
-          >
-            Log Out
-          </Button>
-        ) : (
-          <Button color="inherit" onClick={() => loginWithRedirect()}>
-            Login
-          </Button>
-        )}
-        <IconButton
-          onClick={() => toggleDarkMode()}
-          color="inherit"
-          aria-label="Toggle Dark Mode"
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+          onClick={handleClose}
+          PaperProps={{
+            elevation: 0,
+            sx: {
+              overflow: "visible",
+              filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+              mt: 1.5,
+              "& .MuiAvatar-root": {
+                width: 32,
+                height: 32,
+                ml: -0.5,
+                mr: 1,
+              },
+              "&:before": {
+                content: '""',
+                display: "block",
+                position: "absolute",
+                top: 0,
+                right: 14,
+                width: 10,
+                height: 10,
+                bgcolor: "background.paper",
+                transform: "translateY(-50%) rotate(45deg)",
+                zIndex: 0,
+              },
+            },
+          }}
+          transformOrigin={{ horizontal: "right", vertical: "top" }}
+          anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         >
-          {isDarkMode ? <BedtimeOffOutlinedIcon /> : <BedtimeOutlinedIcon />}
-        </IconButton> */}
+          <MenuItem>
+            <Typography sx={{ p: "8px", fontSize: 14, fontWeight: "500" }}>
+              Profile
+            </Typography>
+          </MenuItem>
+          <MenuItem>
+            {" "}
+            <IconButton
+              onClick={() => toggleDarkMode()}
+              color="inherit"
+              aria-label="Toggle Dark Mode"
+            >
+              {isDarkMode ? (
+                <BedtimeOffOutlinedIcon />
+              ) : (
+                <BedtimeOutlinedIcon />
+              )}
+            </IconButton>
+          </MenuItem>
+          <MenuItem>
+            {isAuthenticated ? (
+              <Button
+                color="inherit"
+                onClick={() =>
+                  logout({ logoutParams: { returnTo: window.location.origin } })
+                }
+              >
+                Log Out
+              </Button>
+            ) : (
+              <Button color="inherit" onClick={() => loginWithRedirect()}>
+                Login
+              </Button>
+            )}
+          </MenuItem>
+        </Menu>
       </Toolbar>
     </AppBar>
   );
