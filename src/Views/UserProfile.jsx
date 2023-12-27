@@ -20,14 +20,16 @@ import CancelTwoToneIcon from "@mui/icons-material/CancelTwoTone";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { LoadingButton } from "@mui/lab";
-import { set } from "date-fns";
+
 import { enqueueSnackbar } from "notistack";
 
 const UserProfile = () => {
-  const { user: currentUser } = useAuth0();
-  const profileId = useLocation().pathname.split("/")[1];
+  const { user } = useAuth0();
+  const rawProfileId = useLocation().pathname.split("/")[1];
+  const profileId = decodeURIComponent(rawProfileId);
 
   const { data: profileUser } = useGetOneUser(profileId);
+  const { data: currentUser } = useGetOneUser(user?.sub);
 
   const {
     mutate: updateUser,
@@ -37,7 +39,17 @@ const UserProfile = () => {
 
   const [isEditing, setIsEditing] = useState(false);
   const [isSelf, setIsSelf] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
+  useEffect(() => {
+    if (currentUser?.roles.some((role) => role.name === "Admin")) {
+      setIsAdmin(true);
+    }
+  }, [currentUser]);
+
+  console.log("currentUser", currentUser);
+
+  console.log("isAdmin", isAdmin);
   const formatDate = (date) => {
     const dayjsDate = dayjs(date);
     return dayjsDate.isValid()
@@ -46,7 +58,7 @@ const UserProfile = () => {
   };
 
   useEffect(() => {
-    if (currentUser?.sub === profileUser?.user_id) {
+    if (currentUser?.user_id === profileUser?.user_id) {
       setIsSelf(true);
     }
   }, [currentUser, profileUser]);
@@ -241,9 +253,11 @@ const UserProfile = () => {
             <Typography sx={{ fontWeight: "bold", mr: 1, flex: 2 }}>
               roles:
             </Typography>
-            <Typography sx={{ flex: 3 }}>
-              {profileUser?.roles.map((role) => role.name).join(", ")}
-            </Typography>
+            {(!isEditing || !isAdmin) && (
+              <Typography sx={{ flex: 3 }}>
+                {profileUser?.roles.map((role) => role.name).join(", ")}
+              </Typography>
+            )}
           </Box>
           {/* User Created At */}
           <Box sx={{ display: "flex", flexDirection: "row" }}>
