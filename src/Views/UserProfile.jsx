@@ -7,13 +7,19 @@ import {
   Card,
   CardActions,
   CardContent,
+  Chip,
+  FormControl,
   IconButton,
+  MenuItem,
+  OutlinedInput,
+  Select,
   TextField,
   Toolbar,
   Typography,
 } from "@mui/material";
 import dayjs from "dayjs";
 import { useGetOneUser, useUpdateUser } from "../hooks/user";
+import { useGetRoleList } from "../hooks/role";
 import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import SaveTwoToneIcon from "@mui/icons-material/SaveTwoTone";
 import CancelTwoToneIcon from "@mui/icons-material/CancelTwoTone";
@@ -30,6 +36,20 @@ const UserProfile = () => {
 
   const { data: profileUser } = useGetOneUser(profileId);
   const { data: currentUser } = useGetOneUser(user?.sub);
+  const { data: roleList } = useGetRoleList();
+
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
+
+  console.log("roleList", roleList);
 
   const {
     mutate: updateUser,
@@ -47,9 +67,6 @@ const UserProfile = () => {
     }
   }, [currentUser]);
 
-  console.log("currentUser", currentUser);
-
-  console.log("isAdmin", isAdmin);
   const formatDate = (date) => {
     const dayjsDate = dayjs(date);
     return dayjsDate.isValid()
@@ -81,7 +98,7 @@ const UserProfile = () => {
         email: profileUser.email,
       });
       setUserRolesData({
-        roles: profileUser.roles,
+        roles: profileUser.roles.map((role) => role.id),
       });
     }
   }, [profileUser]);
@@ -92,6 +109,16 @@ const UserProfile = () => {
       ...prev,
       [name]: value,
     }));
+  };
+
+  const handleRolesChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setUserRolesData({
+      ...userRolesData,
+      roles: typeof value === "string" ? value.split(",") : value,
+    });
   };
 
   const handleUpdateUser = () => {
@@ -258,6 +285,33 @@ const UserProfile = () => {
                 {profileUser?.roles.map((role) => role.name).join(", ")}
               </Typography>
             )}
+            {isEditing && isAdmin && (
+              <Select
+                multiple
+                id="userRoles"
+                name="roles"
+                value={userRolesData.roles}
+                onChange={handleRolesChange}
+                input={<OutlinedInput id="select-multiple-roles" />}
+                renderValue={(selected) => (
+                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                    {selected.map((roleId) => {
+                      const role = roleList.find((role) => role.id === roleId);
+                      return role ? (
+                        <Chip key={roleId} label={role.name} />
+                      ) : null;
+                    })}
+                  </Box>
+                )}
+                MenuProps={MenuProps}
+              >
+                {roleList.map((role) => (
+                  <MenuItem key={role.id} value={role.id}>
+                    {role.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            )}
           </Box>
           {/* User Created At */}
           <Box sx={{ display: "flex", flexDirection: "row" }}>
@@ -319,4 +373,5 @@ const UserProfile = () => {
     </Box>
   );
 };
+
 export default UserProfile;
