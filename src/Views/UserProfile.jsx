@@ -1,14 +1,11 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import {
-  Alert,
   AppBar,
   Box,
-  Button,
   Card,
   CardActions,
   CardContent,
   Chip,
-  FormControl,
   IconButton,
   MenuItem,
   OutlinedInput,
@@ -18,15 +15,18 @@ import {
   Typography,
 } from "@mui/material";
 import dayjs from "dayjs";
-import { useGetOneUser, useUpdateUser } from "../hooks/user";
+import {
+  useGetOneUser,
+  useUpdateUser,
+  useUpdateUserRoles,
+} from "../hooks/user";
 import { useGetRoleList } from "../hooks/role";
 import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import SaveTwoToneIcon from "@mui/icons-material/SaveTwoTone";
 import CancelTwoToneIcon from "@mui/icons-material/CancelTwoTone";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { LoadingButton } from "@mui/lab";
-
 import { enqueueSnackbar } from "notistack";
 
 const UserProfile = () => {
@@ -37,6 +37,8 @@ const UserProfile = () => {
   const { data: profileUser } = useGetOneUser(profileId);
   const { data: currentUser } = useGetOneUser(user?.sub);
   const { data: roleList } = useGetRoleList();
+
+  console.log("profile user roles", profileUser?.roles);
 
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
@@ -57,15 +59,25 @@ const UserProfile = () => {
     isSuccess: isUpdateUserSuccess,
   } = useUpdateUser();
 
-  const [isEditing, setIsEditing] = useState(false);
-  const [isSelf, setIsSelf] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const {
+    mutate: updateUserRoles,
+    isPending: isUpdateUserRolesPending,
+    isSuccess: isUpdateUserRolesSuccess,
+  } = useUpdateUserRoles();
 
-  useEffect(() => {
-    if (currentUser?.roles.some((role) => role.name === "Admin")) {
-      setIsAdmin(true);
-    }
-  }, [currentUser]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [isUpdatingUser, setIsUpdatingUser] = useState(false);
+  const [isUpdatingUserRoles, setIsUpdatingUserRoles] = useState(false);
+
+  const isAdmin = useMemo(
+    () => currentUser?.roles?.some((role) => role.name === "Admin"),
+    [currentUser]
+  );
+
+  const isSelf = useMemo(
+    () => currentUser?.user_id === profileUser?.user_id,
+    [currentUser]
+  );
 
   const formatDate = (date) => {
     const dayjsDate = dayjs(date);
@@ -74,16 +86,10 @@ const UserProfile = () => {
       : "none selected";
   };
 
-  useEffect(() => {
-    if (currentUser?.user_id === profileUser?.user_id) {
-      setIsSelf(true);
-    }
-  }, [currentUser, profileUser]);
-
   const [updateUserData, setUpdateUserData] = useState({
     name: "",
-    email: "",
     nickname: "",
+    email: "",
   });
 
   const [userRolesData, setUserRolesData] = useState({
@@ -98,12 +104,27 @@ const UserProfile = () => {
         email: profileUser.email,
       });
       setUserRolesData({
-        roles: profileUser.roles.map((role) => role.id),
+        roles: profileUser.roles?.map((role) => role.id),
       });
     }
   }, [profileUser]);
 
+  const handleCancel = () => {
+    setIsEditing(false);
+    setUpdateUserData({
+      name: profileUser.name,
+      nickname: profileUser.nickname,
+      email: profileUser.email,
+    });
+    setUserRolesData({
+      roles: profileUser.roles.map((role) => role.id),
+    });
+    setIsUpdatingUser(false);
+    setIsUpdatingUserRoles(false);
+  };
+
   const handleInputChange = (event) => {
+    setIsUpdatingUser(true);
     const { name, value } = event.target;
     setUpdateUserData((prev) => ({
       ...prev,
@@ -112,6 +133,7 @@ const UserProfile = () => {
   };
 
   const handleRolesChange = (event) => {
+    setIsUpdatingUserRoles(true);
     const {
       target: { value },
     } = event;
@@ -133,6 +155,7 @@ const UserProfile = () => {
       const body = updateUserData;
       const userId = profileUser?.user_id;
       updateUser({ userId, body });
+      setIsUpdatingUser(false);
     } else if (trimmedName === "") {
       enqueueSnackbar("Name can't be empty", { variant: "error" });
     } else if (trimmedNickname === "") {
@@ -142,16 +165,42 @@ const UserProfile = () => {
     }
   };
 
+  const handleUpdateUserRoles = () => {
+    const roles = userRolesData.roles;
+    const userId = profileUser?.user_id;
+
+    const hasMemberRole = roles.some((roleId) => {
+      const role = roleList.find((r) => r.id === roleId);
+      return role && role.name === "Member";
+    });
+
+    // const hasAdminRole = roles.some((roleId) => {
+    //   const role = roleList.find((r) => r.id === roleId);
+    //   return role && role.name === "Admin";
+    // });
+
+    if (hasMemberRole) {
+      updateUserRoles({ userId, roles });
+      setIsUpdatingUserRoles(false);
+    } else {
+      enqueueSnackbar("User must always be a Member", { variant: "error" });
+    }
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    handleUpdateUser();
+    if (isUpdatingUser) {
+      handleUpdateUser();
+    } else if (isUpdatingUserRoles) {
+      handleUpdateUserRoles();
+    }
   };
 
   useEffect(() => {
-    if (isUpdateUserSuccess) {
+    if (isUpdateUserSuccess || isUpdateUserRolesSuccess) {
       setIsEditing(false);
     }
-  }, [isUpdateUserSuccess]);
+  }, [isUpdateUserSuccess, isUpdateUserRolesSuccess]);
 
   return (
     <Box
@@ -280,17 +329,18 @@ const UserProfile = () => {
             <Typography sx={{ fontWeight: "bold", mr: 1, flex: 2 }}>
               roles:
             </Typography>
-            {(!isEditing || !isAdmin) && (
+            {(!isEditing || !isAdmin) && Array.isArray(profileUser?.roles) && (
               <Typography sx={{ flex: 3 }}>
                 {profileUser?.roles.map((role) => role.name).join(", ")}
               </Typography>
             )}
             {isEditing && isAdmin && (
               <Select
+                fullWidth
                 multiple
                 id="userRoles"
                 name="roles"
-                value={userRolesData.roles}
+                value={userRolesData?.roles ?? []}
                 onChange={handleRolesChange}
                 input={<OutlinedInput id="select-multiple-roles" />}
                 renderValue={(selected) => (
@@ -357,12 +407,12 @@ const UserProfile = () => {
                 <LoadingButton
                   onClick={handleSubmit}
                   color="inherit"
-                  loading={isUpdateUserPending}
+                  loading={isUpdateUserPending || isUpdateUserRolesPending}
                   type="submit"
                 >
                   <SaveTwoToneIcon />
                 </LoadingButton>
-                <IconButton onClick={() => setIsEditing(false)}>
+                <IconButton onClick={handleCancel}>
                   <CancelTwoToneIcon />
                 </IconButton>
               </Box>

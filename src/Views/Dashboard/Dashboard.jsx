@@ -30,6 +30,8 @@ const Dashboard = () => {
 
   const { data: currentUser } = useGetOneUser(user?.sub);
 
+  console.log("currentUser ", currentUser);
+
   const isAdmin = currentUser?.roles.some((role) => role.name === "Admin");
 
   const { data: toDoList } = useGetToDoList();

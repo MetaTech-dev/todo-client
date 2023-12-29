@@ -104,6 +104,7 @@ export const useUpdateUserRoles = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["userList"] });
+      queryClient.invalidateQueries({ queryKey: ["user"] });
     },
     onError: (error, updatedUser, context) => {
       queryClient.setQueryData(
