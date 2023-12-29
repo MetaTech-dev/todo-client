@@ -38,8 +38,6 @@ const UserProfile = () => {
   const { data: currentUser } = useGetOneUser(user?.sub);
   const { data: roleList } = useGetRoleList();
 
-  console.log("profile user roles", profileUser?.roles);
-
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
   const MenuProps = {
@@ -50,8 +48,6 @@ const UserProfile = () => {
       },
     },
   };
-
-  console.log("roleList", roleList);
 
   const {
     mutate: updateUser,
@@ -173,11 +169,6 @@ const UserProfile = () => {
       const role = roleList.find((r) => r.id === roleId);
       return role && role.name === "Member";
     });
-
-    // const hasAdminRole = roles.some((roleId) => {
-    //   const role = roleList.find((r) => r.id === roleId);
-    //   return role && role.name === "Admin";
-    // });
 
     if (hasMemberRole) {
       updateUserRoles({ userId, roles });
