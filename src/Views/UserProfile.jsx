@@ -288,6 +288,7 @@ const UserProfile = () => {
                 placeholder={profileUser?.email}
                 value={updateUserData.email}
                 onChange={handleInputChange}
+                sx={{ width: "12rem" }}
                 required
               />
             )}
@@ -311,6 +312,7 @@ const UserProfile = () => {
                 placeholder={profileUser?.nickname}
                 value={updateUserData.nickname}
                 onChange={handleInputChange}
+                sx={{ width: "12rem" }}
                 required
               />
             )}
@@ -331,6 +333,7 @@ const UserProfile = () => {
                 multiple
                 id="userRoles"
                 name="roles"
+                size="small"
                 value={userRolesData?.roles ?? []}
                 onChange={handleRolesChange}
                 input={<OutlinedInput id="select-multiple-roles" />}
@@ -345,6 +348,7 @@ const UserProfile = () => {
                   </Box>
                 )}
                 MenuProps={MenuProps}
+                sx={{ maxWidth: "12rem" }}
               >
                 {roleList.map((role) => (
                   <MenuItem key={role.id} value={role.id}>
