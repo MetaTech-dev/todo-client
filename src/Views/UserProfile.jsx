@@ -6,6 +6,7 @@ import {
   CardActions,
   CardContent,
   Chip,
+  CircularProgress,
   IconButton,
   MenuItem,
   OutlinedInput,
@@ -34,7 +35,8 @@ const UserProfile = () => {
   const rawProfileId = useLocation().pathname.split("/")[1];
   const profileId = decodeURIComponent(rawProfileId);
 
-  const { data: profileUser } = useGetOneUser(profileId);
+  const { data: profileUser, isPending: isProfileUserPending } =
+    useGetOneUser(profileId);
   const { data: currentUser } = useGetOneUser(user?.sub);
   const { data: roleList } = useGetRoleList();
 
@@ -220,12 +222,13 @@ const UserProfile = () => {
           position="static"
           sx={{ backgroundColor: "primary.main" }}
         >
-          {(!isEditing || !isSelf) && (
+          {isProfileUserPending && <Toolbar />}
+          {!isProfileUserPending && (!isEditing || !isSelf) && (
             <Toolbar sx={{ fontWeight: "500", fontSize: "20px" }}>
               {profileUser?.name}
             </Toolbar>
           )}
-          {isEditing && isSelf && (
+          {!isProfileUserPending && isEditing && isSelf && (
             <Toolbar sx={{ fontWeight: "500", fontSize: "20px" }}>
               <TextField
                 variant="standard"
@@ -245,174 +248,199 @@ const UserProfile = () => {
         </AppBar>
         <CardContent
           sx={{
+            width: "30rem",
             "&:last-child": {
               pb: 0,
             },
           }}
         >
-          {/* User Profile Picture */}
-          <Box
-            sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}
-          >
-            <Typography sx={{ fontWeight: "bold", mr: 1, flex: 2 }}>
-              profile picture:
-            </Typography>
-            <Box sx={{ flex: 3, mb: 0.5 }}>
-              <Card
-                elevation={2}
+          {isProfileUserPending && (
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <CircularProgress sx={{ m: "5rem" }} size={75} />
+            </Box>
+          )}
+          {!isProfileUserPending && (
+            <>
+              {/* User Profile Picture */}
+              <Box
                 sx={{
-                  width: "fit-content",
                   display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
                 }}
               >
-                <img src={profileUser?.picture} alt="" />
-              </Card>
-            </Box>
-          </Box>
-          {/* User Email */}
-          <Box sx={{ display: "flex", flexDirection: "row" }}>
-            <Typography sx={{ fontWeight: "bold", mr: 1, flex: 2 }}>
-              e-mail:
-            </Typography>
-            {(!isEditing || !isSelf) && (
-              <Typography sx={{ flex: 3 }}>{profileUser?.email}</Typography>
-            )}
-            {isEditing && isSelf && (
-              <TextField
-                variant="outlined"
-                type="email"
-                size="small"
-                inputProps={{ style: { padding: "0.33rem" } }}
-                id="userEmail"
-                name="email"
-                placeholder={profileUser?.email}
-                value={updateUserData.email}
-                onChange={handleInputChange}
-                sx={{ width: "12rem" }}
-                required
-              />
-            )}
-          </Box>
-          {/* User Nickname */}
-          <Box sx={{ display: "flex", flexDirection: "row" }}>
-            <Typography sx={{ fontWeight: "bold", mr: 1, flex: 2 }}>
-              nickname:
-            </Typography>
-            {(!isEditing || !isSelf) && (
-              <Typography sx={{ flex: 3 }}>{profileUser?.nickname}</Typography>
-            )}
-            {isEditing && isSelf && (
-              <TextField
-                variant="outlined"
-                type="search"
-                size="small"
-                inputProps={{ style: { padding: "0.33rem" } }}
-                id="userNickname"
-                name="nickname"
-                placeholder={profileUser?.nickname}
-                value={updateUserData.nickname}
-                onChange={handleInputChange}
-                sx={{ width: "12rem" }}
-                required
-              />
-            )}
-          </Box>
-          {/* Roles */}
-          <Box sx={{ display: "flex", flexDirection: "row" }}>
-            <Typography sx={{ fontWeight: "bold", mr: 1, flex: 2 }}>
-              roles:
-            </Typography>
-            {(!isEditing || !isAdmin) && Array.isArray(profileUser?.roles) && (
-              <Typography sx={{ flex: 3 }}>
-                {profileUser?.roles.map((role) => role.name).join(", ")}
-              </Typography>
-            )}
-            {isEditing && isAdmin && (
-              <Select
-                fullWidth
-                multiple
-                id="userRoles"
-                name="roles"
-                size="small"
-                value={userRolesData?.roles ?? []}
-                onChange={handleRolesChange}
-                input={<OutlinedInput id="select-multiple-roles" />}
-                renderValue={(selected) => (
-                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                    {selected.map((roleId) => {
-                      const role = roleList.find((role) => role.id === roleId);
-                      return role ? (
-                        <Chip key={roleId} label={role.name} />
-                      ) : null;
-                    })}
+                <Typography sx={{ fontWeight: "bold", mr: 1, flex: 2 }}>
+                  Profile Picture:
+                </Typography>
+                <Box sx={{ flex: 3, mb: 0.5 }}>
+                  <Card
+                    elevation={2}
+                    sx={{
+                      width: "fit-content",
+                      display: "flex",
+                    }}
+                  >
+                    <img src={profileUser?.picture} alt="" />
+                  </Card>
+                </Box>
+              </Box>
+              {/* User Email */}
+              <Box sx={{ display: "flex", flexDirection: "row" }}>
+                <Typography sx={{ fontWeight: "bold", mr: 1, flex: 2 }}>
+                  e-mail:
+                </Typography>
+                {(!isEditing || !isSelf) && (
+                  <Typography sx={{ flex: 3 }}>{profileUser?.email}</Typography>
+                )}
+                {isEditing && isSelf && (
+                  <TextField
+                    variant="outlined"
+                    type="email"
+                    size="small"
+                    inputProps={{ style: { padding: "0.33rem" } }}
+                    id="userEmail"
+                    name="email"
+                    placeholder={profileUser?.email}
+                    value={updateUserData.email}
+                    onChange={handleInputChange}
+                    sx={{ width: "12rem" }}
+                    required
+                  />
+                )}
+              </Box>
+              {/* User Nickname */}
+              <Box sx={{ display: "flex", flexDirection: "row" }}>
+                <Typography sx={{ fontWeight: "bold", mr: 1, flex: 2 }}>
+                  Nickname:
+                </Typography>
+                {(!isEditing || !isSelf) && (
+                  <Typography sx={{ flex: 3 }}>
+                    {profileUser?.nickname}
+                  </Typography>
+                )}
+                {isEditing && isSelf && (
+                  <TextField
+                    variant="outlined"
+                    type="search"
+                    size="small"
+                    inputProps={{ style: { padding: "0.33rem" } }}
+                    id="userNickname"
+                    name="nickname"
+                    placeholder={profileUser?.nickname}
+                    value={updateUserData.nickname}
+                    onChange={handleInputChange}
+                    sx={{ width: "12rem" }}
+                    required
+                  />
+                )}
+              </Box>
+              {/* Roles */}
+              <Box sx={{ display: "flex", flexDirection: "row" }}>
+                <Typography sx={{ fontWeight: "bold", mr: 1, flex: 2 }}>
+                  Roles:
+                </Typography>
+                {(!isEditing || !isAdmin) &&
+                  Array.isArray(profileUser?.roles) && (
+                    <Typography sx={{ flex: 3 }}>
+                      {profileUser?.roles.map((role) => role.name).join(", ")}
+                    </Typography>
+                  )}
+                {isEditing && isAdmin && (
+                  <Select
+                    fullWidth
+                    multiple
+                    id="userRoles"
+                    name="roles"
+                    size="small"
+                    value={userRolesData?.roles ?? []}
+                    onChange={handleRolesChange}
+                    input={<OutlinedInput id="select-multiple-roles" />}
+                    renderValue={(selected) => (
+                      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                        {selected.map((roleId) => {
+                          const role = roleList.find(
+                            (role) => role.id === roleId
+                          );
+                          return role ? (
+                            <Chip key={roleId} label={role.name} />
+                          ) : null;
+                        })}
+                      </Box>
+                    )}
+                    MenuProps={MenuProps}
+                    sx={{ maxWidth: "12rem" }}
+                  >
+                    {roleList.map((role) => (
+                      <MenuItem key={role.id} value={role.id}>
+                        {role.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                )}
+              </Box>
+              {/* User Created At */}
+              <Box sx={{ display: "flex", flexDirection: "row" }}>
+                <Typography sx={{ fontWeight: "bold", mr: 1, flex: 2 }}>
+                  Member Since:
+                </Typography>
+                <Typography sx={{ flex: 3 }}>
+                  {formatDate(profileUser?.created_at)}
+                </Typography>
+              </Box>
+              {/* Last Updated At */}
+              <Box sx={{ display: "flex", flexDirection: "row" }}>
+                <Typography sx={{ fontWeight: "bold", mr: 1, flex: 2 }}>
+                  Last Updated:
+                </Typography>
+                <Typography sx={{ flex: 3 }}>
+                  {formatDate(profileUser?.updated_at)}
+                </Typography>
+              </Box>
+              {/* Last Login */}
+              <Box sx={{ display: "flex", flexDirection: "row" }}>
+                <Typography sx={{ fontWeight: "bold", mr: 1, flex: 2 }}>
+                  Last Login:
+                </Typography>
+                <Typography sx={{ flex: 3 }}>
+                  {formatDate(profileUser?.last_login)}
+                </Typography>
+              </Box>
+              <CardActions
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "flex-end",
+                }}
+              >
+                {!isEditing && (
+                  <IconButton onClick={() => setIsEditing(true)}>
+                    <EditTwoToneIcon />
+                  </IconButton>
+                )}
+                {isEditing && (
+                  <Box sx={{ display: "flex", flexDirection: "row" }}>
+                    <LoadingButton
+                      onClick={handleSubmit}
+                      color="inherit"
+                      loading={isUpdateUserPending || isUpdateUserRolesPending}
+                      type="submit"
+                    >
+                      <SaveTwoToneIcon />
+                    </LoadingButton>
+                    <IconButton onClick={handleCancel}>
+                      <CancelTwoToneIcon />
+                    </IconButton>
                   </Box>
                 )}
-                MenuProps={MenuProps}
-                sx={{ maxWidth: "12rem" }}
-              >
-                {roleList.map((role) => (
-                  <MenuItem key={role.id} value={role.id}>
-                    {role.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            )}
-          </Box>
-          {/* User Created At */}
-          <Box sx={{ display: "flex", flexDirection: "row" }}>
-            <Typography sx={{ fontWeight: "bold", mr: 1, flex: 2 }}>
-              member since:
-            </Typography>
-            <Typography sx={{ flex: 3 }}>
-              {formatDate(profileUser?.created_at)}
-            </Typography>
-          </Box>
-          {/* Last Updated At */}
-          <Box sx={{ display: "flex", flexDirection: "row" }}>
-            <Typography sx={{ fontWeight: "bold", mr: 1, flex: 2 }}>
-              last updated:
-            </Typography>
-            <Typography sx={{ flex: 3 }}>
-              {formatDate(profileUser?.updated_at)}
-            </Typography>
-          </Box>
-          {/* Last Login */}
-          <Box sx={{ display: "flex", flexDirection: "row" }}>
-            <Typography sx={{ fontWeight: "bold", mr: 1, flex: 2 }}>
-              last login:
-            </Typography>
-            <Typography sx={{ flex: 3 }}>
-              {formatDate(profileUser?.last_login)}
-            </Typography>
-          </Box>
-          <CardActions
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "flex-end",
-            }}
-          >
-            {!isEditing && (
-              <IconButton onClick={() => setIsEditing(true)}>
-                <EditTwoToneIcon />
-              </IconButton>
-            )}
-            {isEditing && (
-              <Box sx={{ display: "flex", flexDirection: "row" }}>
-                <LoadingButton
-                  onClick={handleSubmit}
-                  color="inherit"
-                  loading={isUpdateUserPending || isUpdateUserRolesPending}
-                  type="submit"
-                >
-                  <SaveTwoToneIcon />
-                </LoadingButton>
-                <IconButton onClick={handleCancel}>
-                  <CancelTwoToneIcon />
-                </IconButton>
-              </Box>
-            )}
-          </CardActions>
+              </CardActions>
+            </>
+          )}
         </CardContent>
       </Card>
     </Box>

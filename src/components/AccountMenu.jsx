@@ -89,7 +89,7 @@ const AccountMenu = () => {
           </Typography>
         </MenuItem>
         <MenuItem>
-          <Tooltip title="Toggle Dark Mode">
+          <Tooltip title="Toggle Dark Mode" placement="left">
             <IconButton
               onClick={() => toggleDarkMode()}
               color="inherit"
