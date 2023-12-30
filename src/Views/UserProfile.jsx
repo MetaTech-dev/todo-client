@@ -137,7 +137,7 @@ const UserProfile = () => {
     } = event;
     setUserRolesData({
       ...userRolesData,
-      roles: typeof value === "string" ? value.split(",") : value,
+      roles: value,
     });
   };
 
@@ -186,6 +186,8 @@ const UserProfile = () => {
       handleUpdateUser();
     } else if (isUpdatingUserRoles) {
       handleUpdateUserRoles();
+    } else if (!isUpdatingUser && !isUpdatingUserRoles) {
+      setIsEditing(false);
     }
   };
 
@@ -309,7 +311,7 @@ const UserProfile = () => {
                     placeholder={profileUser?.email}
                     value={updateUserData.email}
                     onChange={handleInputChange}
-                    sx={{ width: "12rem" }}
+                    sx={{ flex: 3 }}
                     required
                   />
                 )}
@@ -335,7 +337,7 @@ const UserProfile = () => {
                     placeholder={profileUser?.nickname}
                     value={updateUserData.nickname}
                     onChange={handleInputChange}
-                    sx={{ width: "12rem" }}
+                    sx={{ flex: 3 }}
                     required
                   />
                 )}
@@ -374,7 +376,7 @@ const UserProfile = () => {
                       </Box>
                     )}
                     MenuProps={MenuProps}
-                    sx={{ maxWidth: "12rem" }}
+                    sx={{ flex: 3 }}
                   >
                     {roleList.map((role) => (
                       <MenuItem key={role.id} value={role.id}>
