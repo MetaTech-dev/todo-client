@@ -1,18 +1,19 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import {
-  AppBar,
+  Avatar,
   Box,
   Card,
   CardActions,
   CardContent,
+  CardHeader,
   Chip,
   CircularProgress,
   IconButton,
   MenuItem,
   OutlinedInput,
   Select,
+  Skeleton,
   TextField,
-  Toolbar,
   Typography,
 } from "@mui/material";
 import dayjs from "dayjs";
@@ -22,18 +23,21 @@ import {
   useUpdateUserRoles,
 } from "../hooks/user";
 import { useGetRoleList } from "../hooks/role";
-import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
-import SaveTwoToneIcon from "@mui/icons-material/SaveTwoTone";
-import CancelTwoToneIcon from "@mui/icons-material/CancelTwoTone";
-import { useEffect, useMemo, useState } from "react";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
+import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { LoadingButton } from "@mui/lab";
 import { enqueueSnackbar } from "notistack";
 
 const UserProfile = () => {
   const { user } = useAuth0();
-  const rawProfileId = useLocation().pathname.split("/")[1];
-  const profileId = decodeURIComponent(rawProfileId);
+  const { pathname } = useLocation();
+  const profileId = useMemo(
+    () => decodeURIComponent(pathname.split("/")[2]),
+    [pathname]
+  );
 
   const { data: profileUser, isPending: isProfileUserPending } =
     useGetOneUser(profileId);
@@ -42,14 +46,17 @@ const UserProfile = () => {
 
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
-  const MenuProps = {
-    PaperProps: {
-      style: {
-        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 250,
+  const MenuProps = useMemo(
+    () => ({
+      PaperProps: {
+        style: {
+          maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+          width: 250,
+        },
       },
-    },
-  };
+    }),
+    []
+  );
 
   const {
     mutate: updateUser,
@@ -74,15 +81,15 @@ const UserProfile = () => {
 
   const isSelf = useMemo(
     () => currentUser?.user_id === profileUser?.user_id,
-    [currentUser]
+    [currentUser, profileUser]
   );
 
-  const formatDate = (date) => {
+  const formatDate = useCallback((date) => {
     const dayjsDate = dayjs(date);
     return dayjsDate.isValid()
       ? dayjsDate.format("ddd, MMMM, DD, YYYY")
       : "none selected";
-  };
+  }, []);
 
   const [updateUserData, setUpdateUserData] = useState({
     name: "",
@@ -107,7 +114,7 @@ const UserProfile = () => {
     }
   }, [profileUser]);
 
-  const handleCancel = () => {
+  const handleCancel = useCallback(() => {
     setIsEditing(false);
     setUpdateUserData({
       name: profileUser.name,
@@ -119,18 +126,18 @@ const UserProfile = () => {
     });
     setIsUpdatingUser(false);
     setIsUpdatingUserRoles(false);
-  };
+  }, [profileUser]);
 
-  const handleInputChange = (event) => {
+  const handleInputChange = useCallback((event) => {
     setIsUpdatingUser(true);
     const { name, value } = event.target;
     setUpdateUserData((prev) => ({
       ...prev,
       [name]: value,
     }));
-  };
+  }, []);
 
-  const handleRolesChange = (event) => {
+  const handleRolesChange = useCallback((event) => {
     setIsUpdatingUserRoles(true);
     const {
       target: { value },
@@ -139,9 +146,9 @@ const UserProfile = () => {
       ...userRolesData,
       roles: value,
     });
-  };
+  }, []);
 
-  const handleUpdateUser = () => {
+  const handleUpdateUser = useCallback(() => {
     const trimmedName = updateUserData.name.trim();
     const trimmedNickname = updateUserData.nickname.trim();
     const validateEmail = (email) => {
@@ -161,9 +168,9 @@ const UserProfile = () => {
     } else if (!validEmail) {
       enqueueSnackbar("Invalid email", { variant: "error" });
     }
-  };
+  }, [profileUser, updateUserData, updateUser]);
 
-  const handleUpdateUserRoles = () => {
+  const handleUpdateUserRoles = useCallback(() => {
     const roles = userRolesData.roles;
     const userId = profileUser?.user_id;
 
@@ -178,7 +185,7 @@ const UserProfile = () => {
     } else {
       enqueueSnackbar("User must always be a Member", { variant: "error" });
     }
-  };
+  }, [profileUser, roleList, updateUserRoles, userRolesData.roles]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -210,28 +217,17 @@ const UserProfile = () => {
         backgroundColor: "neutral.main",
       }}
     >
-      <Card
-        elevation={2}
-        sx={{
-          minWidth: "22rem",
-        }}
-        component="form"
-        onSubmit={handleSubmit}
-      >
+      <Card elevation={2} component="form" onSubmit={handleSubmit}>
         {/* User Name */}
-        <AppBar
-          elevation={2}
-          position="static"
+        <CardHeader
+          avatar={<Avatar src={profileUser?.picture} />}
           sx={{ backgroundColor: "primary.main" }}
-        >
-          {isProfileUserPending && <Toolbar />}
-          {!isProfileUserPending && (!isEditing || !isSelf) && (
-            <Toolbar sx={{ fontWeight: "500", fontSize: "20px" }}>
-              {profileUser?.name}
-            </Toolbar>
-          )}
-          {!isProfileUserPending && isEditing && isSelf && (
-            <Toolbar sx={{ fontWeight: "500", fontSize: "20px" }}>
+          title={
+            isProfileUserPending ? (
+              <Skeleton />
+            ) : !isEditing || !isSelf ? (
+              profileUser?.name
+            ) : (
               <TextField
                 variant="standard"
                 type="text"
@@ -245,18 +241,17 @@ const UserProfile = () => {
                 onChange={handleInputChange}
                 required
               />
-            </Toolbar>
-          )}
-        </AppBar>
+            )
+          }
+          titleTypographyProps={{ variant: "h5" }}
+        />
         <CardContent
           sx={{
-            width: "30rem",
-            "&:last-child": {
-              pb: 0,
-            },
+            minWidth: "30rem",
+            pb: 0,
           }}
         >
-          {isProfileUserPending && (
+          {isProfileUserPending ? (
             <Box
               sx={{
                 display: "flex",
@@ -266,39 +261,17 @@ const UserProfile = () => {
             >
               <CircularProgress sx={{ m: "5rem" }} size={75} />
             </Box>
-          )}
-          {!isProfileUserPending && (
+          ) : (
             <>
-              {/* User Profile Picture */}
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-              >
-                <Typography sx={{ fontWeight: "bold", mr: 1, flex: 2 }}>
-                  Profile Picture:
-                </Typography>
-                <Box sx={{ flex: 3, mb: 0.5 }}>
-                  <Card
-                    elevation={2}
-                    sx={{
-                      width: "fit-content",
-                      display: "flex",
-                    }}
-                  >
-                    <img src={profileUser?.picture} alt="" />
-                  </Card>
-                </Box>
-              </Box>
               {/* User Email */}
               <Box sx={{ display: "flex", flexDirection: "row" }}>
-                <Typography sx={{ fontWeight: "bold", mr: 1, flex: 2 }}>
-                  e-mail:
+                <Typography noWrap sx={{ fontWeight: "bold", mr: 1, flex: 2 }}>
+                  E-mail:
                 </Typography>
                 {(!isEditing || !isSelf) && (
-                  <Typography sx={{ flex: 3 }}>{profileUser?.email}</Typography>
+                  <Typography noWrap sx={{ flex: 3 }}>
+                    {profileUser?.email}
+                  </Typography>
                 )}
                 {isEditing && isSelf && (
                   <TextField
@@ -318,11 +291,11 @@ const UserProfile = () => {
               </Box>
               {/* User Nickname */}
               <Box sx={{ display: "flex", flexDirection: "row" }}>
-                <Typography sx={{ fontWeight: "bold", mr: 1, flex: 2 }}>
+                <Typography noWrap sx={{ fontWeight: "bold", mr: 1, flex: 2 }}>
                   Nickname:
                 </Typography>
                 {(!isEditing || !isSelf) && (
-                  <Typography sx={{ flex: 3 }}>
+                  <Typography noWrap sx={{ flex: 3 }}>
                     {profileUser?.nickname}
                   </Typography>
                 )}
@@ -344,14 +317,23 @@ const UserProfile = () => {
               </Box>
               {/* Roles */}
               <Box sx={{ display: "flex", flexDirection: "row" }}>
-                <Typography sx={{ fontWeight: "bold", mr: 1, flex: 2 }}>
+                <Typography noWrap sx={{ fontWeight: "bold", mr: 1, flex: 2 }}>
                   Roles:
                 </Typography>
                 {(!isEditing || !isAdmin) &&
                   Array.isArray(profileUser?.roles) && (
-                    <Typography sx={{ flex: 3 }}>
-                      {profileUser?.roles.map((role) => role.name).join(", ")}
-                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        gap: 0.5,
+                        flex: 3,
+                      }}
+                    >
+                      {profileUser.roles.map((role) => (
+                        <Chip key={role.id} label={role.name} />
+                      ))}
+                    </Box>
                   )}
                 {isEditing && isAdmin && (
                   <Select
@@ -388,62 +370,62 @@ const UserProfile = () => {
               </Box>
               {/* User Created At */}
               <Box sx={{ display: "flex", flexDirection: "row" }}>
-                <Typography sx={{ fontWeight: "bold", mr: 1, flex: 2 }}>
+                <Typography noWrap sx={{ fontWeight: "bold", mr: 1, flex: 2 }}>
                   Member Since:
                 </Typography>
-                <Typography sx={{ flex: 3 }}>
+                <Typography noWrap sx={{ flex: 3 }}>
                   {formatDate(profileUser?.created_at)}
                 </Typography>
               </Box>
               {/* Last Updated At */}
               <Box sx={{ display: "flex", flexDirection: "row" }}>
-                <Typography sx={{ fontWeight: "bold", mr: 1, flex: 2 }}>
+                <Typography noWrap sx={{ fontWeight: "bold", mr: 1, flex: 2 }}>
                   Last Updated:
                 </Typography>
-                <Typography sx={{ flex: 3 }}>
+                <Typography noWrap sx={{ flex: 3 }}>
                   {formatDate(profileUser?.updated_at)}
                 </Typography>
               </Box>
               {/* Last Login */}
               <Box sx={{ display: "flex", flexDirection: "row" }}>
-                <Typography sx={{ fontWeight: "bold", mr: 1, flex: 2 }}>
+                <Typography noWrap sx={{ fontWeight: "bold", mr: 1, flex: 2 }}>
                   Last Login:
                 </Typography>
-                <Typography sx={{ flex: 3 }}>
+                <Typography noWrap sx={{ flex: 3 }}>
                   {formatDate(profileUser?.last_login)}
                 </Typography>
               </Box>
-              <CardActions
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "flex-end",
-                }}
-              >
-                {!isEditing && (
-                  <IconButton onClick={() => setIsEditing(true)}>
-                    <EditTwoToneIcon />
-                  </IconButton>
-                )}
-                {isEditing && (
-                  <Box sx={{ display: "flex", flexDirection: "row" }}>
-                    <LoadingButton
-                      onClick={handleSubmit}
-                      color="inherit"
-                      loading={isUpdateUserPending || isUpdateUserRolesPending}
-                      type="submit"
-                    >
-                      <SaveTwoToneIcon />
-                    </LoadingButton>
-                    <IconButton onClick={handleCancel}>
-                      <CancelTwoToneIcon />
-                    </IconButton>
-                  </Box>
-                )}
-              </CardActions>
             </>
           )}
         </CardContent>
+        <CardActions
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "flex-end",
+          }}
+        >
+          {!isEditing && (isAdmin || isSelf) && (
+            <IconButton onClick={() => setIsEditing(true)}>
+              <EditOutlinedIcon />
+            </IconButton>
+          )}
+          {isEditing && (
+            <>
+              <LoadingButton
+                onClick={handleSubmit}
+                color="inherit"
+                loading={isUpdateUserPending || isUpdateUserRolesPending}
+                type="submit"
+              >
+                <SaveOutlinedIcon />
+              </LoadingButton>
+              <IconButton onClick={handleCancel}>
+                <CancelOutlinedIcon />
+              </IconButton>
+            </>
+          )}
+        </CardActions>
       </Card>
     </Box>
   );
