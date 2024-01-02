@@ -1,5 +1,5 @@
 export const requestGetRoleList = async ({ accessToken }) => {
-  const response = await fetch(`http://localhost:3000/role`, {
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/role`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },

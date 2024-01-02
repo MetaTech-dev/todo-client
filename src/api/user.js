@@ -1,5 +1,5 @@
 export const requestGetUserList = async ({ accessToken }) => {
-  const response = await fetch(`http://localhost:3000/user`, {
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/user`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
@@ -12,7 +12,7 @@ export const requestGetUserList = async ({ accessToken }) => {
 };
 
 export const requestGetOneUser = async ({ id, accessToken }) => {
-  const response = await fetch(`http://localhost:3000/user/${id}`, {
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/user/${id}`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
@@ -25,14 +25,17 @@ export const requestGetOneUser = async ({ id, accessToken }) => {
 };
 
 export const requestUpdateUser = async ({ body, userId, accessToken }) => {
-  const response = await fetch(`http://localhost:3000/user/${userId}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-    body: JSON.stringify(body),
-  });
+  const response = await fetch(
+    `${process.env.REACT_APP_API_URL}/user/${userId}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(body),
+    }
+  );
 
   if (!response.ok) {
     const errorResponse = await response.json();
@@ -46,14 +49,17 @@ export const requestUpdateUserRoles = async ({
   userId,
   accessToken,
 }) => {
-  const response = await fetch(`http://localhost:3000/user/${userId}/role`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-    body: JSON.stringify({ roleIds: roles }),
-  });
+  const response = await fetch(
+    `${process.env.REACT_APP_API_URL}/user/${userId}/role`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({ roleIds: roles }),
+    }
+  );
   if (!response.ok) {
     const errorResponse = await response.json();
     throw new Error(errorResponse.message || "Failed to update user roles");

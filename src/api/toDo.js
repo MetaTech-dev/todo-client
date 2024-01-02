@@ -1,5 +1,5 @@
 export const requestGetToDoList = async ({ accessToken }) => {
-  const response = await fetch("http://localhost:3000/toDo", {
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/toDo`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
@@ -12,7 +12,7 @@ export const requestGetToDoList = async ({ accessToken }) => {
 };
 
 export const requestCreateToDo = async ({ toDo, accessToken }) => {
-  const response = await fetch("http://localhost:3000/toDo", {
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/toDo`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -28,7 +28,7 @@ export const requestCreateToDo = async ({ toDo, accessToken }) => {
 };
 
 export const requestRemoveToDo = async ({ id, accessToken }) => {
-  const response = await fetch(`http://localhost:3000/toDo/${id}`, {
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/toDo/${id}`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -43,14 +43,17 @@ export const requestRemoveToDo = async ({ id, accessToken }) => {
 };
 
 export const requestUpdateToDo = async ({ toDo, accessToken }) => {
-  const response = await fetch(`http://localhost:3000/toDo/${toDo.id}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-    body: JSON.stringify(toDo),
-  });
+  const response = await fetch(
+    `${process.env.REACT_APP_API_URL}/toDo/${toDo.id}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(toDo),
+    }
+  );
   if (!response.ok) {
     const errorResponse = await response.json();
     throw new Error(errorResponse.message || "Failed to update toDo");
@@ -59,7 +62,7 @@ export const requestUpdateToDo = async ({ toDo, accessToken }) => {
 };
 
 export const requestUpdateToDoList = async ({ toDoList, accessToken }) => {
-  const response = await fetch(`http://localhost:3000/toDo`, {
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/toDo`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
