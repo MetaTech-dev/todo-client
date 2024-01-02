@@ -1,5 +1,5 @@
 export const requestGetStatusList = async ({ accessToken }) => {
-  const response = await fetch("http://localhost:3000/status", {
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/status`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
@@ -12,7 +12,7 @@ export const requestGetStatusList = async ({ accessToken }) => {
 };
 
 export const requestCreateStatus = async ({ status, accessToken }) => {
-  const response = await fetch("http://localhost:3000/status", {
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/status`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -28,12 +28,15 @@ export const requestCreateStatus = async ({ status, accessToken }) => {
 };
 
 export const requestRemoveStatus = async ({ id, accessToken }) => {
-  const response = await fetch(`http://localhost:3000/status/${id}`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+  const response = await fetch(
+    `${process.env.REACT_APP_API_URL}/status/${id}`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
   if (!response.ok) {
     const errorResponse = await response.json();
     throw new Error(errorResponse.message || "Failed to delete status");
@@ -43,14 +46,17 @@ export const requestRemoveStatus = async ({ id, accessToken }) => {
 };
 
 export const requestUpdateStatus = async ({ status, accessToken }) => {
-  const response = await fetch(`http://localhost:3000/status/${status.id}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-    body: JSON.stringify(status),
-  });
+  const response = await fetch(
+    `${process.env.REACT_APP_API_URL}/status/${status.id}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(status),
+    }
+  );
   if (!response.ok) {
     const errorResponse = await response.json();
     throw new Error(errorResponse.message || "Failed to update status");
@@ -59,7 +65,7 @@ export const requestUpdateStatus = async ({ status, accessToken }) => {
 };
 
 export const requestUpdateStatusList = async ({ statusList, accessToken }) => {
-  const response = await fetch(`http://localhost:3000/status`, {
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/status`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
