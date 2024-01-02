@@ -1,4 +1,10 @@
-import { createContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const AppContext = createContext();
@@ -11,11 +17,14 @@ export const AppSettingsProvider = ({ children }) => {
     loginWithRedirect,
   } = useAuth0();
 
-  const isPrefersDark = window.matchMedia(
-    "(prefers-color-scheme: dark)"
-  ).matches;
+  const isPrefersDark = useMemo(
+    () => window.matchMedia("(prefers-color-scheme: dark)").matches,
+    []
+  );
+
   const [isDarkMode, setIsDarkMode] = useState(isPrefersDark);
-  const toggleDarkMode = () => setIsDarkMode((prev) => !prev);
+
+  const toggleDarkMode = useCallback(() => setIsDarkMode((prev) => !prev), []);
 
   useEffect(() => {
     if (!isLoadingAuthUser && !isAuthenticated) {

@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useMemo, useState } from "react";
 import StatusFormDialog from "../components/StatusFormDialog";
 import ToDoFormDialog from "../components/ToDoFormDialog";
 import ProjectSettingsDialog from "../components/ProjectSettingsDialog";
@@ -13,9 +13,7 @@ export const ToDoProvider = ({ children }) => {
 
   const [isStatusFormDialogOpen, setIsStatusFormDialogOpen] = useState(false);
 
-  const defaultNewStatus = {
-    title: "",
-  };
+  const defaultNewStatus = useMemo(() => ({ title: "" }), []);
 
   const [statusFormData, setStatusFormData] = useState(defaultNewStatus);
 
@@ -28,13 +26,16 @@ export const ToDoProvider = ({ children }) => {
 
   const [isToDoFormDialogOpen, setIsToDoFormDialogOpen] = useState(false);
 
-  const defaultNewToDo = {
-    title: "",
-    description: "",
-    dueDate: null,
-    priority: "low",
-    statusId: statusList && statusList.length > 0 ? statusList[0]?.id : 1,
-  };
+  const defaultNewToDo = useMemo(
+    () => ({
+      title: "",
+      description: "",
+      dueDate: null,
+      priority: "low",
+      statusId: statusList && statusList.length > 0 ? statusList[0]?.id : 1,
+    }),
+    [statusList]
+  );
 
   const [toDoFormData, setToDoFormData] = useState(defaultNewToDo);
 

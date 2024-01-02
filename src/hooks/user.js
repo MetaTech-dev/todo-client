@@ -57,21 +57,22 @@ export const useUpdateUser = () => {
     },
     onMutate: async (updatedUser) => {
       await queryClient.cancelQueries({
-        queryKey: ["user", updatedUser.user_id],
+        queryKey: ["user", updatedUser.userId],
       });
       const previousUser = queryClient.getQueryData([
         "user",
-        updatedUser.user_id,
+        updatedUser.userId,
       ]);
-      queryClient.setQueryData(["user", updatedUser.user_id], updatedUser);
+      queryClient.setQueryData(["user", updatedUser.userId], updatedUser);
       return { previousUser, updatedUser };
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["userList"] });
+      queryClient.invalidateQueries({ queryKey: ["user"] });
     },
     onError: (error, updatedUser, context) => {
       queryClient.setQueryData(
-        ["userList", updatedUser.user_id],
+        ["userList", updatedUser.userId],
         context.previousUser
       );
       enqueueSnackbar(error.message || "An error occurred updating user", {
@@ -103,6 +104,7 @@ export const useUpdateUserRoles = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["userList"] });
+      queryClient.invalidateQueries({ queryKey: ["user"] });
     },
     onError: (error, updatedUser, context) => {
       queryClient.setQueryData(
