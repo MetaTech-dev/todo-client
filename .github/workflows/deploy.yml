@@ -1,0 +1,21 @@
+name: Deploy to Production
+'on':
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy APP
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{secrets.APP_HOST}}
+          username: ${{secrets.DEPLOYER_USERNAME}}
+          key: ${{secrets.DEPLOYER_KEY}}
+          script: |
+            cd ~
+            bash deploy-todo-client.sh
+            echo 'Deployment Complete'
