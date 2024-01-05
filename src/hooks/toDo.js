@@ -16,7 +16,7 @@ export const useGetToDoList = () => {
   return useQuery({
     queryKey: ["toDoList"],
     queryFn: async () => {
-      const accessToken = await getAccessTokenSilently();
+      const accessToken = await getAccessTokenSilently({ cacheMode: "off" });
       return requestGetToDoList({ accessToken });
     },
     onError: (error) => {
@@ -33,7 +33,7 @@ export const useCreateToDo = () => {
 
   return useMutation({
     mutationFn: async (toDo) => {
-      const accessToken = await getAccessTokenSilently();
+      const accessToken = await getAccessTokenSilently({ cacheMode: "off" });
       return requestCreateToDo({ accessToken, toDo });
     },
     onMutate: async (toDo) => {
@@ -63,7 +63,7 @@ export const useRemoveToDo = () => {
 
   return useMutation({
     mutationFn: async (id) => {
-      const accessToken = await getAccessTokenSilently();
+      const accessToken = await getAccessTokenSilently({ cacheMode: "off" });
       return requestRemoveToDo({ accessToken, id });
     },
     onMutate: async (id) => {
@@ -94,7 +94,7 @@ export const useUpdateToDo = () => {
 
   return useMutation({
     mutationFn: async (toDo) => {
-      const accessToken = await getAccessTokenSilently();
+      const accessToken = await getAccessTokenSilently({ cacheMode: "off" });
       return requestUpdateToDo({ accessToken, toDo });
     },
     onMutate: async (updatedToDo) => {
@@ -129,7 +129,7 @@ export const useUpdateToDoList = () => {
 
   return useMutation({
     mutationFn: async (toDoList) => {
-      const accessToken = await getAccessTokenSilently();
+      const accessToken = await getAccessTokenSilently({ cacheMode: "off" });
       return requestUpdateToDoList({ accessToken, toDoList });
     },
     onMutate: async (updatedToDoList) => {

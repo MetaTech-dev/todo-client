@@ -14,7 +14,7 @@ export const useGetUserList = () => {
   return useQuery({
     queryKey: ["userList"],
     queryFn: async () => {
-      const accessToken = await getAccessTokenSilently();
+      const accessToken = await getAccessTokenSilently({ cacheMode: "off" });
       return requestGetUserList({ accessToken });
     },
     onError: (error) => {
@@ -31,7 +31,7 @@ export const useGetOneUser = (id) => {
   return useQuery({
     queryKey: ["user", id],
     queryFn: async () => {
-      const accessToken = await getAccessTokenSilently();
+      const accessToken = await getAccessTokenSilently({ cacheMode: "off" });
       return requestGetOneUser({ id, accessToken });
     },
     onError: (error) => {
@@ -48,7 +48,7 @@ export const useUpdateUser = () => {
 
   return useMutation({
     mutationFn: async ({ userId, body }) => {
-      const accessToken = await getAccessTokenSilently();
+      const accessToken = await getAccessTokenSilently({ cacheMode: "off" });
       return requestUpdateUser({
         userId,
         accessToken,
@@ -88,7 +88,7 @@ export const useUpdateUserRoles = () => {
 
   return useMutation({
     mutationFn: async ({ userId, roles }) => {
-      const accessToken = await getAccessTokenSilently();
+      const accessToken = await getAccessTokenSilently({ cacheMode: "off" });
       return requestUpdateUserRoles({ accessToken, roles, userId });
     },
     onMutate: async (updatedUser) => {
