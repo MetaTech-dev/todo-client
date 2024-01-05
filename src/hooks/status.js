@@ -16,7 +16,7 @@ export const useGetStatusList = () => {
   return useQuery({
     queryKey: ["statusList"],
     queryFn: async () => {
-      const accessToken = await getAccessTokenSilently();
+      const accessToken = await getAccessTokenSilently({ cacheMode: "off" });
       return requestGetStatusList({ accessToken });
     },
     onError: (error) => {
@@ -33,7 +33,7 @@ export const useCreateStatus = () => {
 
   return useMutation({
     mutationFn: async (status) => {
-      const accessToken = await getAccessTokenSilently();
+      const accessToken = await getAccessTokenSilently({ cacheMode: "off" });
       return requestCreateStatus({ accessToken, status });
     },
     onMutate: async (newStatus) => {
@@ -63,7 +63,7 @@ export const useRemoveStatus = () => {
 
   return useMutation({
     mutationFn: async (id) => {
-      const accessToken = await getAccessTokenSilently();
+      const accessToken = await getAccessTokenSilently({ cacheMode: "off" });
       return requestRemoveStatus({ accessToken, id });
     },
     onMutate: async (id) => {
@@ -94,7 +94,7 @@ export const useUpdateStatus = () => {
 
   return useMutation({
     mutationFn: async (status) => {
-      const accessToken = await getAccessTokenSilently();
+      const accessToken = await getAccessTokenSilently({ cacheMode: "off" });
       return requestUpdateStatus({ accessToken, status });
     },
     onMutate: async (updatedStatus) => {
@@ -131,7 +131,7 @@ export const useUpdateStatusList = () => {
 
   return useMutation({
     mutationFn: async (statusList) => {
-      const accessToken = await getAccessTokenSilently();
+      const accessToken = await getAccessTokenSilently({ cacheMode: "off" });
       return requestUpdateStatusList({ accessToken, statusList });
     },
     onMutate: async (updatedStatusList) => {

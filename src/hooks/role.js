@@ -9,7 +9,7 @@ export const useGetRoleList = () => {
   return useQuery({
     queryKey: ["roleList"],
     queryFn: async () => {
-      const accessToken = await getAccessTokenSilently();
+      const accessToken = await getAccessTokenSilently({ cacheMode: "off" });
       return requestGetRoleList({ accessToken });
     },
     onError: (error) => {
