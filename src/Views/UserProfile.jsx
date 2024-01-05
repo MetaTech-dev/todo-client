@@ -221,7 +221,10 @@ const UserProfile = () => {
         {/* User Name */}
         <CardHeader
           avatar={<Avatar src={profileUser?.picture} />}
-          sx={{ backgroundColor: "primary.main" }}
+          sx={{
+            backgroundColor: "primary.main",
+            color: "primary.contrastText",
+          }}
           title={
             isProfileUserPending ? (
               <Skeleton />

@@ -92,7 +92,7 @@ const ProjectSettingsDialog = () => {
       onClose={() => setIsProjectSettingsDialogOpen(false)}
       TransitionComponent={Transition}
     >
-      <AppBar elevation={1} position="static">
+      <AppBar elevation={2} position="static">
         <Toolbar>
           <IconButton
             edge="start"
@@ -107,10 +107,13 @@ const ProjectSettingsDialog = () => {
           </Typography>
         </Toolbar>
       </AppBar>
-      <AppBar position="static" color="neutral" sx={{ mb: 2 }} elevation={1}>
+      <AppBar
+        position="static"
+        sx={{ mb: 2, backgroundColor: "neutral.main" }}
+        elevation={1}
+      >
         <Toolbar id="project-settings-toolbar" variant="dense">
           <Button
-            color="inherit"
             variant="contained"
             size="small"
             onClick={() => setIsStatusFormDialogOpen(true)}
