@@ -13,7 +13,6 @@ const LoadingStatusBoardView = (key) => {
         display: "flex",
         flexDirection: "column",
         flexGrow: 1,
-        m: 1,
         maxWidth: theme.spacing(40),
       }}
     >
