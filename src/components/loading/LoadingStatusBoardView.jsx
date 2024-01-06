@@ -1,10 +1,10 @@
 import { useTheme } from "@emotion/react";
-import { Box, CardHeader, Paper } from "@mui/material";
+import { Box, Card, CardHeader } from "@mui/material";
 import LoadingToDoCard from "./LoadingToDoCard";
 
 const LoadingStatusBoardView = (key) => {
   const theme = useTheme();
-  const isDarkMode = theme.palette.mode === "dark";
+
   return (
     <Box
       className="status-column"
@@ -16,7 +16,7 @@ const LoadingStatusBoardView = (key) => {
         maxWidth: theme.spacing(40),
       }}
     >
-      <Paper
+      <Card
         elevation={2}
         sx={{
           backgroundColor: "neutral.main",
@@ -29,15 +29,15 @@ const LoadingStatusBoardView = (key) => {
           title="..."
           sx={{
             borderRadius: "3px",
-            backgroundColor: isDarkMode ? "inherit" : "primary.main",
+            backgroundColor: "primary.main",
             color: "primary.contrastText",
           }}
           titleTypographyProps={{
             variant: "h6",
           }}
-        ></CardHeader>
+        />
         <LoadingToDoCard />
-      </Paper>
+      </Card>
     </Box>
   );
 };

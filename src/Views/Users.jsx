@@ -44,6 +44,7 @@ const Users = () => {
           }
           sx={{
             backgroundColor: "primary.main",
+            color: "primary.contrastText",
           }}
           titleTypographyProps={{
             variant: "h5",

@@ -2,10 +2,11 @@ import {
   AppBar,
   Box,
   Button,
+  Card,
+  CardHeader,
   Dialog,
   IconButton,
   List,
-  Paper,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -123,25 +124,19 @@ const ProjectSettingsDialog = () => {
         </Toolbar>
       </AppBar>
       <Box sx={{ display: "flex", justifyContent: "center" }}>
-        <Paper elevation={1}>
-          <AppBar
-            elevation={1}
-            sx={{ position: "static", backgroundColor: "neutral.main" }}
-          >
-            <Toolbar>
-              <Typography
-                variant="h6"
-                component="div"
-                sx={{
-                  textAlign: "center",
-                  color: "neutral.contrastText",
-                  opacity: "0.9",
-                }}
-              >
-                Status Management
-              </Typography>
-            </Toolbar>
-          </AppBar>
+        <Card elevation={2}>
+          <CardHeader
+            title="Status Management"
+            sx={{
+              borderRadius: "3px",
+              backgroundColor: "primary.main",
+              color: "primary.contrastText",
+            }}
+            titleTypographyProps={{
+              variant: "h6",
+            }}
+          />
+
           <DragDropContext
             onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
@@ -175,7 +170,7 @@ const ProjectSettingsDialog = () => {
               )}
             </Droppable>
           </DragDropContext>
-        </Paper>
+        </Card>
       </Box>
     </Dialog>
   );

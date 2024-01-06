@@ -1,11 +1,4 @@
-import {
-  AppBar,
-  Box,
-  CardHeader,
-  Paper,
-  Toolbar,
-  Typography,
-} from "@mui/material";
+import { Box, CardHeader, Card } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import ToDoCard from "../../components/ToDoCard";
 import LoadingStatusBoardView from "../../components/loading/LoadingStatusBoardView";
@@ -20,7 +13,6 @@ const BoardView = ({
   toDoList,
 }) => {
   const theme = useTheme();
-  const isDarkMode = theme.palette.mode === "dark";
 
   const { mutate: updateToDoList } = useUpdateToDoList();
 
@@ -90,7 +82,7 @@ const BoardView = ({
           statusList &&
           statusList?.map((status) => {
             return (
-              <Paper
+              <Card
                 elevation={2}
                 key={status.id}
                 sx={{
@@ -110,13 +102,13 @@ const BoardView = ({
                   title={status.title}
                   sx={{
                     borderRadius: "3px",
-                    backgroundColor: isDarkMode ? "inherit" : "primary.main",
+                    backgroundColor: "primary.main",
                     color: "primary.contrastText",
                   }}
                   titleTypographyProps={{
                     variant: "h6",
                   }}
-                ></CardHeader>
+                />
                 <Droppable droppableId={status.id.toString()} key={status.id}>
                   {(provided) => (
                     <Box
@@ -141,7 +133,7 @@ const BoardView = ({
                     </Box>
                   )}
                 </Droppable>
-              </Paper>
+              </Card>
             );
           })}
         {(isStatusListPending || !filteredToDoList) && (
