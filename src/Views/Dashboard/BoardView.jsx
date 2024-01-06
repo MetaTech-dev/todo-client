@@ -1,4 +1,4 @@
-import { AppBar, Box, Paper, Toolbar, Typography } from "@mui/material";
+import { Box, CardHeader, Card } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import ToDoCard from "../../components/ToDoCard";
 import LoadingStatusBoardView from "../../components/loading/LoadingStatusBoardView";
@@ -82,7 +82,7 @@ const BoardView = ({
           statusList &&
           statusList?.map((status) => {
             return (
-              <Paper
+              <Card
                 elevation={2}
                 key={status.id}
                 sx={{
@@ -98,26 +98,17 @@ const BoardView = ({
                   maxWidth: theme.spacing(40),
                 }}
               >
-                <AppBar
-                  position="static"
-                  elevation={2}
+                <CardHeader
+                  title={status.title}
                   sx={{
                     borderRadius: "3px",
+                    backgroundColor: "primary.main",
+                    color: "primary.contrastText",
                   }}
-                  color="primary"
-                >
-                  <Toolbar variant="dense" color="inherit">
-                    <Typography
-                      sx={{
-                        fontWeight: "450",
-                        fontSize: "22px",
-                        opacity: ".8",
-                      }}
-                    >
-                      {status.title}
-                    </Typography>
-                  </Toolbar>
-                </AppBar>
+                  titleTypographyProps={{
+                    variant: "h6",
+                  }}
+                />
                 <Droppable droppableId={status.id.toString()} key={status.id}>
                   {(provided) => (
                     <Box
@@ -142,7 +133,7 @@ const BoardView = ({
                     </Box>
                   )}
                 </Droppable>
-              </Paper>
+              </Card>
             );
           })}
         {(isStatusListPending || !filteredToDoList) && (

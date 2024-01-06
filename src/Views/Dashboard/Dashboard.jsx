@@ -30,32 +30,9 @@ const Dashboard = () => {
 
   const { data: currentUser } = useGetOneUser(user?.sub);
 
-  console.log("currentUser ", currentUser);
-
   const isAdmin = currentUser?.roles.some((role) => role.name === "Admin");
 
   const { data: toDoList } = useGetToDoList();
-
-  ///testing section!!!!
-  // const { mutate: updateUser } = useUpdateUser();
-
-  // const { mutate: updateUserRole } = useUpdateUserRoles();
-
-  // const handleUpdate = () => {
-  // const body = {
-  //     name: "DEFINITELY ZAQ",
-  // };
-  // const userId = user?.user_id;
-  // if (user) {
-  //   updateUser({ userId, body });
-  // }
-
-  //   const roles = [`rol_bCQ2d2jO6kxIsQyI`];
-  //   const userId = "google-oauth2|102295201720803560500";
-  //   updateUserRole({ userId, roles });
-  // };
-
-  //end of testing section :)
 
   const [searchQuery, setSearchQuery] = useState("");
   const handleChangeSearchQuery = (e) => {
