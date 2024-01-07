@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { useCallback, useContext, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
-import DarkModeContext from "../../contexts/AppContext";
+import AppContext from "../../contexts/AppContext";
 import { useAuth0 } from "@auth0/auth0-react";
 import BedtimeOutlinedIcon from "@mui/icons-material/BedtimeOutlined";
 import BedtimeOffOutlinedIcon from "@mui/icons-material/BedtimeOffOutlined";
@@ -17,7 +17,7 @@ import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import LogoutIcon from "@mui/icons-material/Logout";
 
 const AccountMenu = () => {
-  const { isDarkMode, toggleDarkMode } = useContext(DarkModeContext);
+  const { isDarkMode, toggleDarkMode } = useContext(AppContext);
   const { isAuthenticated, loginWithRedirect, logout, user } = useAuth0();
 
   const getInitials = useCallback(() => {

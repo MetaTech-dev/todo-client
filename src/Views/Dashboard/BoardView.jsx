@@ -100,11 +100,6 @@ const BoardView = ({
               >
                 <CardHeader
                   title={status.title}
-                  sx={{
-                    borderRadius: "3px",
-                    backgroundColor: "primary.main",
-                    color: "primary.contrastText",
-                  }}
                   titleTypographyProps={{
                     variant: "h6",
                   }}
@@ -114,7 +109,12 @@ const BoardView = ({
                     <Box
                       ref={provided.innerRef}
                       {...provided.droppableProps}
-                      sx={{ flexGrow: 1, overflowY: "auto", pt: 1 }}
+                      sx={{
+                        flexGrow: 1,
+                        overflowY: "auto",
+                        pt: 1,
+                        overflowX: "hidden",
+                      }}
                     >
                       {filterToDosByStatus(status)?.map((toDo, index) => {
                         return (

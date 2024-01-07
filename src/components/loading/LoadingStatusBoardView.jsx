@@ -1,5 +1,5 @@
 import { useTheme } from "@emotion/react";
-import { Box, Card, CardHeader } from "@mui/material";
+import { Box, Card, CardHeader, Skeleton } from "@mui/material";
 import LoadingToDoCard from "./LoadingToDoCard";
 
 const LoadingStatusBoardView = (key) => {
@@ -26,12 +26,7 @@ const LoadingStatusBoardView = (key) => {
         }}
       >
         <CardHeader
-          title="..."
-          sx={{
-            borderRadius: "3px",
-            backgroundColor: "primary.main",
-            color: "primary.contrastText",
-          }}
+          title={<Skeleton variant="text" animation="wave" />}
           titleTypographyProps={{
             variant: "h6",
           }}

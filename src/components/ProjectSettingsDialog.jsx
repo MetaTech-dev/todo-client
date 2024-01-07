@@ -127,11 +127,6 @@ const ProjectSettingsDialog = () => {
         <Card elevation={2}>
           <CardHeader
             title="Status Management"
-            sx={{
-              borderRadius: "3px",
-              backgroundColor: "primary.main",
-              color: "primary.contrastText",
-            }}
             titleTypographyProps={{
               variant: "h6",
             }}

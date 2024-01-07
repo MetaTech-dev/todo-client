@@ -1,6 +1,7 @@
 import {
   Box,
   Card,
+  CardActionArea,
   CardContent,
   Divider,
   IconButton,
@@ -14,6 +15,7 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import { Draggable } from "react-beautiful-dnd";
+import { Link as RouterLink } from "react-router-dom";
 
 const ToDoCard = ({ toDo, index, activeCard, isDragging }) => {
   const {
@@ -92,50 +94,52 @@ const ToDoCard = ({ toDo, index, activeCard, isDragging }) => {
             opacity: isStatic ? 0.4 : 1,
           })}
         >
-          <CardContent sx={{ p: 1.5, "&:last-child": { paddingBottom: 1 } }}>
-            <Typography variant="h5">{toDo.title}</Typography>
-            <Divider />
-            <Typography>{handleDescription()}</Typography>
-            <Divider sx={{ mb: 1 }} />
-            <Typography>
-              <b>Created at:</b> {formattedCreatedDate}
-            </Typography>
-            <Divider sx={{ mb: 1 }} />
-            <Typography>
-              <b>Due Date:</b> {formattedDueDate}
-            </Typography>
-            <Box sx={{ display: "flex", alignItems: "center" }}>
+          <CardActionArea component={RouterLink} to={`/todos/${toDo.id}`}>
+            <CardContent sx={{ p: 1.5, "&:last-child": { paddingBottom: 1 } }}>
+              <Typography variant="h5">{toDo.title}</Typography>
+              <Divider />
+              <Typography>{handleDescription()}</Typography>
+              <Divider sx={{ mb: 1 }} />
               <Typography>
-                <b>Priority:</b> {toDo.priority}{" "}
+                <b>Created at:</b> {formattedCreatedDate}
               </Typography>
-              <FiberManualRecordIcon
-                sx={{
-                  fontSize: "small",
-                  color: getPriorityColor(),
-                  ml: 0.5,
-                }}
-              />
-              <Box sx={{ flexGrow: 1 }} />
-              <CardActions sx={{ p: 0 }}>
-                <IconButton
-                  size="small"
-                  color="inherit"
-                  onClick={() => handleEdit()}
-                  aria-label="Edit ToDo"
-                >
-                  <EditTwoToneIcon />
-                </IconButton>
-                <IconButton
-                  size="small"
-                  color="inherit"
-                  onClick={() => handleDeleteClick(toDo, "toDo")}
-                  aria-label="Delete ToDo"
-                >
-                  <DeleteOutlineOutlinedIcon />
-                </IconButton>
-              </CardActions>
-            </Box>
-          </CardContent>
+              <Divider sx={{ mb: 1 }} />
+              <Typography>
+                <b>Due Date:</b> {formattedDueDate}
+              </Typography>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Typography>
+                  <b>Priority:</b> {toDo.priority}{" "}
+                </Typography>
+                <FiberManualRecordIcon
+                  sx={{
+                    fontSize: "small",
+                    color: getPriorityColor(),
+                    ml: 0.5,
+                  }}
+                />
+                <Box sx={{ flexGrow: 1 }} />
+                <CardActions sx={{ p: 0 }}>
+                  <IconButton
+                    size="small"
+                    color="inherit"
+                    onClick={() => handleEdit()}
+                    aria-label="Edit ToDo"
+                  >
+                    <EditTwoToneIcon />
+                  </IconButton>
+                  <IconButton
+                    size="small"
+                    color="inherit"
+                    onClick={() => handleDeleteClick(toDo, "toDo")}
+                    aria-label="Delete ToDo"
+                  >
+                    <DeleteOutlineOutlinedIcon />
+                  </IconButton>
+                </CardActions>
+              </Box>
+            </CardContent>
+          </CardActionArea>
         </Card>
       )}
     </Draggable>

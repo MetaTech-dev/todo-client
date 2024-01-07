@@ -16,14 +16,13 @@ import AppContext from "./contexts/AppContext";
 import { SnackbarProvider, enqueueSnackbar } from "notistack";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import LoadingUser from "./components/loading/LoadingUser";
 
 function App() {
   const [queryClient] = useState(() => new QueryClient());
 
   const { isDarkMode } = useContext(AppContext);
 
-  const { error: authError, isLoading: isLoadingAuthUser } = useAuth0();
+  const { error: authError } = useAuth0();
 
   const theme = createTheme({
     palette: {
@@ -33,6 +32,18 @@ function App() {
       neutral: {
         main: "#90A4AE66",
         contrastText: isDarkMode ? "#fff" : "#000",
+      },
+    },
+    components: {
+      MuiCardHeader: {
+        styleOverrides: {
+          root: ({ theme }) => ({
+            backgroundColor: isDarkMode
+              ? theme.palette.primary.dark
+              : theme.palette.primary.main,
+            color: theme.palette.primary.contrastText,
+          }),
+        },
       },
     },
   });
