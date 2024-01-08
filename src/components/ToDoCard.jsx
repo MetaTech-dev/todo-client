@@ -16,6 +16,7 @@ import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import { Draggable } from "react-beautiful-dnd";
 import { Link as RouterLink } from "react-router-dom";
+import { useGetOneUser } from "../hooks/user";
 
 const ToDoCard = ({ toDo, index, activeCard, isDragging }) => {
   const {
@@ -42,16 +43,19 @@ const ToDoCard = ({ toDo, index, activeCard, isDragging }) => {
       ? dayjsDate.format("ddd, MMMM, DD, YYYY")
       : "none selected";
   };
+  const { data: toDoAuthor } = useGetOneUser(toDo.authorUserId);
 
   const formattedCreatedDate = formatDate(toDo.createdDate);
   const formattedDueDate = formatDate(toDo.dueDate);
 
-  const handleEdit = () => {
+  const handleEdit = (event) => {
+    event.preventDefault();
     setToDoFormData(toDo);
     setIsToDoFormDialogOpen(true);
   };
 
-  const handleDeleteClick = (item, itemType) => {
+  const handleDeleteClick = (event, item, itemType) => {
+    event.preventDefault();
     setDeleteConfirmationItemType(itemType);
     setDeleteConfirmationItem(item);
     setIsDeleteConfirmationDialogOpen(true);
@@ -101,6 +105,10 @@ const ToDoCard = ({ toDo, index, activeCard, isDragging }) => {
               <Typography>{handleDescription()}</Typography>
               <Divider sx={{ mb: 1 }} />
               <Typography>
+                <b>Author:</b> {toDoAuthor?.name}
+              </Typography>
+              <Divider sx={{ mb: 1 }} />
+              <Typography>
                 <b>Created at:</b> {formattedCreatedDate}
               </Typography>
               <Divider sx={{ mb: 1 }} />
@@ -123,7 +131,7 @@ const ToDoCard = ({ toDo, index, activeCard, isDragging }) => {
                   <IconButton
                     size="small"
                     color="inherit"
-                    onClick={() => handleEdit()}
+                    onClick={(event) => handleEdit(event)}
                     aria-label="Edit ToDo"
                   >
                     <EditTwoToneIcon />
@@ -131,7 +139,7 @@ const ToDoCard = ({ toDo, index, activeCard, isDragging }) => {
                   <IconButton
                     size="small"
                     color="inherit"
-                    onClick={() => handleDeleteClick(toDo, "toDo")}
+                    onClick={(event) => handleDeleteClick(event, toDo, "toDo")}
                     aria-label="Delete ToDo"
                   >
                     <DeleteOutlineOutlinedIcon />

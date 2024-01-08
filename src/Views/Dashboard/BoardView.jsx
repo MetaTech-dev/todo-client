@@ -109,7 +109,7 @@ const BoardView = ({
                     <Box
                       ref={provided.innerRef}
                       {...provided.droppableProps}
-                      sx={{
+                      sx={(theme) => ({
                         flexGrow: 1,
                         overflowY: "auto",
                         pt: 1,
@@ -118,10 +118,13 @@ const BoardView = ({
                           width: "5px",
                         },
                         "&::-webkit-scrollbar-thumb": {
-                          backgroundColor: "grey",
+                          backgroundColor: theme.palette.primary.main,
                           borderRadius: "5px",
                         },
-                      }}
+                        "&::-webkit-scrollbar-thumb:hover": {
+                          backgroundColor: theme.palette.primary.light,
+                        },
+                      })}
                     >
                       {filterToDosByStatus(status)?.map((toDo, index) => {
                         return (

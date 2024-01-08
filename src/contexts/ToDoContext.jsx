@@ -1,9 +1,11 @@
-import { createContext, useMemo, useState } from "react";
+import { createContext, useEffect, useMemo, useState } from "react";
 import StatusFormDialog from "../components/StatusFormDialog";
 import ToDoFormDialog from "../components/ToDoFormDialog";
 import ProjectSettingsDialog from "../components/ProjectSettingsDialog";
 import { useGetStatusList } from "../hooks/status";
 import DeleteConfirmationDialog from "../components/DeleteConfirmationDialog";
+import { useAuth0 } from "@auth0/auth0-react";
+import { set } from "date-fns";
 
 const ToDoContext = createContext();
 export default ToDoContext;
@@ -22,7 +24,7 @@ export const ToDoProvider = ({ children }) => {
   const [isProjectSettingsDialogOpen, setIsProjectSettingsDialogOpen] =
     useState(false);
 
-  // TODO SECTION
+  const { user } = useAuth0();
 
   const [isToDoFormDialogOpen, setIsToDoFormDialogOpen] = useState(false);
 
@@ -33,9 +35,18 @@ export const ToDoProvider = ({ children }) => {
       dueDate: null,
       priority: "low",
       statusId: statusList && statusList.length > 0 ? statusList[0]?.id : 1,
+      authorUserId: null,
+      assigneeUserId: null,
     }),
-    [statusList]
+    [statusList, user]
   );
+
+  useEffect(() => {
+    setToDoFormData((prev) => ({
+      ...prev,
+      authorUserId: user?.sub,
+    }));
+  }, [user]);
 
   const [toDoFormData, setToDoFormData] = useState(defaultNewToDo);
 
