@@ -104,9 +104,9 @@ const UserProfile = () => {
   useEffect(() => {
     if (profileUser) {
       setUpdateUserData({
-        name: profileUser.name,
-        nickname: profileUser.nickname,
-        email: profileUser.email,
+        name: profileUser.name || "",
+        nickname: profileUser.nickname || "",
+        email: profileUser.email || "",
       });
       setUserRolesData({
         roles: profileUser.roles?.map((role) => role.id),

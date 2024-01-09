@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Box,
   Card,
   CardActionArea,
@@ -44,6 +45,8 @@ const ToDoCard = ({ toDo, index, activeCard, isDragging }) => {
       : "none selected";
   };
   const { data: toDoAuthor } = useGetOneUser(toDo.authorUserId);
+
+  const { data: toDoAssignee } = useGetOneUser(toDo.assigneeUserId);
 
   const formattedCreatedDate = formatDate(toDo.createdDate);
   const formattedDueDate = formatDate(toDo.dueDate);
@@ -104,10 +107,32 @@ const ToDoCard = ({ toDo, index, activeCard, isDragging }) => {
               <Divider />
               <Typography>{handleDescription()}</Typography>
               <Divider sx={{ mb: 1 }} />
-              <Typography>
-                <b>Author:</b> {toDoAuthor?.name}
-              </Typography>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Typography>
+                  <b>Author:</b>
+                </Typography>
+                <Avatar
+                  src={toDoAuthor?.picture}
+                  sx={{ height: 30, width: 30, ml: 0.5, mr: 0.5 }}
+                />
+                <Typography>{toDoAuthor?.name}</Typography>
+              </Box>
               <Divider sx={{ mb: 1 }} />
+              {toDoAssignee && (
+                <>
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <Typography>
+                      <b>Assignee:</b>
+                    </Typography>
+                    <Avatar
+                      src={toDoAssignee?.picture}
+                      sx={{ height: 30, width: 30, ml: 0.5, mr: 0.5 }}
+                    />
+                    <Typography>{toDoAssignee?.name}</Typography>
+                  </Box>
+                  <Divider sx={{ mb: 1 }} />
+                </>
+              )}
               <Typography>
                 <b>Created at:</b> {formattedCreatedDate}
               </Typography>

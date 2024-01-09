@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import ToDoContext from "../contexts/ToDoContext";
 import {
   Box,
@@ -12,12 +12,19 @@ import {
   Select,
   TextField,
   Alert,
+  Autocomplete,
+  ListItem,
+  Avatar,
+  ListItemText,
+  ListItemAvatar,
+  InputAdornment,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import LoadingButton from "@mui/lab/LoadingButton";
 import dayjs from "dayjs";
 import { useCreateToDo, useUpdateToDo } from "../hooks/toDo";
 import { useGetStatusList } from "../hooks/status";
+import { useGetUserList } from "../hooks/user";
 
 const ToDoForm = () => {
   const {
@@ -29,6 +36,8 @@ const ToDoForm = () => {
   } = useContext(ToDoContext);
 
   const [showWarning, setShowWarning] = useState("");
+
+  const { data: userList } = useGetUserList();
 
   const { data: statusList } = useGetStatusList();
 
@@ -52,9 +61,18 @@ const ToDoForm = () => {
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
+
     setToDoFormData((prev) => ({
       ...prev,
       [name]: value,
+    }));
+  };
+
+  const handleAssigneeChange = (event, value) => {
+    const { user_id } = value;
+    setToDoFormData((prev) => ({
+      ...prev,
+      assigneeUserId: user_id,
     }));
   };
 
@@ -127,24 +145,81 @@ const ToDoForm = () => {
             variant="standard"
             value={toDoFormData.description}
             onChange={handleInputChange}
-            sx={{ paddingBottom: "1rem" }}
+            sx={{ pb: "1rem" }}
             required
             multiline
           />
-          <DatePicker
-            sx={{ paddingBottom: "1rem" }}
-            label="Date Due"
-            value={toDoFormData.dueDate ? dayjs(toDoFormData.dueDate) : null}
-            onChange={(newDate) =>
-              setToDoFormData((prev) => ({
-                ...prev,
-                dueDate: newDate,
-              }))
-            }
-            disablePast
-          />
+          <Box sx={{ display: "flex", flexWrap: "wrap" }}>
+            <DatePicker
+              sx={{ pb: "1rem", pr: "1rem" }}
+              label="Date Due"
+              value={toDoFormData.dueDate ? dayjs(toDoFormData.dueDate) : null}
+              onChange={(newDate) =>
+                setToDoFormData((prev) => ({
+                  ...prev,
+                  dueDate: newDate,
+                }))
+              }
+              disablePast
+            />
+            <Autocomplete
+              autoHighlight
+              id="assignee-autocomplete"
+              options={userList || []}
+              value={
+                userList?.find(
+                  (user) => user.user_id === toDoFormData.assigneeUserId
+                ) || null
+              }
+              getOptionLabel={(option) => option.user_id}
+              sx={{ pb: "1rem", width: "17rem" }}
+              renderOption={(props, option) => {
+                return (
+                  <ListItem {...props} key={option.user_id}>
+                    <ListItemAvatar>
+                      <Avatar
+                        src={option.picture}
+                        sx={{ height: 30, width: 30 }}
+                      />
+                    </ListItemAvatar>
+                    <ListItemText primary={option.name} />
+                  </ListItem>
+                );
+              }}
+              onChange={handleAssigneeChange}
+              renderInput={({
+                inputProps: { value, ...restInputProps },
+                InputProps,
+                ...restParams
+              }) => {
+                const user = userList.find((user) => user.user_id === value);
+                return (
+                  <TextField
+                    {...restParams}
+                    value={user?.name || ""}
+                    label="Assignee"
+                    InputProps={{
+                      ...InputProps,
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Avatar
+                            src={user?.picture}
+                            sx={{ height: 30, width: 30 }}
+                          />
+                        </InputAdornment>
+                      ),
+                    }}
+                    inputProps={{
+                      ...restInputProps,
+                      value: user?.name || "",
+                    }}
+                  />
+                );
+              }}
+            />
+          </Box>
           {/* TODO: look into double labels */}
-          <FormControl fullWidth size="small" sx={{ paddingBottom: "1rem" }}>
+          <FormControl fullWidth size="small" sx={{ pb: "1rem" }}>
             <InputLabel id="toDo-priority-label">Priority</InputLabel>
             <Select
               labelId="toDo-priority-label"
