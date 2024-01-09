@@ -11,6 +11,22 @@ export const requestGetStatusList = async ({ accessToken }) => {
   return response.json();
 };
 
+export const requestGetOneStatus = async ({ id, accessToken }) => {
+  const response = await fetch(
+    `${process.env.REACT_APP_API_URL}/status/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+  if (!response.ok) {
+    const errorResponse = await response.json();
+    throw new Error(errorResponse.message || "Failed to fetch status");
+  }
+  return response.json();
+};
+
 export const requestCreateStatus = async ({ status, accessToken }) => {
   const response = await fetch(`${process.env.REACT_APP_API_URL}/status`, {
     method: "POST",

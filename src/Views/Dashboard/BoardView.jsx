@@ -114,16 +114,6 @@ const BoardView = ({
                         overflowY: "auto",
                         pt: 1,
                         overflowX: "hidden",
-                        "&::-webkit-scrollbar": {
-                          width: "5px",
-                        },
-                        "&::-webkit-scrollbar-thumb": {
-                          backgroundColor: theme.palette.primary.main,
-                          borderRadius: "5px",
-                        },
-                        "&::-webkit-scrollbar-thumb:hover": {
-                          backgroundColor: theme.palette.primary.light,
-                        },
                       })}
                     >
                       {filterToDosByStatus(status)?.map((toDo, index) => {

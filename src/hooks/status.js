@@ -2,6 +2,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import {
   requestCreateStatus,
+  requestGetOneStatus,
   requestGetStatusList,
   requestRemoveStatus,
   requestUpdateStatus,
@@ -24,6 +25,27 @@ export const useGetStatusList = () => {
         variant: "error",
       });
     },
+  });
+};
+
+export const useGetOneStatus = (id) => {
+  const { getAccessTokenSilently } = useAuth0();
+
+  return useQuery({
+    queryKey: ["status", id],
+    queryFn: async () => {
+      const accessToken = await getAccessTokenSilently({ cacheMode: "off" });
+      return requestGetOneStatus({
+        id,
+        accessToken,
+      });
+    },
+    onError: (error) => {
+      enqueueSnackbar(error.message || "An error occurred fetching status", {
+        variant: "error",
+      });
+    },
+    enabled: Boolean(id),
   });
 };
 

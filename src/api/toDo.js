@@ -11,6 +11,19 @@ export const requestGetToDoList = async ({ accessToken }) => {
   return response.json();
 };
 
+export const requestGetOneToDo = async ({ id, accessToken }) => {
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/toDo/${id}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  if (!response.ok) {
+    const errorResponse = await response.json();
+    throw new Error(errorResponse.message || "Failed to fetch toDo");
+  }
+  return response.json();
+};
+
 export const requestCreateToDo = async ({ toDo, accessToken }) => {
   const response = await fetch(`${process.env.REACT_APP_API_URL}/toDo`, {
     method: "POST",

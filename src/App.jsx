@@ -45,6 +45,20 @@ function App() {
           }),
         },
       },
+      MuiCssBaseline: {
+        styleOverrides: (theme) => ({
+          "&::-webkit-scrollbar": {
+            width: "5px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: theme.palette.primary.main,
+            borderRadius: "5px",
+          },
+          "&::-webkit-scrollbar-thumb:hover": {
+            backgroundColor: theme.palette.primary.light,
+          },
+        }),
+      },
     },
   });
 
