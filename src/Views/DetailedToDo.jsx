@@ -20,6 +20,7 @@ import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import { useLocation } from "react-router-dom";
 import { useGetOneStatus } from "../hooks/status";
 import { useTheme } from "@emotion/react";
+import LoadingDetailedToDo from "../components/loading/LoadingDetailedToDo";
 
 const DetailedToDo = () => {
   const {
@@ -94,103 +95,113 @@ const DetailedToDo = () => {
         backgroundColor: "neutral.main",
       }}
     >
-      <Paper
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          p: 2,
-        }}
-      >
-        <Box sx={(theme) => ({ display: "flex", width: theme.spacing(120) })}>
-          <Card elevation={2} sx={{ flex: 6, mr: 2 }}>
-            <CardContent sx={{ p: 1.5, "&:last-child": { paddingBottom: 1 } }}>
-              <Typography variant="h5">{toDo?.title}</Typography>
-              <Divider />
-              <Typography
-                sx={{
-                  overflowY: "auto",
-                  maxHeight: "30rem",
-                }}
+      {isToDoPending ? (
+        <LoadingDetailedToDo />
+      ) : (
+        <Paper
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            p: 2,
+          }}
+        >
+          <Box sx={(theme) => ({ display: "flex", width: theme.spacing(120) })}>
+            <Card elevation={2} sx={{ flex: 6, mr: 2 }}>
+              <CardContent
+                sx={{ p: 1.5, "&:last-child": { paddingBottom: 1 } }}
               >
-                {toDo?.description}
-              </Typography>
-            </CardContent>
-          </Card>
-          <Card elevation={2} sx={{ flex: 3 }}>
-            <CardContent sx={{ p: 1.5, "&:last-child": { paddingBottom: 1 } }}>
-              {/* <Box sx={{ display: "flex", alignItems: "center" }}> */}
-              <Typography variant="h6">{toDoStatus?.title}</Typography>
-              {/* </Box> */}
-              <Divider sx={{ mb: 1 }} />
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                <Typography>
-                  <b>Author:</b>
+                <Typography variant="h5">{toDo?.title}</Typography>
+                <Divider />
+                <Typography
+                  sx={{
+                    overflowY: "auto",
+                    maxHeight: "30rem",
+                  }}
+                >
+                  {toDo?.description}
                 </Typography>
-                <Avatar
-                  src={toDoAuthor?.picture}
-                  sx={{ height: 30, width: 30, ml: 0.5, mr: 0.5 }}
-                />
-                <Typography>{toDoAuthor?.name}</Typography>
-              </Box>
-              <Divider sx={{ mb: 1 }} />
-              {toDoAssignee && (
-                <>
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <Typography>
-                      <b>Assignee:</b>
-                    </Typography>
-                    <Avatar
-                      src={toDoAssignee?.picture}
-                      sx={{ height: 30, width: 30, ml: 0.5, mr: 0.5 }}
-                    />
-                    <Typography>{toDoAssignee?.name}</Typography>
-                  </Box>
-                  <Divider sx={{ mb: 1 }} />
-                </>
-              )}
-              <Typography>
-                <b>Created at:</b> {formattedCreatedDate}
-              </Typography>
-              <Divider sx={{ mb: 1 }} />
-              <Typography>
-                <b>Due Date:</b> {formattedDueDate}
-              </Typography>
-              <Divider sx={{ mb: 1 }} />
-              <Box sx={{ display: "flex", alignItems: "center" }}>
+              </CardContent>
+            </Card>
+            <Card elevation={2} sx={{ flex: 3 }}>
+              <CardContent
+                sx={{ p: 1.5, "&:last-child": { paddingBottom: 1 } }}
+              >
+                {/* <Box sx={{ display: "flex", alignItems: "center" }}> */}
+                <Typography variant="h6">{toDoStatus?.title}</Typography>
+                {/* </Box> */}
+                <Divider sx={{ mb: 1 }} />
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <Typography>
+                    <b>Author:</b>
+                  </Typography>
+                  <Avatar
+                    src={toDoAuthor?.picture}
+                    sx={{ height: 30, width: 30, ml: 0.5, mr: 0.5 }}
+                  />
+                  <Typography>{toDoAuthor?.name}</Typography>
+                </Box>
+                <Divider sx={{ mb: 1 }} />
+                {toDoAssignee && (
+                  <>
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                      <Typography>
+                        <b>Assignee:</b>
+                      </Typography>
+                      <Avatar
+                        src={toDoAssignee?.picture}
+                        sx={{ height: 30, width: 30, ml: 0.5, mr: 0.5 }}
+                      />
+                      <Typography>{toDoAssignee?.name}</Typography>
+                    </Box>
+                    <Divider sx={{ mb: 1 }} />
+                  </>
+                )}
                 <Typography>
-                  <b>Priority:</b>
+                  <b>Created at:</b> {formattedCreatedDate}
                 </Typography>
+                <Divider sx={{ mb: 1 }} />
+                <Typography>
+                  <b>Due Date:</b> {formattedDueDate}
+                </Typography>
+                <Divider sx={{ mb: 1 }} />
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <Typography>
+                    <b>Priority:</b>
+                  </Typography>
 
-                <Chip
-                  size="small"
-                  color={getPriorityColor()}
-                  label={toDo?.priority}
-                />
-              </Box>
-              <Box sx={{ flexGrow: 1 }} />
-            </CardContent>
-          </Card>
-        </Box>
+                  <Chip
+                    size="small"
+                    color={getPriorityColor()}
+                    label={toDo?.priority}
+                  />
+                </Box>
+                <Box sx={{ flexGrow: 1 }} />
+              </CardContent>
+            </Card>
+          </Box>
 
-        <CardActions sx={{ p: 0, display: "flex", justifyContent: "flex-end" }}>
-          <IconButton
-            size="small"
-            color="inherit"
-            onClick={(event) => handleEdit(event)}
-            aria-label="Edit ToDo"
+          <CardActions
+            sx={{ p: 0, display: "flex", justifyContent: "flex-end" }}
           >
-            <EditTwoToneIcon />
-          </IconButton>
-          <IconButton
-            size="small"
-            color="inherit"
-            onClick={(event) => handleDeleteClick(event, toDo, "toDo")}
-            aria-label="Delete ToDo"
-          >
-            <DeleteOutlineOutlinedIcon />
-          </IconButton>
-        </CardActions>
-      </Paper>
+            <IconButton
+              size="small"
+              color="inherit"
+              onClick={(event) => handleEdit(event)}
+              aria-label="Edit ToDo"
+            >
+              <EditTwoToneIcon />
+            </IconButton>
+            <IconButton
+              size="small"
+              color="inherit"
+              onClick={(event) => handleDeleteClick(event, toDo, "toDo")}
+              aria-label="Delete ToDo"
+            >
+              <DeleteOutlineOutlinedIcon />
+            </IconButton>
+          </CardActions>
+        </Paper>
+      )}
     </Box>
   );
 };
