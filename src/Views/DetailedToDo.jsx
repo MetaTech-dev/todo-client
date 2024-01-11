@@ -84,6 +84,8 @@ const DetailedToDo = () => {
       setUpdateToDoData({
         title: toDo.title,
         description: toDo.description,
+        createdDate: toDo.createdDate,
+        authorUserId: toDo.authorUserId,
         dueDate: toDo.dueDate,
         priority: toDo.priority,
         statusId: toDo.statusId,
