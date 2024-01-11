@@ -15,7 +15,6 @@ import {
   Chip,
   Divider,
   FormControl,
-  IconButton,
   InputAdornment,
   InputLabel,
   ListItem,
@@ -26,21 +25,15 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 import { useLocation } from "react-router-dom";
-import { useGetOneStatus, useGetStatusList } from "../hooks/status";
-import { useTheme } from "@emotion/react";
+import { useGetStatusList } from "../hooks/status";
 import LoadingDetailedToDo from "../components/loading/LoadingDetailedToDo";
 import { LoadingButton } from "@mui/lab";
 import { enqueueSnackbar } from "notistack";
 import { DatePicker } from "@mui/x-date-pickers";
-import { set } from "date-fns";
 
 const DetailedToDo = () => {
   const {
-    setToDoFormData,
-    setIsToDoFormDialogOpen,
     setIsDeleteConfirmationDialogOpen,
     setDeleteConfirmationItem,
     setDeleteConfirmationItemType,
@@ -60,8 +53,6 @@ const DetailedToDo = () => {
     isSuccess: isUpdateToDoSuccess,
   } = useUpdateToDo();
 
-  //   const { data: toDoStatus } = useGetOneStatus(toDo?.statusId);
-
   const { data: statusList } = useGetStatusList();
 
   const { data: userList } = useGetUserList();
@@ -73,8 +64,6 @@ const DetailedToDo = () => {
       : "none selected";
   };
   const { data: toDoAuthor } = useGetOneUser(toDo?.authorUserId);
-
-  //   const { data: toDoAssignee } = useGetOneUser(toDo?.assigneeUserId);
 
   const formattedCreatedDate = formatDate(toDo?.createdDate);
 
@@ -170,19 +159,6 @@ const DetailedToDo = () => {
     setIsDeleteConfirmationDialogOpen(true);
   };
 
-  const getPriorityColor = () => {
-    switch (toDo?.priority) {
-      case "low":
-        return "success";
-      case "medium":
-        return "warning";
-      case "high":
-        return "error";
-      default:
-        return "success";
-    }
-  };
-
   return (
     <Box
       id="detailed-todo-container"
@@ -203,9 +179,6 @@ const DetailedToDo = () => {
           sx={{
             width: "90%",
             maxHeight: "90%",
-            // display: "flex",
-            // flexDirection: "column",
-            // "&:last-child": { paddingBottom: 0 },
           }}
         >
           <CardHeader
@@ -280,7 +253,7 @@ const DetailedToDo = () => {
                   InputProps,
                   ...restParams
                 }) => {
-                  const user = userList.find((user) => user.user_id === value);
+                  const user = userList?.find((user) => user.user_id === value);
                   return (
                     <TextField
                       {...restParams}
@@ -330,7 +303,7 @@ const DetailedToDo = () => {
                 size="small"
                 disablePast
               />
-              <FormControl size="small">
+              <FormControl size="small" sx={{ mr: 1 }}>
                 <InputLabel id="toDo-status-label">Status</InputLabel>
                 <Select
                   labelId="toDo-status-label"
@@ -349,6 +322,27 @@ const DetailedToDo = () => {
                   })}
                 </Select>
               </FormControl>
+              <FormControl size="small">
+                <InputLabel id="toDo-priority-label">Priority</InputLabel>
+                <Select
+                  labelId="toDo-priority-label"
+                  id="toDo-priority-select"
+                  name="priority"
+                  value={updateToDoData.priority}
+                  onChange={handleSelectChange}
+                  label="status"
+                >
+                  <MenuItem value="low">
+                    <Chip label="Low" color="success" size="small" />
+                  </MenuItem>
+                  <MenuItem value="medium">
+                    <Chip label="Medium" color="warning" size="small" />
+                  </MenuItem>
+                  <MenuItem value="high">
+                    <Chip label="High" color="error" size="small" />
+                  </MenuItem>
+                </Select>
+              </FormControl>
             </Box>
             <TextField
               type="text"
@@ -360,32 +354,13 @@ const DetailedToDo = () => {
               onChange={handleTextChange}
               multiline
               maxRows={15}
-              minRows={5}
+              minRows={3}
               sx={{ overflowY: "auto" }}
               fullWidth
               required
             />
-            {/* <Typography variant="h6">{toDoStatus?.title}</Typography>
-           
-            <Typography>
-              <b>Due Date:</b> {formattedDueDate}
-            </Typography>
-            <Divider sx={{ mb: 1 }} />
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Typography>
-                <b>Priority:</b>
-              </Typography>
-
-              <Chip
-                size="small"
-                color={getPriorityColor()}
-                label={toDo?.priority}
-              />
-            </Box>
-            <Box sx={{ flexGrow: 1 }} /> */}
           </CardContent>
-
-          <CardActions sx={{ justifyContent: "flex-end", pt: 0 }}>
+          <CardActions sx={{ justifyContent: "flex-end", pt: 0, pb: 2 }}>
             {isEditing && (
               <>
                 <LoadingButton
@@ -396,7 +371,12 @@ const DetailedToDo = () => {
                 >
                   Save
                 </LoadingButton>
-                <Button variant="outlined" size="small" onClick={handleCancel}>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  onClick={handleCancel}
+                  sx={{ mr: 1.5 }}
+                >
                   Cancel
                 </Button>
               </>
@@ -405,6 +385,7 @@ const DetailedToDo = () => {
               size="small"
               variant="outlined"
               onClick={(event) => handleDeleteClick(event, toDo, "toDo")}
+              sx={{ mr: 1 }}
             >
               Delete
             </Button>
