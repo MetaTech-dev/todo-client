@@ -14,18 +14,22 @@ import {
   CardHeader,
   Chip,
   Divider,
+  FormControl,
   IconButton,
   InputAdornment,
+  InputLabel,
   ListItem,
   ListItemAvatar,
   ListItemText,
+  MenuItem,
+  Select,
   TextField,
   Typography,
 } from "@mui/material";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 import { useLocation } from "react-router-dom";
-import { useGetOneStatus } from "../hooks/status";
+import { useGetOneStatus, useGetStatusList } from "../hooks/status";
 import { useTheme } from "@emotion/react";
 import LoadingDetailedToDo from "../components/loading/LoadingDetailedToDo";
 import { LoadingButton } from "@mui/lab";
@@ -56,22 +60,23 @@ const DetailedToDo = () => {
     isSuccess: isUpdateToDoSuccess,
   } = useUpdateToDo();
 
-  const { data: toDoStatus } = useGetOneStatus(toDo?.statusId);
+  //   const { data: toDoStatus } = useGetOneStatus(toDo?.statusId);
+
+  const { data: statusList } = useGetStatusList();
 
   const { data: userList } = useGetUserList();
 
   const formatDate = (date) => {
     const dayjsDate = dayjs(date);
     return dayjsDate.isValid()
-      ? dayjsDate.format("ddd, MMMM, DD, YYYY")
+      ? dayjsDate.format("MMMM, DD, YYYY")
       : "none selected";
   };
   const { data: toDoAuthor } = useGetOneUser(toDo?.authorUserId);
 
-  const { data: toDoAssignee } = useGetOneUser(toDo?.assigneeUserId);
+  //   const { data: toDoAssignee } = useGetOneUser(toDo?.assigneeUserId);
 
   const formattedCreatedDate = formatDate(toDo?.createdDate);
-  const formattedDueDate = formatDate(toDo?.dueDate);
 
   const [isEditing, setIsEditing] = useState(false);
 
@@ -132,6 +137,16 @@ const DetailedToDo = () => {
     setUpdateToDoData((prev) => ({
       ...prev,
       dueDate: newDate,
+    }));
+  };
+
+  const handleSelectChange = (event) => {
+    setIsEditing(true);
+    const { name, value } = event.target;
+
+    setUpdateToDoData((prev) => ({
+      ...prev,
+      [name]: value,
     }));
   };
 
@@ -293,8 +308,8 @@ const DetailedToDo = () => {
               />
               <DatePicker
                 sx={{
-                  pb: "1rem",
-                  pr: "1rem",
+                  pb: 1,
+                  pr: 1,
                   width: "10rem",
                   "& .MuiInputBase-root": {
                     pr: 1,
@@ -315,6 +330,25 @@ const DetailedToDo = () => {
                 size="small"
                 disablePast
               />
+              <FormControl size="small">
+                <InputLabel id="toDo-status-label">Status</InputLabel>
+                <Select
+                  labelId="toDo-status-label"
+                  id="toDo-status-select"
+                  name="statusId"
+                  value={updateToDoData.statusId}
+                  onChange={handleSelectChange}
+                  label="status"
+                >
+                  {statusList?.map((status) => {
+                    return (
+                      <MenuItem value={status.id} key={status.id}>
+                        <Chip label={status.title} size="small" />
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
             </Box>
             <TextField
               type="text"
