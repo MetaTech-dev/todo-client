@@ -32,7 +32,7 @@ const Dashboard = () => {
 
   const isAdmin = currentUser?.roles.some((role) => role.name === "Admin");
 
-  const { data: toDoList } = useGetToDoList();
+  const { data: toDoList, isPending: isToDoListPending } = useGetToDoList();
 
   const [searchQuery, setSearchQuery] = useState("");
   const handleChangeSearchQuery = (e) => {
@@ -140,6 +140,7 @@ const Dashboard = () => {
             exclusive
             onChange={handleViewState}
             aria-label="View Option Buttons"
+            disabled={isToDoListPending || isStatusListPending}
           >
             <ToggleButton value="board">Board</ToggleButton>
             <ToggleButton value="list">List</ToggleButton>
