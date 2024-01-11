@@ -69,11 +69,18 @@ const ToDoForm = () => {
   };
 
   const handleAssigneeChange = (event, value) => {
-    const { user_id } = value;
-    setToDoFormData((prev) => ({
-      ...prev,
-      assigneeUserId: user_id,
-    }));
+    if (value) {
+      const { user_id } = value;
+      setToDoFormData((prev) => ({
+        ...prev,
+        assigneeUserId: user_id,
+      }));
+    } else {
+      setToDoFormData((prev) => ({
+        ...prev,
+        assigneeUserId: null,
+      }));
+    }
   };
 
   const toDoFormTitle = (toDo) => {
@@ -151,6 +158,11 @@ const ToDoForm = () => {
           />
           <Box sx={{ display: "flex", flexWrap: "wrap" }}>
             <DatePicker
+              slotProps={{
+                actionBar: {
+                  actions: ["clear"],
+                },
+              }}
               sx={{ pb: "1rem", pr: "1rem" }}
               label="Date Due"
               value={toDoFormData.dueDate ? dayjs(toDoFormData.dueDate) : null}

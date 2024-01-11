@@ -116,11 +116,18 @@ const DetailedToDo = () => {
 
   const handleAssigneeChange = (event, value) => {
     setIsEditing(true);
-    const { user_id } = value;
-    setUpdateToDoData((prev) => ({
-      ...prev,
-      assigneeUserId: user_id,
-    }));
+    if (value) {
+      const { user_id } = value;
+      setUpdateToDoData((prev) => ({
+        ...prev,
+        assigneeUserId: user_id,
+      }));
+    } else {
+      setUpdateToDoData((prev) => ({
+        ...prev,
+        assigneeUserId: null,
+      }));
+    }
   };
 
   const handleDueDateChange = (newDate) => {
@@ -282,20 +289,16 @@ const DetailedToDo = () => {
                 size="small"
               />
               <DatePicker
+                slotProps={{
+                  actionBar: {
+                    actions: ["clear"],
+                  },
+                  textField: { size: "small" },
+                }}
                 sx={{
                   pb: 1,
                   pr: 1,
-                  width: "10rem",
-                  "& .MuiInputBase-root": {
-                    pr: 1,
-                    "& .MuiButtonBase-root": {
-                      pl: 0,
-                    },
-                    "& .MuiInputBase-input": {
-                      p: 1.1,
-                      pr: 0,
-                    },
-                  },
+                  width: "12rem",
                 }}
                 label="Date Due"
                 value={
@@ -387,7 +390,10 @@ const DetailedToDo = () => {
               size="small"
               variant="outlined"
               onClick={(event) => handleDeleteClick(event, toDo, "toDo")}
-              sx={{ mr: 1 }}
+              sx={{
+                mr: 1,
+                color: "neutral.main",
+              }}
             >
               Delete
             </Button>

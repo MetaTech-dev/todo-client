@@ -72,10 +72,12 @@ const ToDoCard = ({ toDo, index, activeCard, isDragging }) => {
                 }}
               >
                 <Typography variant="h6">{toDo.title}</Typography>
-                <Avatar
-                  src={toDoAssignee?.picture}
-                  sx={{ height: 25, width: 25, ml: 1 }}
-                />
+                {toDoAssignee && (
+                  <Avatar
+                    src={toDoAssignee?.picture}
+                    sx={{ height: 25, width: 25, ml: 1 }}
+                  />
+                )}
               </Box>
               <Box
                 sx={{
