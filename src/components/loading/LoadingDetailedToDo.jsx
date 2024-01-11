@@ -1,12 +1,4 @@
-import {
-  Box,
-  Card,
-  CardActions,
-  CardContent,
-  Divider,
-  Paper,
-  Skeleton,
-} from "@mui/material";
+import { Card, CardContent, Divider, Paper, Skeleton } from "@mui/material";
 
 const LoadingDetailedToDo = () => {
   return (
@@ -42,29 +34,9 @@ const LoadingDetailedToDo = () => {
           <Divider sx={{ mb: 1 }} />
           <Skeleton height={30} width={80} animation="wave" />
           <Divider sx={{ mb: 1 }} />
-
           <Skeleton height={30} width={80} animation="wave" />
         </CardContent>
       </Card>
-
-      {/* <CardActions sx={{ p: 0, display: "flex", justifyContent: "flex-end" }}>
-        <IconButton
-          size="small"
-          color="inherit"
-          onClick={(event) => handleEdit(event)}
-          aria-label="Edit ToDo"
-        >
-          <EditTwoToneIcon />
-        </IconButton>
-        <IconButton
-          size="small"
-          color="inherit"
-          onClick={(event) => handleDeleteClick(event, toDo, "toDo")}
-          aria-label="Delete ToDo"
-        >
-          <DeleteOutlineOutlinedIcon />
-        </IconButton>
-      </CardActions> */}
     </Paper>
   );
 };

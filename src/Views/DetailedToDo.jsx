@@ -1,26 +1,37 @@
-import { useContext, useMemo } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import ToDoContext from "../contexts/ToDoContext";
 import dayjs from "dayjs";
-import { useGetOneUser } from "../hooks/user";
-import { useGetOneToDo } from "../hooks/toDo";
+import { useGetOneUser, useGetUserList } from "../hooks/user";
+import { useGetOneToDo, useUpdateToDo } from "../hooks/toDo";
 import {
+  Autocomplete,
   Avatar,
   Box,
+  Button,
   Card,
   CardActions,
   CardContent,
+  CardHeader,
   Chip,
   Divider,
   IconButton,
-  Paper,
+  InputAdornment,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  TextField,
   Typography,
 } from "@mui/material";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
+import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 import { useLocation } from "react-router-dom";
 import { useGetOneStatus } from "../hooks/status";
 import { useTheme } from "@emotion/react";
 import LoadingDetailedToDo from "../components/loading/LoadingDetailedToDo";
+import { LoadingButton } from "@mui/lab";
+import { enqueueSnackbar } from "notistack";
+import { DatePicker } from "@mui/x-date-pickers";
+import { set } from "date-fns";
 
 const DetailedToDo = () => {
   const {
@@ -37,11 +48,17 @@ const DetailedToDo = () => {
     [pathname]
   );
 
-  const theme = useTheme();
-
   const { data: toDo, isPending: isToDoPending } = useGetOneToDo(toDoId);
 
+  const {
+    mutate: updateToDo,
+    isPending: isUpdateToDoPending,
+    isSuccess: isUpdateToDoSuccess,
+  } = useUpdateToDo();
+
   const { data: toDoStatus } = useGetOneStatus(toDo?.statusId);
+
+  const { data: userList } = useGetUserList();
 
   const formatDate = (date) => {
     const dayjsDate = dayjs(date);
@@ -56,10 +73,79 @@ const DetailedToDo = () => {
   const formattedCreatedDate = formatDate(toDo?.createdDate);
   const formattedDueDate = formatDate(toDo?.dueDate);
 
-  const handleEdit = (event) => {
-    event.preventDefault();
-    setToDoFormData(toDo);
-    setIsToDoFormDialogOpen(true);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const [updateToDoData, setUpdateToDoData] = useState({
+    title: "",
+    description: "",
+    dueDate: null,
+    priority: "low",
+    statusId: 1,
+    assigneeUserId: null,
+    id: null,
+  });
+
+  useEffect(() => {
+    if (toDo) {
+      setUpdateToDoData({
+        title: toDo.title,
+        description: toDo.description,
+        dueDate: toDo.dueDate,
+        priority: toDo.priority,
+        statusId: toDo.statusId,
+        assigneeUserId: toDo.assigneeUserId,
+        id: toDo.id,
+      });
+    }
+  }, [toDo]);
+
+  const handleTextChange = useCallback((event) => {
+    setIsEditing(true);
+    setUpdateToDoData((prev) => ({
+      ...prev,
+      [event.target.name]: event.target.value,
+    }));
+  }, []);
+
+  const handleSave = () => {
+    updateToDo(updateToDoData);
+  };
+
+  useEffect(() => {
+    if (isUpdateToDoSuccess) {
+      enqueueSnackbar("ToDo updated successfully", { variant: "success" });
+      setIsEditing(false);
+    }
+  }, [isUpdateToDoSuccess]);
+
+  const handleAssigneeChange = (event, value) => {
+    setIsEditing(true);
+    const { user_id } = value;
+    setUpdateToDoData((prev) => ({
+      ...prev,
+      assigneeUserId: user_id,
+    }));
+  };
+
+  const handleDueDateChange = (newDate) => {
+    setIsEditing(true);
+    setUpdateToDoData((prev) => ({
+      ...prev,
+      dueDate: newDate,
+    }));
+  };
+
+  const handleCancel = () => {
+    setUpdateToDoData({
+      title: toDo.title,
+      description: toDo.description,
+      dueDate: toDo.dueDate,
+      priority: toDo.priority,
+      statusId: toDo.statusId,
+      assigneeUserId: toDo.assigneeUserId,
+      id: toDo.id,
+    });
+    setIsEditing(false);
   };
 
   const handleDeleteClick = (event, item, itemType) => {
@@ -98,109 +184,198 @@ const DetailedToDo = () => {
       {isToDoPending ? (
         <LoadingDetailedToDo />
       ) : (
-        <Paper
+        <Card
           sx={{
-            display: "flex",
-            flexDirection: "column",
-            p: 2,
+            width: "90%",
+            maxHeight: "90%",
+            // display: "flex",
+            // flexDirection: "column",
+            // "&:last-child": { paddingBottom: 0 },
           }}
         >
-          <Box sx={(theme) => ({ display: "flex", width: theme.spacing(120) })}>
-            <Card elevation={2} sx={{ flex: 6, mr: 2 }}>
-              <CardContent
-                sx={{ p: 1.5, "&:last-child": { paddingBottom: 1 } }}
+          <CardHeader
+            title={
+              <TextField
+                type="text"
+                variant="filled"
+                id="toDoTitle"
+                name="title"
+                placeholder="Title"
+                value={updateToDoData?.title}
+                InputProps={{
+                  style: { fontSize: "1.5rem" },
+                }}
+                onChange={handleTextChange}
+                fullWidth
+                required
+              />
+            }
+            subheader={
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  mt: 1,
+                }}
               >
-                <Typography variant="h5">{toDo?.title}</Typography>
-                <Divider />
-                <Typography
-                  sx={{
-                    overflowY: "auto",
-                    maxHeight: "30rem",
-                  }}
+                <Typography sx={{ mr: 1 }}>
+                  Author: {toDoAuthor?.name}
+                </Typography>
+                <Avatar
+                  src={toDoAuthor?.picture}
+                  sx={{ height: 30, width: 30 }}
+                />
+                <Box sx={{ flex: 1 }} />
+                <Typography sx={{ mr: 1 }}>
+                  Created: {formattedCreatedDate}
+                </Typography>
+              </Box>
+            }
+            sx={{ backgroundColor: "transparent" }}
+          />
+          <CardContent>
+            <Box sx={{ display: "flex" }}>
+              <Autocomplete
+                autoHighlight
+                id="assignee-autocomplete"
+                options={userList || []}
+                value={
+                  userList?.find(
+                    (user) => user.user_id === updateToDoData.assigneeUserId
+                  ) || null
+                }
+                getOptionLabel={(option) => option.user_id}
+                sx={{ width: "17rem", mr: 1 }}
+                renderOption={(props, option) => {
+                  return (
+                    <ListItem {...props} key={option.user_id}>
+                      <ListItemAvatar>
+                        <Avatar
+                          src={option.picture}
+                          sx={{ height: 30, width: 30 }}
+                        />
+                      </ListItemAvatar>
+                      <ListItemText primary={option.name} />
+                    </ListItem>
+                  );
+                }}
+                onChange={handleAssigneeChange}
+                renderInput={({
+                  inputProps: { value, ...restInputProps },
+                  InputProps,
+                  ...restParams
+                }) => {
+                  const user = userList.find((user) => user.user_id === value);
+                  return (
+                    <TextField
+                      {...restParams}
+                      value={user?.name || ""}
+                      label="Assignee"
+                      InputProps={{
+                        ...InputProps,
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <Avatar
+                              src={user?.picture}
+                              sx={{ height: 25, width: 25 }}
+                            />
+                          </InputAdornment>
+                        ),
+                      }}
+                      inputProps={{
+                        ...restInputProps,
+                        value: user?.name || "",
+                      }}
+                    />
+                  );
+                }}
+                size="small"
+              />
+              <DatePicker
+                sx={{
+                  pb: "1rem",
+                  pr: "1rem",
+                  width: "10rem",
+                  "& .MuiInputBase-root": {
+                    pr: 1,
+                    "& .MuiButtonBase-root": {
+                      pl: 0,
+                    },
+                    "& .MuiInputBase-input": {
+                      p: 1.1,
+                      pr: 0,
+                    },
+                  },
+                }}
+                label="Date Due"
+                value={
+                  updateToDoData.dueDate ? dayjs(updateToDoData.dueDate) : null
+                }
+                onChange={handleDueDateChange}
+                size="small"
+                disablePast
+              />
+            </Box>
+            <TextField
+              type="text"
+              variant="filled"
+              id="toDoDescription"
+              name="description"
+              placeholder="Description"
+              value={updateToDoData?.description}
+              onChange={handleTextChange}
+              multiline
+              maxRows={15}
+              minRows={5}
+              sx={{ overflowY: "auto" }}
+              fullWidth
+              required
+            />
+            {/* <Typography variant="h6">{toDoStatus?.title}</Typography>
+           
+            <Typography>
+              <b>Due Date:</b> {formattedDueDate}
+            </Typography>
+            <Divider sx={{ mb: 1 }} />
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Typography>
+                <b>Priority:</b>
+              </Typography>
+
+              <Chip
+                size="small"
+                color={getPriorityColor()}
+                label={toDo?.priority}
+              />
+            </Box>
+            <Box sx={{ flexGrow: 1 }} /> */}
+          </CardContent>
+
+          <CardActions sx={{ justifyContent: "flex-end", pt: 0 }}>
+            {isEditing && (
+              <>
+                <LoadingButton
+                  variant="contained"
+                  size="small"
+                  onClick={handleSave}
+                  loading={isUpdateToDoPending}
                 >
-                  {toDo?.description}
-                </Typography>
-              </CardContent>
-            </Card>
-            <Card elevation={2} sx={{ flex: 3 }}>
-              <CardContent
-                sx={{ p: 1.5, "&:last-child": { paddingBottom: 1 } }}
-              >
-                {/* <Box sx={{ display: "flex", alignItems: "center" }}> */}
-                <Typography variant="h6">{toDoStatus?.title}</Typography>
-                {/* </Box> */}
-                <Divider sx={{ mb: 1 }} />
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <Typography>
-                    <b>Author:</b>
-                  </Typography>
-                  <Avatar
-                    src={toDoAuthor?.picture}
-                    sx={{ height: 30, width: 30, ml: 0.5, mr: 0.5 }}
-                  />
-                  <Typography>{toDoAuthor?.name}</Typography>
-                </Box>
-                <Divider sx={{ mb: 1 }} />
-                {toDoAssignee && (
-                  <>
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                      <Typography>
-                        <b>Assignee:</b>
-                      </Typography>
-                      <Avatar
-                        src={toDoAssignee?.picture}
-                        sx={{ height: 30, width: 30, ml: 0.5, mr: 0.5 }}
-                      />
-                      <Typography>{toDoAssignee?.name}</Typography>
-                    </Box>
-                    <Divider sx={{ mb: 1 }} />
-                  </>
-                )}
-                <Typography>
-                  <b>Created at:</b> {formattedCreatedDate}
-                </Typography>
-                <Divider sx={{ mb: 1 }} />
-                <Typography>
-                  <b>Due Date:</b> {formattedDueDate}
-                </Typography>
-                <Divider sx={{ mb: 1 }} />
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <Typography>
-                    <b>Priority:</b>
-                  </Typography>
-
-                  <Chip
-                    size="small"
-                    color={getPriorityColor()}
-                    label={toDo?.priority}
-                  />
-                </Box>
-                <Box sx={{ flexGrow: 1 }} />
-              </CardContent>
-            </Card>
-          </Box>
-
-          <CardActions
-            sx={{ p: 0, display: "flex", justifyContent: "flex-end" }}
-          >
-            <IconButton
+                  Save
+                </LoadingButton>
+                <Button variant="outlined" size="small" onClick={handleCancel}>
+                  Cancel
+                </Button>
+              </>
+            )}
+            <Button
               size="small"
-              color="inherit"
-              onClick={(event) => handleEdit(event)}
-              aria-label="Edit ToDo"
-            >
-              <EditTwoToneIcon />
-            </IconButton>
-            <IconButton
-              size="small"
-              color="inherit"
+              variant="outlined"
               onClick={(event) => handleDeleteClick(event, toDo, "toDo")}
-              aria-label="Delete ToDo"
             >
-              <DeleteOutlineOutlinedIcon />
-            </IconButton>
+              Delete
+            </Button>
           </CardActions>
-        </Paper>
+        </Card>
       )}
     </Box>
   );
