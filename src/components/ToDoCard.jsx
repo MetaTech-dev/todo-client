@@ -1,29 +1,20 @@
 import {
+  Avatar,
   Box,
   Card,
+  CardActionArea,
   CardContent,
-  Divider,
-  IconButton,
+  Chip,
+  SvgIcon,
   Typography,
 } from "@mui/material";
-import CardActions from "@mui/material/CardActions";
-import dayjs from "dayjs";
-import ToDoContext from "../contexts/ToDoContext";
-import { useContext, useEffect, useState } from "react";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
-import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+import { useEffect, useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
+import { Link as RouterLink } from "react-router-dom";
+import { useGetOneUser } from "../hooks/user";
+import dayjs from "dayjs";
 
 const ToDoCard = ({ toDo, index, activeCard, isDragging }) => {
-  const {
-    setToDoFormData,
-    setIsToDoFormDialogOpen,
-    setIsDeleteConfirmationDialogOpen,
-    setDeleteConfirmationItem,
-    setDeleteConfirmationItemType,
-  } = useContext(ToDoContext);
-
   const [isStatic, setIsStatic] = useState(false);
 
   useEffect(() => {
@@ -34,47 +25,27 @@ const ToDoCard = ({ toDo, index, activeCard, isDragging }) => {
     }
   }, [isDragging, activeCard]);
 
-  const formatDate = (date) => {
-    const dayjsDate = dayjs(date);
-    return dayjsDate.isValid()
-      ? dayjsDate.format("ddd, MMMM, DD, YYYY")
-      : "none selected";
-  };
-
-  const formattedCreatedDate = formatDate(toDo.createdDate);
-  const formattedDueDate = formatDate(toDo.dueDate);
-
-  const handleEdit = () => {
-    setToDoFormData(toDo);
-    setIsToDoFormDialogOpen(true);
-  };
-
-  const handleDeleteClick = (item, itemType) => {
-    setDeleteConfirmationItemType(itemType);
-    setDeleteConfirmationItem(item);
-    setIsDeleteConfirmationDialogOpen(true);
-  };
+  const { data: toDoAssignee } = useGetOneUser(toDo.assigneeUserId);
 
   const getPriorityColor = () => {
-    switch (toDo.priority) {
+    switch (toDo?.priority) {
       case "low":
-        return "success.main";
+        return "success";
       case "medium":
-        return "warning.main";
+        return "warning";
       case "high":
-        return "error.main";
+        return "error";
       default:
-        return "success.main";
+        return "success";
     }
   };
 
-  const handleDescription = () => {
-    if (toDo.description.length > 400) {
-      return toDo.description.substring(0, 400) + "... (click edit to expand)";
-    } else {
-      return toDo.description;
-    }
+  const formatDate = (date) => {
+    const dayjsDate = dayjs(date);
+    return dayjsDate.isValid() ? dayjsDate.format("M/D/YYYY") : "none selected";
   };
+
+  const dueDate = formatDate(toDo?.dueDate);
 
   const cardElevation = isStatic && isDragging ? 1 : activeCard ? 5 : 2;
 
@@ -92,50 +63,49 @@ const ToDoCard = ({ toDo, index, activeCard, isDragging }) => {
             opacity: isStatic ? 0.4 : 1,
           })}
         >
-          <CardContent sx={{ p: 1.5, "&:last-child": { paddingBottom: 1 } }}>
-            <Typography variant="h5">{toDo.title}</Typography>
-            <Divider />
-            <Typography>{handleDescription()}</Typography>
-            <Divider sx={{ mb: 1 }} />
-            <Typography>
-              <b>Created at:</b> {formattedCreatedDate}
-            </Typography>
-            <Divider sx={{ mb: 1 }} />
-            <Typography>
-              <b>Due Date:</b> {formattedDueDate}
-            </Typography>
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Typography>
-                <b>Priority:</b> {toDo.priority}{" "}
-              </Typography>
-              <FiberManualRecordIcon
+          <CardActionArea component={RouterLink} to={`/todos/${toDo.id}`}>
+            <CardContent>
+              <Box
                 sx={{
-                  fontSize: "small",
-                  color: getPriorityColor(),
-                  ml: 0.5,
+                  display: "flex",
+                  justifyContent: "space-between",
                 }}
-              />
-              <Box sx={{ flexGrow: 1 }} />
-              <CardActions sx={{ p: 0 }}>
-                <IconButton
+              >
+                <Typography variant="h6">{toDo.title}</Typography>
+                {toDoAssignee && (
+                  <Avatar
+                    src={toDoAssignee?.picture}
+                    sx={{ height: 25, width: 25, ml: 1 }}
+                  />
+                )}
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "end",
+                }}
+              >
+                <Chip
                   size="small"
-                  color="inherit"
-                  onClick={() => handleEdit()}
-                  aria-label="Edit ToDo"
-                >
-                  <EditTwoToneIcon />
-                </IconButton>
-                <IconButton
-                  size="small"
-                  color="inherit"
-                  onClick={() => handleDeleteClick(toDo, "toDo")}
-                  aria-label="Delete ToDo"
-                >
-                  <DeleteOutlineOutlinedIcon />
-                </IconButton>
-              </CardActions>
-            </Box>
-          </CardContent>
+                  color={getPriorityColor()}
+                  label={toDo?.priority}
+                  sx={{ mt: 1 }}
+                />
+                {toDo.dueDate && (
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      opacity: 0.5,
+                      fontSize: "14px",
+                    }}
+                  >
+                    Due: {dueDate}
+                  </Typography>
+                )}
+              </Box>
+            </CardContent>
+          </CardActionArea>
         </Card>
       )}
     </Draggable>

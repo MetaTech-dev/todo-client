@@ -39,6 +39,7 @@ export const useGetOneUser = (id) => {
         variant: "error",
       });
     },
+    enabled: Boolean(id),
   });
 };
 

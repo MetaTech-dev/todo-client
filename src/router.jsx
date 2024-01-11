@@ -5,6 +5,7 @@ import UserProfile from "./Views/UserProfile";
 import Users from "./Views/Users";
 import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
+import DetailedToDo from "./Views/DetailedToDo";
 
 export const routerChildren = [
   {
@@ -14,6 +15,12 @@ export const routerChildren = [
     name: "Dashboard",
     isInNavMenu: true,
     icon: <DashboardOutlinedIcon />,
+  },
+  {
+    path: "todos/:toDoId",
+    element: <DetailedToDo />,
+    name: "Detailed ToDo",
+    isInNavMenu: false,
   },
   {
     path: "users",

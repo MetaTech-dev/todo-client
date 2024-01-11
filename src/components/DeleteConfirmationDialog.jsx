@@ -62,7 +62,7 @@ const DeleteConfirmationDialog = () => {
       </DialogContent>
       <DialogActions sx={{ justifyContent: "center" }}>
         <LoadingButton
-          variant="contained"
+          variant="outlined"
           loading={isRemoveToDoPending || isRemoveStatusPending}
           onClick={handleDelete}
         >
