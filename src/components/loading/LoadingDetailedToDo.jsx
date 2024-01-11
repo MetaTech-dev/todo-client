@@ -1,43 +1,49 @@
-import { Card, CardContent, Divider, Paper, Skeleton } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  Divider,
+  Paper,
+  Skeleton,
+} from "@mui/material";
 
 const LoadingDetailedToDo = () => {
   return (
-    <Paper
-      sx={(theme) => ({
-        display: "flex",
-        flexDirection: "row",
+    <Card
+      sx={{
         p: 2,
-        width: theme.spacing(120),
-      })}
+        width: "90%",
+      }}
+      elevation={2}
     >
-      <Card elevation={2} sx={{ flex: 6, mr: 2 }}>
-        <CardContent>
-          <Skeleton height={50} animation="wave" />
-          <Divider sx={{ mb: 1 }} />
-          <Skeleton
-            height={400}
-            animation="wave"
-            id="bigskelly"
-            variant="rounded"
-          />
-        </CardContent>
-      </Card>
-      <Card elevation={2} sx={{ flex: 3 }}>
-        <CardContent sx={{ "&:last-child": { paddingBottom: 1 } }}>
-          <Skeleton height={50} animation="wave" />
-          <Divider sx={{ mb: 1 }} />
-          <Skeleton height={30} width={200} animation="wave" />
-          <Divider sx={{ mb: 1 }} />
-          <Skeleton height={30} width={220} animation="wave" />
-          <Divider sx={{ mb: 1 }} />
-          <Skeleton height={30} width={160} animation="wave" />
-          <Divider sx={{ mb: 1 }} />
-          <Skeleton height={30} width={80} animation="wave" />
-          <Divider sx={{ mb: 1 }} />
-          <Skeleton height={30} width={80} animation="wave" />
-        </CardContent>
-      </Card>
-    </Paper>
+      <Skeleton height={70} animation="wave" variant="rounded" sx={{ m: 2 }} />
+      <Box sx={{ display: "flex", alignItems: "center", m: 2 }}>
+        <Skeleton height={50} width={140} animation="wave" sx={{ mr: 1 }} />
+        <Skeleton
+          height={35}
+          width={35}
+          animation="wave"
+          variant="circular"
+          sx={{ mr: 1 }}
+        />
+        <Box sx={{ flex: 1 }} />
+        <Skeleton height={50} width={100} animation="wave" sx={{ mr: 1 }} />
+      </Box>
+      <CardContent>
+        <Box sx={{ display: "flex" }}>
+          <Skeleton height={50} width={140} animation="wave" sx={{ mr: 1 }} />
+          <Skeleton height={50} width={180} animation="wave" sx={{ mr: 1 }} />
+          <Skeleton height={50} width={110} animation="wave" sx={{ mr: 1 }} />
+          <Skeleton height={50} width={100} animation="wave" sx={{ mr: 1 }} />
+        </Box>
+        <Skeleton
+          height={200}
+          animation="wave"
+          id="bigskelly"
+          variant="rounded"
+        />
+      </CardContent>
+    </Card>
   );
 };
 
