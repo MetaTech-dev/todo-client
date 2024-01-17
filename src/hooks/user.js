@@ -1,61 +1,73 @@
-import { useAuth0 } from "@auth0/auth0-react";
-import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { enqueueSnackbar } from "notistack";
 import {
   requestGetUserList,
   requestGetOneUser,
   requestUpdateUser,
-  requestUpdateUserRoles,
+  requestUpdateUserRole,
 } from "../api/user";
+import { useAuthMutation, useAuthQuery } from "./auth";
+import { useUser } from "@clerk/clerk-react";
 
-export const useGetUserList = () => {
-  const { getAccessTokenSilently } = useAuth0();
+export const useGetCurrentUser = () => {
+  const { user: authUser } = useUser();
 
-  return useQuery({
-    queryKey: ["userList"],
-    queryFn: async () => {
-      const accessToken = await getAccessTokenSilently({ cacheMode: "off" });
-      return requestGetUserList({ accessToken });
+  const { data: organizationMemberships } = useQuery({
+    queryKey: ["organizationMemberships", authUser?.id],
+    queryFn: async () => authUser.getOrganizationMemberships(),
+    onError: (error) => {
+      enqueueSnackbar(
+        error.message || "An error occurred fetching organization memberships",
+        {
+          variant: "error",
+        }
+      );
     },
+    enabled: Boolean(authUser?.id),
+  });
+
+  return {
+    user: {
+      ...authUser,
+      permissions: organizationMemberships?.[0]?.permissions || [],
+      role: organizationMemberships?.[0]?.role || "",
+    },
+  };
+};
+
+export const useGetUserList = () =>
+  useAuthQuery({
+    queryKey: ["userList"],
+    queryFn: requestGetUserList,
     onError: (error) => {
       enqueueSnackbar(error.message || "An error occurred fetching users", {
         variant: "error",
       });
     },
   });
-};
 
-export const useGetOneUser = (id) => {
-  const { getAccessTokenSilently } = useAuth0();
-
-  return useQuery({
-    queryKey: ["user", id],
-    queryFn: async () => {
-      const accessToken = await getAccessTokenSilently({ cacheMode: "off" });
-      return requestGetOneUser({ id, accessToken });
-    },
+export const useGetOneUser = (data) =>
+  useAuthQuery({
+    data,
+    queryKey: ["user", data.id],
+    queryFn: async (params) => requestGetOneUser(params),
     onError: (error) => {
       enqueueSnackbar(error.message || "An error occurred fetching user", {
         variant: "error",
       });
     },
-    enabled: Boolean(id),
+    enabled: Boolean(data.id),
   });
-};
 
 export const useUpdateUser = () => {
   const queryClient = useQueryClient();
-  const { getAccessTokenSilently } = useAuth0();
 
-  return useMutation({
-    mutationFn: async ({ userId, body }) => {
-      const accessToken = await getAccessTokenSilently({ cacheMode: "off" });
-      return requestUpdateUser({
+  return useAuthMutation({
+    mutationFn: async ({ userId, body }) =>
+      requestUpdateUser({
         userId,
-        accessToken,
         body,
-      });
-    },
+      }),
     onMutate: async (updatedUser) => {
       await queryClient.cancelQueries({
         queryKey: ["user", updatedUser.userId],
@@ -83,24 +95,17 @@ export const useUpdateUser = () => {
   });
 };
 
-export const useUpdateUserRoles = () => {
+export const useUpdateUserRole = () => {
   const queryClient = useQueryClient();
-  const { getAccessTokenSilently } = useAuth0();
 
-  return useMutation({
-    mutationFn: async ({ userId, roles }) => {
-      const accessToken = await getAccessTokenSilently({ cacheMode: "off" });
-      return requestUpdateUserRoles({ accessToken, roles, userId });
-    },
+  return useAuthMutation({
+    mutationFn: requestUpdateUserRole,
     onMutate: async (updatedUser) => {
       await queryClient.cancelQueries({
-        queryKey: ["user", updatedUser.user_id],
+        queryKey: ["user", updatedUser.id],
       });
-      const previousUser = queryClient.getQueryData([
-        "user",
-        updatedUser.user_id,
-      ]);
-      queryClient.setQueryData(["user", updatedUser.user_id], updatedUser);
+      const previousUser = queryClient.getQueryData(["user", updatedUser.id]);
+      queryClient.setQueryData(["user", updatedUser.id], updatedUser);
       return { previousUser, updatedUser };
     },
     onSuccess: () => {
@@ -109,15 +114,12 @@ export const useUpdateUserRoles = () => {
     },
     onError: (error, updatedUser, context) => {
       queryClient.setQueryData(
-        ["userList", updatedUser.user_id],
+        ["userList", updatedUser.id],
         context.previousUser
       );
-      enqueueSnackbar(
-        error.message || "An error occurred updating user roles",
-        {
-          variant: "error",
-        }
-      );
+      enqueueSnackbar(error.message || "An error occurred updating user role", {
+        variant: "error",
+      });
     },
   });
 };

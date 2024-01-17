@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ToDoContext from "../contexts/ToDoContext";
 import {
   Box,
@@ -70,10 +70,10 @@ const ToDoForm = () => {
 
   const handleAssigneeChange = (event, value) => {
     if (value) {
-      const { user_id } = value;
+      const { id } = value;
       setToDoFormData((prev) => ({
         ...prev,
-        assigneeUserId: user_id,
+        assigneeUserId: id,
       }));
     } else {
       setToDoFormData((prev) => ({
@@ -179,43 +179,48 @@ const ToDoForm = () => {
               id="assignee-autocomplete"
               options={userList || []}
               value={
-                userList?.find(
-                  (user) => user.user_id === toDoFormData.assigneeUserId
-                ) || null
+                userList?.length > 0
+                  ? userList?.find(
+                      (user) => user.id === toDoFormData.assigneeUserId
+                    )
+                  : null
               }
-              getOptionLabel={(option) => option.user_id}
+              getOptionLabel={(option) => option.id}
               sx={{ pb: "1rem", width: "17rem" }}
-              renderOption={(props, option) => {
-                return (
-                  <ListItem {...props} key={option.user_id}>
-                    <ListItemAvatar>
-                      <Avatar
-                        src={option.picture}
-                        sx={{ height: 30, width: 30 }}
-                      />
-                    </ListItemAvatar>
-                    <ListItemText primary={option.name} />
-                  </ListItem>
-                );
-              }}
+              renderOption={(props, option) => (
+                <ListItem {...props} key={option.id}>
+                  <ListItemAvatar>
+                    <Avatar
+                      src={option.imageUrl}
+                      sx={{ height: 30, width: 30 }}
+                    />
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={`${option.firstName} ${option.lastName}`}
+                  />
+                </ListItem>
+              )}
               onChange={handleAssigneeChange}
               renderInput={({
                 inputProps: { value, ...restInputProps },
                 InputProps,
                 ...restParams
               }) => {
-                const user = userList.find((user) => user.user_id === value);
+                const user =
+                  userList?.length > 0
+                    ? userList.find((user) => user.id === value)
+                    : [];
                 return (
                   <TextField
                     {...restParams}
-                    value={user?.name || ""}
+                    value={user ? `${user?.firstName} ${user?.lastName}` : ""}
                     label="Assignee"
                     InputProps={{
                       ...InputProps,
                       startAdornment: (
                         <InputAdornment position="start">
                           <Avatar
-                            src={user?.picture}
+                            src={user?.imageUrl}
                             sx={{ height: 30, width: 30 }}
                           />
                         </InputAdornment>
@@ -223,7 +228,7 @@ const ToDoForm = () => {
                     }}
                     inputProps={{
                       ...restInputProps,
-                      value: user?.name || "",
+                      value: user ? `${user?.firstName} ${user?.lastName}` : "",
                     }}
                   />
                 );
@@ -256,13 +261,15 @@ const ToDoForm = () => {
               onChange={handleInputChange}
               label="status"
             >
-              {statusList?.map((status) => {
-                return (
-                  <MenuItem value={status.id} key={status.id}>
-                    {status.title}
-                  </MenuItem>
-                );
-              })}
+              {statusList?.length > 0
+                ? statusList.map((status) => {
+                    return (
+                      <MenuItem value={status.id} key={status.id}>
+                        {status.title}
+                      </MenuItem>
+                    );
+                  })
+                : null}
             </Select>
           </FormControl>
         </DialogContent>

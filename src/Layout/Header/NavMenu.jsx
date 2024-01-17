@@ -1,7 +1,5 @@
 import MenuIcon from "@mui/icons-material/Menu";
-import { useCallback, useMemo, useState } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
-import { useGetOneUser } from "../../hooks/user";
+import { useCallback, useState } from "react";
 import {
   IconButton,
   ListItemIcon,
@@ -12,17 +10,9 @@ import {
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { routerChildren } from "../../router";
+import { SignedIn } from "@clerk/clerk-react";
 
 const NavMenu = () => {
-  const { user } = useAuth0();
-
-  const { data: currentUser } = useGetOneUser(user?.sub);
-
-  const isMember = useMemo(
-    () => currentUser?.roles?.some((role) => role.name === "Member"),
-    [currentUser]
-  );
-
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClose = useCallback(() => {
@@ -43,7 +33,7 @@ const NavMenu = () => {
           <MenuIcon />
         </IconButton>
       </Tooltip>
-      {isMember && (
+      <SignedIn>
         <Menu
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
@@ -59,7 +49,7 @@ const NavMenu = () => {
               </MenuItem>
             ))}
         </Menu>
-      )}
+      </SignedIn>
     </>
   );
 };

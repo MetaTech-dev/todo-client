@@ -10,6 +10,7 @@ import ToDoContext from "../contexts/ToDoContext";
 import { useRemoveToDo } from "../hooks/toDo";
 import { LoadingButton } from "@mui/lab";
 import { useRemoveStatus } from "../hooks/status";
+import { useNavigate } from "react-router-dom";
 
 const DeleteConfirmationDialog = () => {
   const {
@@ -33,6 +34,8 @@ const DeleteConfirmationDialog = () => {
     isSuccess: isRemoveStatusSuccess,
   } = useRemoveStatus();
 
+  const navigate = useNavigate();
+
   const handleClose = () => {
     setIsDeleteConfirmationDialogOpen(false);
     setDeleteConfirmationItem(null);
@@ -41,10 +44,11 @@ const DeleteConfirmationDialog = () => {
 
   const handleDelete = () => {
     if (deleteConfirmationItemType === "toDo") {
-      removeToDo(deleteConfirmationItem.id);
+      removeToDo({ id: deleteConfirmationItem.id });
     } else if (deleteConfirmationItemType === "status") {
-      removeStatus(deleteConfirmationItem.id);
+      removeStatus({ id: deleteConfirmationItem.id });
     }
+    navigate("/");
   };
 
   useEffect(() => {

@@ -79,7 +79,7 @@ const BoardView = ({
       <DragDropContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
         {!isStatusListPending &&
           filteredToDoList &&
-          statusList &&
+          statusList?.length > 0 &&
           statusList?.map((status) => {
             return (
               <Card

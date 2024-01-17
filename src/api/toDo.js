@@ -1,7 +1,7 @@
-export const requestGetToDoList = async ({ accessToken }) => {
+export const requestGetToDoList = async ({ token }) => {
   const response = await fetch(`${process.env.REACT_APP_API_URL}/toDo`, {
     headers: {
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `Bearer ${token}`,
     },
   });
   if (!response.ok) {
@@ -11,12 +11,15 @@ export const requestGetToDoList = async ({ accessToken }) => {
   return response.json();
 };
 
-export const requestGetOneToDo = async ({ id, accessToken }) => {
-  const response = await fetch(`${process.env.REACT_APP_API_URL}/toDo/${id}`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+export const requestGetOneToDo = async ({ data, token }) => {
+  const response = await fetch(
+    `${process.env.REACT_APP_API_URL}/toDo/${data.id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
   if (!response.ok) {
     const errorResponse = await response.json();
     throw new Error(errorResponse.message || "Failed to fetch toDo");
@@ -24,14 +27,14 @@ export const requestGetOneToDo = async ({ id, accessToken }) => {
   return response.json();
 };
 
-export const requestCreateToDo = async ({ toDo, accessToken }) => {
+export const requestCreateToDo = async ({ data, token }) => {
   const response = await fetch(`${process.env.REACT_APP_API_URL}/toDo`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(toDo),
+    body: JSON.stringify(data),
   });
   if (!response.ok) {
     const errorResponse = await response.json();
@@ -40,13 +43,16 @@ export const requestCreateToDo = async ({ toDo, accessToken }) => {
   return response.json();
 };
 
-export const requestRemoveToDo = async ({ id, accessToken }) => {
-  const response = await fetch(`${process.env.REACT_APP_API_URL}/toDo/${id}`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+export const requestRemoveToDo = async ({ data, token }) => {
+  const response = await fetch(
+    `${process.env.REACT_APP_API_URL}/toDo/${data.id}`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
   if (!response.ok) {
     const errorResponse = await response.json();
     throw new Error(errorResponse.message || "Failed to delete toDo");
@@ -55,16 +61,16 @@ export const requestRemoveToDo = async ({ id, accessToken }) => {
   }
 };
 
-export const requestUpdateToDo = async ({ toDo, accessToken }) => {
+export const requestUpdateToDo = async ({ data, token }) => {
   const response = await fetch(
-    `${process.env.REACT_APP_API_URL}/toDo/${toDo.id}`,
+    `${process.env.REACT_APP_API_URL}/toDo/${data.id}`,
     {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(toDo),
+      body: JSON.stringify(data),
     }
   );
   if (!response.ok) {
@@ -74,14 +80,14 @@ export const requestUpdateToDo = async ({ toDo, accessToken }) => {
   return response.json();
 };
 
-export const requestUpdateToDoList = async ({ toDoList, accessToken }) => {
+export const requestUpdateToDoList = async ({ data, token }) => {
   const response = await fetch(`${process.env.REACT_APP_API_URL}/toDo`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(toDoList),
+    body: JSON.stringify(data),
   });
   if (!response.ok) {
     const errorResponse = await response.json();

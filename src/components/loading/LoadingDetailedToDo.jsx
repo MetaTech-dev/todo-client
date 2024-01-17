@@ -1,11 +1,4 @@
-import {
-  Box,
-  Card,
-  CardContent,
-  Divider,
-  Paper,
-  Skeleton,
-} from "@mui/material";
+import { Box, Card, CardContent, Skeleton } from "@mui/material";
 
 const LoadingDetailedToDo = () => {
   return (

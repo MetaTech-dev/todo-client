@@ -16,23 +16,20 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import { useGetStatusList } from "../../hooks/status";
 import { useGetToDoList } from "../../hooks/toDo";
 import { useDebounce } from "../../utils/useDebounce";
-import { useAuth0 } from "@auth0/auth0-react";
-import { useGetOneUser } from "../../hooks/user";
+import { useGetCurrentUser } from "../../hooks/user";
 
 const Dashboard = () => {
   const { setIsProjectSettingsDialogOpen, setIsToDoFormDialogOpen } =
     useContext(ToDoContext);
+  const { user } = useGetCurrentUser();
 
   const { data: statusList, isPending: isStatusListPending } =
     useGetStatusList();
 
-  const { user } = useAuth0();
+  const isAdmin = useMemo(() => user?.role === "org:admin", [user]);
 
-  const { data: currentUser } = useGetOneUser(user?.sub);
-
-  const isAdmin = currentUser?.roles.some((role) => role.name === "Admin");
-
-  const { data: toDoList, isPending: isToDoListPending } = useGetToDoList();
+  const getTodoListResult = useGetToDoList();
+  const { data: toDoList, isPending: isToDoListPending } = getTodoListResult;
 
   const [searchQuery, setSearchQuery] = useState("");
   const handleChangeSearchQuery = (e) => {
@@ -43,8 +40,10 @@ const Dashboard = () => {
 
   const filteredToDoList = useMemo(() => {
     if (debouncedSearchQuery === "") {
+      if (!toDoList) return [];
       return toDoList;
     } else {
+      if (!toDoList) return [];
       return toDoList.filter((toDo) =>
         Object.values(toDo).some((value) =>
           String(value)

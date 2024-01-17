@@ -4,8 +4,7 @@ import ToDoFormDialog from "../components/ToDoFormDialog";
 import ProjectSettingsDialog from "../components/ProjectSettingsDialog";
 import { useGetStatusList } from "../hooks/status";
 import DeleteConfirmationDialog from "../components/DeleteConfirmationDialog";
-import { useAuth0 } from "@auth0/auth0-react";
-import { set } from "date-fns";
+import { useUser } from "@clerk/clerk-react";
 
 const ToDoContext = createContext();
 export default ToDoContext;
@@ -24,7 +23,7 @@ export const ToDoProvider = ({ children }) => {
   const [isProjectSettingsDialogOpen, setIsProjectSettingsDialogOpen] =
     useState(false);
 
-  const { user } = useAuth0();
+  const { user } = useUser();
 
   const [isToDoFormDialogOpen, setIsToDoFormDialogOpen] = useState(false);
 
@@ -44,7 +43,7 @@ export const ToDoProvider = ({ children }) => {
   useEffect(() => {
     setToDoFormData((prev) => ({
       ...prev,
-      authorUserId: user?.sub,
+      authorUserId: user?.id,
     }));
   }, [user]);
 

@@ -1,7 +1,7 @@
-export const requestGetStatusList = async ({ accessToken }) => {
+export const requestGetStatusList = async ({ token }) => {
   const response = await fetch(`${process.env.REACT_APP_API_URL}/status`, {
     headers: {
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `Bearer ${token}`,
     },
   });
   if (!response.ok) {
@@ -11,12 +11,12 @@ export const requestGetStatusList = async ({ accessToken }) => {
   return response.json();
 };
 
-export const requestGetOneStatus = async ({ id, accessToken }) => {
+export const requestGetOneStatus = async ({ data, token }) => {
   const response = await fetch(
-    `${process.env.REACT_APP_API_URL}/status/${id}`,
+    `${process.env.REACT_APP_API_URL}/status/${data.id}`,
     {
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${token}`,
       },
     }
   );
@@ -27,14 +27,14 @@ export const requestGetOneStatus = async ({ id, accessToken }) => {
   return response.json();
 };
 
-export const requestCreateStatus = async ({ status, accessToken }) => {
+export const requestCreateStatus = async ({ data, token }) => {
   const response = await fetch(`${process.env.REACT_APP_API_URL}/status`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(status),
+    body: JSON.stringify(data),
   });
   if (!response.ok) {
     const errorResponse = await response.json();
@@ -43,13 +43,13 @@ export const requestCreateStatus = async ({ status, accessToken }) => {
   return response.json();
 };
 
-export const requestRemoveStatus = async ({ id, accessToken }) => {
+export const requestRemoveStatus = async ({ data, token }) => {
   const response = await fetch(
-    `${process.env.REACT_APP_API_URL}/status/${id}`,
+    `${process.env.REACT_APP_API_URL}/status/${data.id}`,
     {
       method: "DELETE",
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${token}`,
       },
     }
   );
@@ -61,16 +61,16 @@ export const requestRemoveStatus = async ({ id, accessToken }) => {
   }
 };
 
-export const requestUpdateStatus = async ({ status, accessToken }) => {
+export const requestUpdateStatus = async ({ data, token }) => {
   const response = await fetch(
-    `${process.env.REACT_APP_API_URL}/status/${status.id}`,
+    `${process.env.REACT_APP_API_URL}/status/${data.id}`,
     {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(status),
+      body: JSON.stringify(data),
     }
   );
   if (!response.ok) {
@@ -80,14 +80,14 @@ export const requestUpdateStatus = async ({ status, accessToken }) => {
   return response.json();
 };
 
-export const requestUpdateStatusList = async ({ statusList, accessToken }) => {
+export const requestUpdateStatusList = async ({ data, token }) => {
   const response = await fetch(`${process.env.REACT_APP_API_URL}/status`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(statusList),
+    body: JSON.stringify(data),
   });
   if (!response.ok) {
     const errorResponse = await response.json();

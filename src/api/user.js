@@ -1,7 +1,7 @@
-export const requestGetUserList = async ({ accessToken }) => {
+export const requestGetUserList = async ({ token }) => {
   const response = await fetch(`${process.env.REACT_APP_API_URL}/user`, {
     headers: {
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `Bearer ${token}`,
     },
   });
   if (!response.ok) {
@@ -11,12 +11,15 @@ export const requestGetUserList = async ({ accessToken }) => {
   return response.json();
 };
 
-export const requestGetOneUser = async ({ id, accessToken }) => {
-  const response = await fetch(`${process.env.REACT_APP_API_URL}/user/${id}`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+export const requestGetOneUser = async ({ data, token }) => {
+  const response = await fetch(
+    `${process.env.REACT_APP_API_URL}/user/${data.id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
   if (!response.ok) {
     const errorResponse = await response.json();
     throw new Error(errorResponse.message || "Failed to fetch user");
@@ -24,16 +27,16 @@ export const requestGetOneUser = async ({ id, accessToken }) => {
   return response.json();
 };
 
-export const requestUpdateUser = async ({ body, userId, accessToken }) => {
+export const requestUpdateUser = async ({ data, token }) => {
   const response = await fetch(
-    `${process.env.REACT_APP_API_URL}/user/${userId}`,
+    `${process.env.REACT_APP_API_URL}/user/${data.userId}`,
     {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify(data.body),
     }
   );
 
@@ -44,25 +47,21 @@ export const requestUpdateUser = async ({ body, userId, accessToken }) => {
   return response.json();
 };
 
-export const requestUpdateUserRoles = async ({
-  roles,
-  userId,
-  accessToken,
-}) => {
+export const requestUpdateUserRole = async ({ data, token }) => {
   const response = await fetch(
-    `${process.env.REACT_APP_API_URL}/user/${userId}/role`,
+    `${process.env.REACT_APP_API_URL}/user/${data.userId}/role`,
     {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ roleIds: roles }),
+      body: JSON.stringify({ role: data.role }),
     }
   );
   if (!response.ok) {
     const errorResponse = await response.json();
-    throw new Error(errorResponse.message || "Failed to update user roles");
+    throw new Error(errorResponse.message || "Failed to update user role");
   }
   return response.json();
 };

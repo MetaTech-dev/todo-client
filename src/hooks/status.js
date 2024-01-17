@@ -1,5 +1,4 @@
-import { useAuth0 } from "@auth0/auth0-react";
-import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   requestCreateStatus,
   requestGetOneStatus,
@@ -10,54 +9,37 @@ import {
 } from "../api/status";
 import { enqueueSnackbar } from "notistack";
 import { v4 as uuid } from "uuid";
+import { useAuthMutation, useAuthQuery } from "./auth";
 
-export const useGetStatusList = () => {
-  const { getAccessTokenSilently } = useAuth0();
-
-  return useQuery({
+export const useGetStatusList = () =>
+  useAuthQuery({
     queryKey: ["statusList"],
-    queryFn: async () => {
-      const accessToken = await getAccessTokenSilently({ cacheMode: "off" });
-      return requestGetStatusList({ accessToken });
-    },
+    queryFn: requestGetStatusList,
     onError: (error) => {
       enqueueSnackbar(error.message || "An error occurred fetching statuses", {
         variant: "error",
       });
     },
   });
-};
 
-export const useGetOneStatus = (id) => {
-  const { getAccessTokenSilently } = useAuth0();
-
-  return useQuery({
-    queryKey: ["status", id],
-    queryFn: async () => {
-      const accessToken = await getAccessTokenSilently({ cacheMode: "off" });
-      return requestGetOneStatus({
-        id,
-        accessToken,
-      });
-    },
+export const useGetOneStatus = (data) =>
+  useAuthQuery({
+    data,
+    queryKey: ["status", data.id],
+    queryFn: async (params) => requestGetOneStatus(params),
     onError: (error) => {
       enqueueSnackbar(error.message || "An error occurred fetching status", {
         variant: "error",
       });
     },
-    enabled: Boolean(id),
+    enabled: Boolean(data.id),
   });
-};
 
 export const useCreateStatus = () => {
   const queryClient = useQueryClient();
-  const { getAccessTokenSilently } = useAuth0();
 
-  return useMutation({
-    mutationFn: async (status) => {
-      const accessToken = await getAccessTokenSilently({ cacheMode: "off" });
-      return requestCreateStatus({ accessToken, status });
-    },
+  return useAuthMutation({
+    mutationFn: async (params) => requestCreateStatus(params),
     onMutate: async (newStatus) => {
       await queryClient.cancelQueries({ queryKey: ["statusList"] });
       const previousStatusList = queryClient.getQueryData(["statusList"]);
@@ -81,13 +63,9 @@ export const useCreateStatus = () => {
 
 export const useRemoveStatus = () => {
   const queryClient = useQueryClient();
-  const { getAccessTokenSilently } = useAuth0();
 
-  return useMutation({
-    mutationFn: async (id) => {
-      const accessToken = await getAccessTokenSilently({ cacheMode: "off" });
-      return requestRemoveStatus({ accessToken, id });
-    },
+  return useAuthMutation({
+    mutationFn: async (params) => requestRemoveStatus(params),
     onMutate: async (id) => {
       await queryClient.cancelQueries({ queryKey: ["statusList"] });
       const previousStatusList = queryClient.getQueryData(["statusList"]);
@@ -112,13 +90,9 @@ export const useRemoveStatus = () => {
 
 export const useUpdateStatus = () => {
   const queryClient = useQueryClient();
-  const { getAccessTokenSilently } = useAuth0();
 
-  return useMutation({
-    mutationFn: async (status) => {
-      const accessToken = await getAccessTokenSilently({ cacheMode: "off" });
-      return requestUpdateStatus({ accessToken, status });
-    },
+  return useAuthMutation({
+    mutationFn: async (params) => requestUpdateStatus(params),
     onMutate: async (updatedStatus) => {
       await queryClient.cancelQueries({
         queryKey: ["statusList", updatedStatus.id],
@@ -149,13 +123,9 @@ export const useUpdateStatus = () => {
 
 export const useUpdateStatusList = () => {
   const queryClient = useQueryClient();
-  const { getAccessTokenSilently } = useAuth0();
 
-  return useMutation({
-    mutationFn: async (statusList) => {
-      const accessToken = await getAccessTokenSilently({ cacheMode: "off" });
-      return requestUpdateStatusList({ accessToken, statusList });
-    },
+  return useAuthMutation({
+    mutationFn: async (params) => requestUpdateStatusList(params),
     onMutate: async (updatedStatusList) => {
       await queryClient.cancelQueries({
         queryKey: ["statusList"],

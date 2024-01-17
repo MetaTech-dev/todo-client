@@ -5,7 +5,6 @@ import {
   CardActionArea,
   CardContent,
   Chip,
-  SvgIcon,
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -25,7 +24,7 @@ const ToDoCard = ({ toDo, index, activeCard, isDragging }) => {
     }
   }, [isDragging, activeCard]);
 
-  const { data: toDoAssignee } = useGetOneUser(toDo.assigneeUserId);
+  const { data: toDoAssignee } = useGetOneUser({ id: toDo.assigneeUserId });
 
   const getPriorityColor = () => {
     switch (toDo?.priority) {
@@ -74,7 +73,7 @@ const ToDoCard = ({ toDo, index, activeCard, isDragging }) => {
                 <Typography variant="h6">{toDo.title}</Typography>
                 {toDoAssignee && (
                   <Avatar
-                    src={toDoAssignee?.picture}
+                    src={toDoAssignee?.imageUrl}
                     sx={{ height: 25, width: 25, ml: 1 }}
                   />
                 )}
