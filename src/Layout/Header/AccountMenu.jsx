@@ -49,7 +49,7 @@ const AccountMenu = () => {
         </Avatar>
       </SignedIn>
       <SignedOut>
-        <SignInButton>
+        <SignInButton mode="modal">
           <IconButton>
             <Person2Outlined fontSize="small" />
           </IconButton>

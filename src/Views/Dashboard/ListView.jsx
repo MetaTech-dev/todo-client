@@ -153,11 +153,7 @@ const ListView = ({ statusList, filteredToDoList }) => {
       },
     },
   ];
-  return (
-    <Box sx={{ minHeight: "100vh" }}>
-      <DataGrid rows={rows} columns={columns} />
-    </Box>
-  );
+  return <DataGrid rows={rows} columns={columns} />;
 };
 
 export default ListView;

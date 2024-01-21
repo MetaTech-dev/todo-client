@@ -28,8 +28,7 @@ const Dashboard = () => {
 
   const isAdmin = useMemo(() => user?.role === "org:admin", [user]);
 
-  const getTodoListResult = useGetToDoList();
-  const { data: toDoList, isPending: isToDoListPending } = getTodoListResult;
+  const { data: toDoList, isPending: isToDoListPending } = useGetToDoList();
 
   const [searchQuery, setSearchQuery] = useState("");
   const handleChangeSearchQuery = (e) => {
@@ -100,15 +99,7 @@ const Dashboard = () => {
   };
 
   return (
-    <Box
-      id="dashboard-container"
-      sx={{
-        flexGrow: 1,
-        display: "flex",
-        flexDirection: "column",
-        overflow: "hidden",
-      }}
-    >
+    <>
       <AppBar
         position="static"
         sx={{ backgroundColor: "neutral.main" }}
@@ -155,8 +146,23 @@ const Dashboard = () => {
           )}
         </Toolbar>
       </AppBar>
-      {getViewState()}
-    </Box>
+      <Box
+        id="dashboard-view-container"
+        sx={{
+          display: "flex",
+          flexGrow: 1,
+          p: 1,
+          gap: 1,
+          overflowX: "auto",
+          overflowY: "hidden",
+          justifyContent: "flex-start",
+          width: "100%",
+          height: "100%",
+        }}
+      >
+        {getViewState()}
+      </Box>
+    </>
   );
 };
 
