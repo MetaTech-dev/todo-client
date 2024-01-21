@@ -7,7 +7,7 @@ import {
   requestUpdateUserRole,
 } from "../api/user";
 import { useAuthMutation, useAuthQuery } from "./auth";
-import { useUser } from "@clerk/clerk-react";
+import { useOrganization, useUser } from "@clerk/clerk-react";
 
 export const useGetCurrentUser = () => {
   const { user: authUser } = useUser();
@@ -37,8 +37,10 @@ export const useGetCurrentUser = () => {
     : {};
 };
 
-export const useGetUserList = () =>
-  useAuthQuery({
+export const useGetUserList = () => {
+  const { organization } = useOrganization();
+
+  return useAuthQuery({
     queryKey: ["userList"],
     queryFn: requestGetUserList,
     onError: (error) => {
@@ -46,8 +48,9 @@ export const useGetUserList = () =>
         variant: "error",
       });
     },
+    enabled: Boolean(organization?.id),
   });
-
+};
 export const useGetOneUser = (data) =>
   useAuthQuery({
     data,
