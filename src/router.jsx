@@ -6,8 +6,6 @@ import Users from "./Views/Users";
 import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import DetailedToDo from "./Views/DetailedToDo";
-import { SignIn } from "@clerk/clerk-react";
-import { Box } from "@mui/material";
 import { Organizations } from "./Views/Organizations";
 
 export const routerChildren = [
