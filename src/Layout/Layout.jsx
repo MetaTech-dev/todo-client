@@ -17,24 +17,37 @@ const Layout = () => {
       id="layout-container"
     >
       <Header />
-      <SignedIn>
-        <ToDoProvider>
-          <Outlet />
-        </ToDoProvider>
-      </SignedIn>
-      <SignedOut>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            height: "100%",
-            width: "100%",
-          }}
-        >
-          <SignIn />
-        </Box>
-      </SignedOut>
+      <Box
+        id="main-container"
+        component="main"
+        sx={{
+          flexGrow: 1,
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <SignedIn>
+          <ToDoProvider>
+            <Outlet />
+          </ToDoProvider>
+        </SignedIn>
+        <SignedOut>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "100%",
+              width: "100%",
+            }}
+          >
+            <SignIn />
+          </Box>
+        </SignedOut>
+      </Box>
     </Box>
   );
 };

@@ -64,87 +64,74 @@ const BoardView = ({
   };
 
   return (
-    <Box
-      id="board-view-container"
-      sx={{
-        display: "flex",
-        flexGrow: 1,
-        p: 1,
-        gap: 1,
-        overflowX: "auto",
-        overflowY: "hidden",
-        justifyContent: "flex-start",
-      }}
-    >
-      <DragDropContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-        {!isStatusListPending &&
-          filteredToDoList &&
-          statusList?.length > 0 &&
-          statusList?.map((status) => {
-            return (
-              <Card
-                elevation={2}
-                key={status.id}
-                sx={{
-                  backgroundColor: "neutral.main",
-                  minWidth: theme.spacing(40),
-                  overflowY: "hidden",
-                  display: "flex",
-                  flexGrow: 1,
-                  flexDirection: "column",
-                  ":hover": {
-                    border: isDragging ? `1px solid #808080` : "none",
-                  },
-                  maxWidth: theme.spacing(40),
+    <DragDropContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+      {!isStatusListPending &&
+        filteredToDoList &&
+        statusList?.length > 0 &&
+        statusList?.map((status) => {
+          return (
+            <Card
+              elevation={2}
+              key={status.id}
+              sx={{
+                backgroundColor: "neutral.main",
+                minWidth: theme.spacing(40),
+                overflowY: "hidden",
+                display: "flex",
+                flexGrow: 1,
+                flexDirection: "column",
+                ":hover": {
+                  border: isDragging ? `1px solid #808080` : "none",
+                },
+                maxWidth: theme.spacing(40),
+              }}
+            >
+              <CardHeader
+                title={status.title}
+                titleTypographyProps={{
+                  variant: "h6",
                 }}
-              >
-                <CardHeader
-                  title={status.title}
-                  titleTypographyProps={{
-                    variant: "h6",
-                  }}
-                />
-                <Droppable droppableId={status.id.toString()} key={status.id}>
-                  {(provided) => (
-                    <Box
-                      ref={provided.innerRef}
-                      {...provided.droppableProps}
-                      sx={(theme) => ({
-                        flexGrow: 1,
-                        overflowY: "auto",
-                        pt: 1,
-                        overflowX: "hidden",
-                      })}
-                    >
-                      {filterToDosByStatus(status)?.map((toDo, index) => {
-                        return (
-                          <ToDoCard
-                            toDo={toDo}
-                            key={toDo.id}
-                            index={index}
-                            activeCard={
-                              activeId?.toString() === toDo.id.toString()
-                            }
-                            isDragging={isDragging}
-                          />
-                        );
-                      })}
-                      {provided.placeholder}
-                    </Box>
-                  )}
-                </Droppable>
-              </Card>
-            );
-          })}
-        {(isStatusListPending || !filteredToDoList) && (
-          <>
-            <LoadingStatusBoardView key={1} />
-            <LoadingStatusBoardView key={2} />
-            <LoadingStatusBoardView key={3} />
-          </>
-        )}
-      </DragDropContext>
-    </Box>
+              />
+              <Droppable droppableId={status.id.toString()} key={status.id}>
+                {(provided) => (
+                  <Box
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    sx={(theme) => ({
+                      flexGrow: 1,
+                      overflowY: "auto",
+                      pt: 1,
+                      overflowX: "hidden",
+                    })}
+                  >
+                    {filterToDosByStatus(status)?.map((toDo, index) => {
+                      return (
+                        <ToDoCard
+                          toDo={toDo}
+                          key={toDo.id}
+                          index={index}
+                          activeCard={
+                            activeId?.toString() === toDo.id.toString()
+                          }
+                          isDragging={isDragging}
+                        />
+                      );
+                    })}
+                    {provided.placeholder}
+                  </Box>
+                )}
+              </Droppable>
+            </Card>
+          );
+        })}
+      {(isStatusListPending || !filteredToDoList) && (
+        <>
+          <LoadingStatusBoardView key={1} />
+          <LoadingStatusBoardView key={2} />
+          <LoadingStatusBoardView key={3} />
+        </>
+      )}
+    </DragDropContext>
   );
 };
 
