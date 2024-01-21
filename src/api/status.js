@@ -1,5 +1,4 @@
 export const requestGetStatusList = async ({ token, orgId }) => {
-  console.log("requestGetStatusList orgId", orgId);
   try {
     const response = await fetch(
       `${process.env.REACT_APP_API_URL}/status${
