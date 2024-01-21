@@ -8,7 +8,7 @@ import {
   MenuItem,
   Tooltip,
 } from "@mui/material";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 import { routerChildren } from "../../router";
 import { SignedIn, useOrganization } from "@clerk/clerk-react";
 
@@ -18,8 +18,13 @@ const NavMenu = () => {
   const handleClose = useCallback(() => {
     setAnchorEl(null);
   }, []);
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   const { organization } = useOrganization();
+  if (!organization && pathname === "/organization") {
+    navigate("/");
+  }
 
   return (
     <>
@@ -44,7 +49,9 @@ const NavMenu = () => {
         >
           {routerChildren
             .filter((child) =>
-              child.path === "users" ? Boolean(organization) : child.isInNavMenu
+              child.path === "organization"
+                ? Boolean(organization)
+                : child.isInNavMenu
             )
             .map((child) => (
               <MenuItem component={RouterLink} to={child.path} key={child.path}>

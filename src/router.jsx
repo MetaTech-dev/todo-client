@@ -1,12 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
 import Layout from "./Layout";
 import Dashboard from "./Views/Dashboard";
-import UserProfile from "./Views/UserProfile";
-import Users from "./Views/Users";
 import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import DetailedToDo from "./Views/DetailedToDo";
-import { Organizations } from "./Views/Organizations";
+import { OrganizationProfile } from "@clerk/clerk-react";
 
 export const routerChildren = [
   {
@@ -24,22 +22,9 @@ export const routerChildren = [
     isInNavMenu: false,
   },
   {
-    path: "users",
-    element: <Users />,
-    name: "Users",
-    isInNavMenu: true,
-    icon: <PeopleAltOutlinedIcon />,
-  },
-  {
-    path: "users/:userId",
-    element: <UserProfile />,
-    name: "User Profile",
-    isInNavMenu: false,
-  },
-  {
-    path: "organizations",
-    element: <Organizations />,
-    name: "Organizations",
+    path: "organization",
+    element: <OrganizationProfile />,
+    name: "Organization",
     isInNavMenu: true,
     icon: <PeopleAltOutlinedIcon />,
   },
