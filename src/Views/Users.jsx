@@ -36,6 +36,7 @@ const Users = () => {
             <Avatar
               sx={{
                 backgroundColor: "primary.light",
+                color: "primary.contrastText",
               }}
             >
               <PeopleAltOutlinedIcon />
