@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { routerChildren } from "../../router";
-import { SignedIn } from "@clerk/clerk-react";
+import { SignedIn, useOrganization } from "@clerk/clerk-react";
 
 const NavMenu = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -18,6 +18,8 @@ const NavMenu = () => {
   const handleClose = useCallback(() => {
     setAnchorEl(null);
   }, []);
+
+  const { organization } = useOrganization();
 
   return (
     <>
@@ -41,7 +43,9 @@ const NavMenu = () => {
           onClick={handleClose}
         >
           {routerChildren
-            .filter((child) => child.isInNavMenu)
+            .filter((child) =>
+              child.path === "users" ? Boolean(organization) : child.isInNavMenu
+            )
             .map((child) => (
               <MenuItem component={RouterLink} to={child.path} key={child.path}>
                 <ListItemIcon>{child.icon}</ListItemIcon>
