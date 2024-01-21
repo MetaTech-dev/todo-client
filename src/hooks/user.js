@@ -26,13 +26,15 @@ export const useGetCurrentUser = () => {
     enabled: Boolean(authUser?.id),
   });
 
-  return {
-    user: {
-      ...authUser,
-      permissions: organizationMemberships?.[0]?.permissions || [],
-      role: organizationMemberships?.[0]?.role || "",
-    },
-  };
+  return authUser
+    ? {
+        user: {
+          ...authUser,
+          permissions: organizationMemberships?.[0]?.permissions || [],
+          role: organizationMemberships?.[0]?.role || "",
+        },
+      }
+    : {};
 };
 
 export const useGetUserList = () =>
