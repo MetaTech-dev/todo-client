@@ -28,8 +28,7 @@ const Dashboard = () => {
 
   const isAdmin = useMemo(() => user?.role === "org:admin", [user]);
 
-  const getTodoListResult = useGetToDoList();
-  const { data: toDoList, isPending: isToDoListPending } = getTodoListResult;
+  const { data: toDoList, isPending: isToDoListPending } = useGetToDoList();
 
   const [searchQuery, setSearchQuery] = useState("");
   const handleChangeSearchQuery = (e) => {
