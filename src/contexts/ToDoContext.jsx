@@ -40,6 +40,8 @@ export const ToDoProvider = ({ children }) => {
     [statusList, user]
   );
 
+  console.log("statuslist", statusList);
+
   useEffect(() => {
     setToDoFormData((prev) => ({
       ...prev,

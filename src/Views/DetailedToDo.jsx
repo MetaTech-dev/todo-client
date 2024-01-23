@@ -31,6 +31,7 @@ import { LoadingButton } from "@mui/lab";
 import { enqueueSnackbar } from "notistack";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useTimeSince } from "../utils/useTimeSince";
+import { useOrganization } from "@clerk/clerk-react";
 
 const DetailedToDo = () => {
   const {
@@ -44,6 +45,9 @@ const DetailedToDo = () => {
     () => Number(decodeURIComponent(pathname.split("/")[2])),
     [pathname]
   );
+
+  const { organization } = useOrganization();
+
   const { data: toDo, isPending: isToDoPending } = useGetOneToDo({
     id: toDoId,
   });
@@ -167,7 +171,8 @@ const DetailedToDo = () => {
     <Box
       id="detailed-todo-container"
       sx={{
-        flexGrow: 1,
+        width: "100%",
+        height: "100%",
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
@@ -232,64 +237,66 @@ const DetailedToDo = () => {
                 flexWrap: "wrap",
               }}
             >
-              <Autocomplete
-                autoHighlight
-                id="assignee-autocomplete"
-                options={userList || []}
-                value={
-                  userList?.find(
-                    (user) => user.id === updateToDoData.assigneeUserId
-                  ) || null
-                }
-                getOptionLabel={(option) => option.id}
-                sx={{ width: "17rem", pt: 1 }}
-                renderOption={(props, option) => {
-                  return (
-                    <ListItem {...props} key={option.id}>
-                      <ListItemAvatar>
-                        <Avatar
-                          src={option.imageUrl}
-                          sx={{ height: 24, width: 24 }}
+              {organization && (
+                <Autocomplete
+                  autoHighlight
+                  id="assignee-autocomplete"
+                  options={userList || []}
+                  value={
+                    userList?.find(
+                      (user) => user.id === updateToDoData.assigneeUserId
+                    ) || null
+                  }
+                  getOptionLabel={(option) => option.id}
+                  sx={{ width: "17rem", pt: 1 }}
+                  renderOption={(props, option) => {
+                    return (
+                      <ListItem {...props} key={option.id}>
+                        <ListItemAvatar>
+                          <Avatar
+                            src={option.imageUrl}
+                            sx={{ height: 24, width: 24 }}
+                          />
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={`${option?.firstName} ${option?.lastName}`}
                         />
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={`${option?.firstName} ${option?.lastName}`}
+                      </ListItem>
+                    );
+                  }}
+                  onChange={handleAssigneeChange}
+                  renderInput={({
+                    inputProps: { value, ...restInputProps },
+                    InputProps,
+                    ...restParams
+                  }) => {
+                    const user = userList?.find((user) => user.id === value);
+                    return (
+                      <TextField
+                        {...restParams}
+                        value={`${user?.firstName} ${user?.lastName}`}
+                        label="Assignee"
+                        InputProps={{
+                          ...InputProps,
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <Avatar
+                                src={user?.imageUrl}
+                                sx={{ height: 24, width: 24 }}
+                              />
+                            </InputAdornment>
+                          ),
+                        }}
+                        inputProps={{
+                          ...restInputProps,
+                          value: `${user?.firstName} ${user?.lastName}`,
+                        }}
                       />
-                    </ListItem>
-                  );
-                }}
-                onChange={handleAssigneeChange}
-                renderInput={({
-                  inputProps: { value, ...restInputProps },
-                  InputProps,
-                  ...restParams
-                }) => {
-                  const user = userList?.find((user) => user.id === value);
-                  return (
-                    <TextField
-                      {...restParams}
-                      value={`${user?.firstName} ${user?.lastName}`}
-                      label="Assignee"
-                      InputProps={{
-                        ...InputProps,
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <Avatar
-                              src={user?.imageUrl}
-                              sx={{ height: 24, width: 24 }}
-                            />
-                          </InputAdornment>
-                        ),
-                      }}
-                      inputProps={{
-                        ...restInputProps,
-                        value: `${user?.firstName} ${user?.lastName}`,
-                      }}
-                    />
-                  );
-                }}
-                size="small"
-              />
+                    );
+                  }}
+                  size="small"
+                />
+              )}
               <Box sx={{ pt: 1 }}>
                 <DatePicker
                   slotProps={{
@@ -366,13 +373,16 @@ const DetailedToDo = () => {
                 alignItems: "center",
               }}
             >
-              <Avatar
-                src={toDoAuthor?.imageUrl}
-                sx={{ height: 24, width: 24, mr: 0.5 }}
-              />
+              {organization && (
+                <Avatar
+                  src={toDoAuthor?.imageUrl}
+                  sx={{ height: 24, width: 24, mr: 0.5 }}
+                />
+              )}
               <Typography sx={{ mr: 1 }} variant="caption">
-                {`${toDoAuthor?.firstName} ${toDoAuthor?.lastName}`} created{" "}
-                {timeSince}
+                {organization
+                  ? `${toDoAuthor?.firstName} ${toDoAuthor?.lastName} created ${timeSince}`
+                  : `created ${timeSince}`}
               </Typography>
             </Box>
             <Box sx={{ flexGrow: 1 }} />
