@@ -5,6 +5,7 @@ import ProjectSettingsDialog from "../components/ProjectSettingsDialog";
 import { useGetStatusList } from "../hooks/status";
 import DeleteConfirmationDialog from "../components/DeleteConfirmationDialog";
 import { useUser } from "@clerk/clerk-react";
+import { set } from "date-fns";
 
 const ToDoContext = createContext();
 export default ToDoContext;
@@ -18,7 +19,8 @@ export const ToDoProvider = ({ children }) => {
 
   const [statusFormData, setStatusFormData] = useState(defaultNewStatus);
 
-  const { data: statusList } = useGetStatusList();
+  const { data: statusList, isSuccess: isStatusListSuccess } =
+    useGetStatusList();
 
   const [isProjectSettingsDialogOpen, setIsProjectSettingsDialogOpen] =
     useState(false);
@@ -33,14 +35,20 @@ export const ToDoProvider = ({ children }) => {
       description: "",
       dueDate: null,
       priority: "low",
-      statusId: statusList && statusList.length > 0 ? statusList[0]?.id : 1,
+      statusId: "",
       authorUserId: null,
       assigneeUserId: null,
     }),
     [statusList, user]
   );
 
-  console.log("statuslist", statusList);
+  useEffect(() => {
+    const firstStatus = statusList?.find((status) => status.position === 1);
+    setToDoFormData((prev) => ({
+      ...prev,
+      statusId: firstStatus?.id,
+    }));
+  }, [isStatusListSuccess, statusList]);
 
   useEffect(() => {
     setToDoFormData((prev) => ({
