@@ -73,7 +73,7 @@ const DetailedToDo = () => {
     description: "",
     dueDate: null,
     priority: "low",
-    statusId: 1,
+    statusId: "",
     assigneeUserId: null,
     id: null,
   });
