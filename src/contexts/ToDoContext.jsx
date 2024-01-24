@@ -29,7 +29,10 @@ export const ToDoProvider = ({ children }) => {
   const [isToDoFormDialogOpen, setIsToDoFormDialogOpen] = useState(false);
 
   const firstStatus = useMemo(
-    () => statusList?.find((status) => status.position === 1),
+    () =>
+      statusList?.length > 0
+        ? statusList?.find((status) => status.position === 1)
+        : null,
     [statusList]
   );
 

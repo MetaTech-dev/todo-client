@@ -30,22 +30,25 @@ const Dashboard = () => {
 
   const { organization } = useOrganization();
 
+  console.log("organization in dashboard", organization);
+
   const queryClient = useQueryClient();
 
   useEffect(() => {
+    // console.log("organization changed");
     queryClient.invalidateQueries({ queryKey: ["user"] });
     queryClient.invalidateQueries({ queryKey: ["statusList"] });
     queryClient.invalidateQueries({ queryKey: ["toDoList"] });
-  }, [organization, organization?.name]);
+  }, [organization]);
 
   const isAdmin = useMemo(
     () => (organization ? user?.role === "org:admin" : true),
     [user]
   );
 
-  console.log("organization", organization);
-
   const { data: toDoList, isPending: isToDoListPending } = useGetToDoList();
+  console.log("statusList", statusList);
+  // console.log("todoList", toDoList);
 
   const [searchQuery, setSearchQuery] = useState("");
   const handleChangeSearchQuery = (e) => {
