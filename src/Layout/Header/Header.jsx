@@ -38,7 +38,7 @@ const Header = () => {
             elements: {
               rootBox: {
                 display: "flex",
-                border: "1px solid gray",
+                // border: "1px solid gray",
                 borderRadius: "0.25rem",
                 "&:hover": {
                   border: "1px solid white",

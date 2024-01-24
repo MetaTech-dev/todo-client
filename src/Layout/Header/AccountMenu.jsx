@@ -17,7 +17,7 @@ const AccountMenu = () => {
 
   return (
     <>
-      <IconButton onClick={() => toggleDarkMode()}>
+      <IconButton onClick={() => toggleDarkMode()} sx={{ mr: 1 }}>
         {isDarkMode ? (
           <BedtimeOutlinedIcon fontSize="small" />
         ) : (

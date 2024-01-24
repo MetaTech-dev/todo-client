@@ -1,10 +1,9 @@
-export const requestGetRoleList = async ({ token, orgId }) => {
+export const requestGetRoleList = async ({ token }) => {
   try {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/role`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ orgId }),
     });
     if (!response.ok) {
       const errorResponse = await response.json();
