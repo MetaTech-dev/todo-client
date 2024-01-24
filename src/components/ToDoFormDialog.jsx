@@ -165,6 +165,10 @@ const ToDoForm = () => {
                 actionBar: {
                   actions: ["clear"],
                 },
+                textField: {
+                  size: "small",
+                  InputLabelProps: { shrink: true },
+                },
               }}
               sx={{ pb: "1rem", pr: "1rem" }}
               label="Date Due"
@@ -183,41 +187,38 @@ const ToDoForm = () => {
                 id="assignee-autocomplete"
                 options={userList || []}
                 value={
-                  userList?.length > 0
-                    ? userList?.find(
-                        (user) => user.id === toDoFormData.assigneeUserId
-                      )
-                    : null
+                  userList?.find(
+                    (user) => user.id === toDoFormData.assigneeUserId
+                  ) || null
                 }
                 getOptionLabel={(option) => option.id}
-                sx={{ pb: "1rem", width: "17rem" }}
-                renderOption={(props, option) => (
-                  <ListItem {...props} key={option.id}>
-                    <ListItemAvatar>
-                      <Avatar
-                        src={option.imageUrl}
-                        sx={{ height: 30, width: 30 }}
+                sx={{ width: "17rem" }}
+                renderOption={(props, option) => {
+                  return (
+                    <ListItem {...props} key={option.id}>
+                      <ListItemAvatar>
+                        <Avatar
+                          src={option.imageUrl}
+                          sx={{ height: 24, width: 24 }}
+                        />
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary={`${option?.firstName} ${option?.lastName}`}
                       />
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={`${option.firstName} ${option.lastName}`}
-                    />
-                  </ListItem>
-                )}
+                    </ListItem>
+                  );
+                }}
                 onChange={handleAssigneeChange}
                 renderInput={({
                   inputProps: { value, ...restInputProps },
                   InputProps,
                   ...restParams
                 }) => {
-                  const user =
-                    userList?.length > 0
-                      ? userList.find((user) => user.id === value)
-                      : [];
+                  const user = userList?.find((user) => user.id === value);
                   return (
                     <TextField
                       {...restParams}
-                      value={user ? `${user?.firstName} ${user?.lastName}` : ""}
+                      value={`${user?.firstName} ${user?.lastName}`}
                       label="Assignee"
                       InputProps={{
                         ...InputProps,
@@ -225,7 +226,7 @@ const ToDoForm = () => {
                           <InputAdornment position="start">
                             <Avatar
                               src={user?.imageUrl}
-                              sx={{ height: 30, width: 30 }}
+                              sx={{ height: 24, width: 24 }}
                             />
                           </InputAdornment>
                         ),
@@ -239,6 +240,7 @@ const ToDoForm = () => {
                     />
                   );
                 }}
+                size="small"
               />
             )}
           </Box>

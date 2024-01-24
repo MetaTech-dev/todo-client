@@ -1,10 +1,27 @@
 import { Box } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
-import { SignIn, SignedIn, SignedOut } from "@clerk/clerk-react";
+import {
+  SignIn,
+  SignedIn,
+  SignedOut,
+  useOrganization,
+} from "@clerk/clerk-react";
 import { ToDoProvider } from "../contexts/ToDoContext";
+import { useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Layout = () => {
+  const queryClient = useQueryClient();
+
+  const { organization } = useOrganization();
+
+  useEffect(() => {
+    queryClient.invalidateQueries();
+    // queryClient.invalidateQueries({ queryKey: ["user"] });
+    // queryClient.invalidateQueries({ queryKey: ["statusList"] });
+    // queryClient.invalidateQueries({ queryKey: ["toDoList"] });
+  }, [organization]);
   return (
     <Box
       sx={{

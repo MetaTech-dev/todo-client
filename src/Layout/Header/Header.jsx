@@ -8,9 +8,11 @@ import NavMenu from "./NavMenu";
 import { OrganizationSwitcher } from "@clerk/clerk-react";
 
 const Header = () => {
-  const location = useLocation();
+  const { pathname } = useLocation();
 
-  const isHome = useMemo(() => location.pathname === "/", [location]);
+  const isHome = useMemo(() => pathname === "/", [pathname]);
+
+  const inDetailView = useMemo(() => pathname.includes("/todos/"), [pathname]);
 
   return (
     <AppBar position="static" elevation={2}>
@@ -33,21 +35,23 @@ const Header = () => {
             <Typography variant="h6">ToDo</Typography>
           </Link>
         )}
-        <OrganizationSwitcher
-          appearance={{
-            elements: {
-              rootBox: {
-                display: "flex",
-                // border: "1px solid gray",
-                borderRadius: "0.25rem",
-                "&:hover": {
-                  border: "1px solid white",
+        {!inDetailView && (
+          <OrganizationSwitcher
+            appearance={{
+              elements: {
+                rootBox: {
+                  display: "flex",
+                  // border: "1px solid gray",
+                  borderRadius: "0.25rem",
+                  "&:hover": {
+                    border: "1px solid white",
+                  },
                 },
+                organizationSwitcherTriggerIcon: { marginLeft: 0 },
               },
-              organizationSwitcherTriggerIcon: { marginLeft: 0 },
-            },
-          }}
-        />
+            }}
+          />
+        )}
         <Box sx={{ flexGrow: 1 }} />
         <AccountMenu />
       </Toolbar>
