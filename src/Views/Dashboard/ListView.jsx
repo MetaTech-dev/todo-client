@@ -19,7 +19,10 @@ const ListView = ({ statusList, filteredToDoList }) => {
   } = useContext(ToDoContext);
 
   const getStatusTitle = (statusId) => {
-    const status = statusList?.find((status) => status.id === statusId);
+    const status =
+      statusList?.length > 0
+        ? statusList?.find((status) => status.id === statusId)
+        : null;
     return status ? status?.title : "Unknown Status";
   };
 
@@ -153,11 +156,7 @@ const ListView = ({ statusList, filteredToDoList }) => {
       },
     },
   ];
-  return (
-    <Box sx={{ minHeight: "100vh" }}>
-      <DataGrid rows={rows} columns={columns} />
-    </Box>
-  );
+  return <DataGrid rows={rows} columns={columns} />;
 };
 
 export default ListView;

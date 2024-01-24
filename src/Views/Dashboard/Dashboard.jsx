@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import {
   AppBar,
   Box,
@@ -16,21 +16,32 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import { useGetStatusList } from "../../hooks/status";
 import { useGetToDoList } from "../../hooks/toDo";
 import { useDebounce } from "../../utils/useDebounce";
-import { useAuth0 } from "@auth0/auth0-react";
-import { useGetOneUser } from "../../hooks/user";
+import { useGetCurrentUser } from "../../hooks/user";
+import { useOrganization } from "@clerk/clerk-react";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Dashboard = () => {
   const { setIsProjectSettingsDialogOpen, setIsToDoFormDialogOpen } =
     useContext(ToDoContext);
+  const { user } = useGetCurrentUser();
 
   const { data: statusList, isPending: isStatusListPending } =
     useGetStatusList();
 
-  const { user } = useAuth0();
+  const { organization } = useOrganization();
 
-  const { data: currentUser } = useGetOneUser(user?.sub);
+  const queryClient = useQueryClient();
 
-  const isAdmin = currentUser?.roles.some((role) => role.name === "Admin");
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ["user"] });
+    queryClient.invalidateQueries({ queryKey: ["statusList"] });
+    queryClient.invalidateQueries({ queryKey: ["toDoList"] });
+  }, [organization]);
+
+  const isAdmin = useMemo(
+    () => (organization ? user?.role === "org:admin" : true),
+    [user]
+  );
 
   const { data: toDoList, isPending: isToDoListPending } = useGetToDoList();
 
@@ -43,8 +54,10 @@ const Dashboard = () => {
 
   const filteredToDoList = useMemo(() => {
     if (debouncedSearchQuery === "") {
+      if (!toDoList) return [];
       return toDoList;
     } else {
+      if (!toDoList) return [];
       return toDoList.filter((toDo) =>
         Object.values(toDo).some((value) =>
           String(value)
@@ -101,15 +114,7 @@ const Dashboard = () => {
   };
 
   return (
-    <Box
-      id="dashboard-container"
-      sx={{
-        flexGrow: 1,
-        display: "flex",
-        flexDirection: "column",
-        overflow: "hidden",
-      }}
-    >
+    <>
       <AppBar
         position="static"
         sx={{ backgroundColor: "neutral.main" }}
@@ -156,8 +161,23 @@ const Dashboard = () => {
           )}
         </Toolbar>
       </AppBar>
-      {getViewState()}
-    </Box>
+      <Box
+        id="dashboard-view-container"
+        sx={{
+          display: "flex",
+          flexGrow: 1,
+          p: 1,
+          gap: 1,
+          overflowX: "auto",
+          overflowY: "hidden",
+          justifyContent: "flex-start",
+          width: "100%",
+          height: "100%",
+        }}
+      >
+        {getViewState()}
+      </Box>
+    </>
   );
 };
 

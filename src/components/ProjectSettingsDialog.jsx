@@ -144,7 +144,8 @@ const ProjectSettingsDialog = () => {
                   {...provided.droppableProps}
                 >
                   {isStatusListSuccess &&
-                    statusList.map((status) => {
+                    statusList?.length > 0 &&
+                    statusList?.map((status) => {
                       return (
                         <StatusCard
                           key={status.id}

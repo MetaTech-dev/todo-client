@@ -16,7 +16,6 @@ import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 
 const Users = () => {
   const { data: userList, isPending: isUserListPending } = useGetUserList();
-
   return (
     <Box
       id="users-container"
@@ -37,6 +36,7 @@ const Users = () => {
             <Avatar
               sx={{
                 backgroundColor: "primary.light",
+                color: "primary.contrastText",
               }}
             >
               <PeopleAltOutlinedIcon />
@@ -47,7 +47,7 @@ const Users = () => {
             color: "primary.contrastText",
           }}
           titleTypographyProps={{
-            variant: "h5",
+            variant: "h6",
           }}
         />
         <List>
@@ -68,15 +68,18 @@ const Users = () => {
                 </ListItem>
               ))
             : userList?.map((user) => (
-                <ListItem key={user.user_id} disablePadding>
+                <ListItem key={user.id} disablePadding>
                   <ListItemButton
                     component={RouterLink}
-                    to={`/users/${user.user_id}`}
+                    to={`/users/${user.id}`}
                   >
                     <ListItemIcon>
-                      <Avatar src={user.picture} />
+                      <Avatar src={user.imageUrl} />
                     </ListItemIcon>
-                    <ListItemText primary={user.name} secondary={user.email} />
+                    <ListItemText
+                      primary={`${user?.firstName} ${user?.lastName}`}
+                      secondary={user.email}
+                    />
                   </ListItemButton>
                 </ListItem>
               ))}

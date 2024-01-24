@@ -1,21 +1,15 @@
-import { useAuth0 } from "@auth0/auth0-react";
-import { useQuery } from "@tanstack/react-query";
 import { requestGetRoleList } from "../api/role";
 import { enqueueSnackbar } from "notistack";
+import { useAuthQuery } from "./auth";
 
-export const useGetRoleList = () => {
-  const { getAccessTokenSilently } = useAuth0();
-
-  return useQuery({
+// TODO: probably don't need this once using Clerk
+export const useGetRoleList = () =>
+  useAuthQuery({
     queryKey: ["roleList"],
-    queryFn: async () => {
-      const accessToken = await getAccessTokenSilently({ cacheMode: "off" });
-      return requestGetRoleList({ accessToken });
-    },
+    queryFn: requestGetRoleList,
     onError: (error) => {
       enqueueSnackbar(error.message || "An error occurred fetching roles", {
         variant: "error",
       });
     },
   });
-};

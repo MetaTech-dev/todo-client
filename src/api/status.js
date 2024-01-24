@@ -1,97 +1,121 @@
-export const requestGetStatusList = async ({ accessToken }) => {
-  const response = await fetch(`${process.env.REACT_APP_API_URL}/status`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-  if (!response.ok) {
-    const errorResponse = await response.json();
-    throw new Error(errorResponse.message || "Failed to fetch status list");
-  }
-  return response.json();
-};
-
-export const requestGetOneStatus = async ({ id, accessToken }) => {
-  const response = await fetch(
-    `${process.env.REACT_APP_API_URL}/status/${id}`,
-    {
+export const requestGetStatusList = async ({ token }) => {
+  try {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/status`, {
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${token}`,
       },
+    });
+    if (!response.ok) {
+      const errorResponse = await response.json();
+      throw new Error(errorResponse.message || "Failed to fetch status list");
     }
-  );
-  if (!response.ok) {
-    const errorResponse = await response.json();
-    throw new Error(errorResponse.message || "Failed to fetch status");
+    return response.json();
+  } catch (error) {
+    console.error("requestGetStatusList error", error);
   }
-  return response.json();
 };
 
-export const requestCreateStatus = async ({ status, accessToken }) => {
-  const response = await fetch(`${process.env.REACT_APP_API_URL}/status`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-    body: JSON.stringify(status),
-  });
-  if (!response.ok) {
-    const errorResponse = await response.json();
-    throw new Error(errorResponse.message || "Failed to create status");
+export const requestGetOneStatus = async ({ data, token }) => {
+  try {
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}/status/${data.id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (!response.ok) {
+      const errorResponse = await response.json();
+      throw new Error(errorResponse.message || "Failed to fetch status");
+    }
+    return response.json();
+  } catch (error) {
+    console.error("requestGetOneStatus error", error);
   }
-  return response.json();
 };
 
-export const requestRemoveStatus = async ({ id, accessToken }) => {
-  const response = await fetch(
-    `${process.env.REACT_APP_API_URL}/status/${id}`,
-    {
-      method: "DELETE",
+export const requestCreateStatus = async ({ data, token }) => {
+  try {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/status`, {
+      method: "POST",
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      const errorResponse = await response.json();
+      throw new Error(errorResponse.message || "Failed to create status");
     }
-  );
-  if (!response.ok) {
-    const errorResponse = await response.json();
-    throw new Error(errorResponse.message || "Failed to delete status");
-  } else if (response.ok) {
-    return true;
+    return response.json();
+  } catch (error) {
+    console.error("requestCreateStatus error", error);
   }
 };
 
-export const requestUpdateStatus = async ({ status, accessToken }) => {
-  const response = await fetch(
-    `${process.env.REACT_APP_API_URL}/status/${status.id}`,
-    {
+export const requestRemoveStatus = async ({ data, token }) => {
+  try {
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}/status/${data.id}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (!response.ok) {
+      const errorResponse = await response.json();
+      throw new Error(errorResponse.message || "Failed to delete status");
+    } else if (response.ok) {
+      return true;
+    }
+  } catch (error) {
+    console.error("requestRemoveStatus error", error);
+  }
+};
+
+export const requestUpdateStatus = async ({ data, token }) => {
+  try {
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}/status/${data.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      }
+    );
+    if (!response.ok) {
+      const errorResponse = await response.json();
+      throw new Error(errorResponse.message || "Failed to update status");
+    }
+    return response.json();
+  } catch (error) {
+    console.error("requestUpdateStatus error", error);
+  }
+};
+
+export const requestUpdateStatusList = async ({ data, token }) => {
+  try {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/status`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(status),
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      const errorResponse = await response.json();
+      throw new Error(errorResponse.message || "Failed to update status list");
     }
-  );
-  if (!response.ok) {
-    const errorResponse = await response.json();
-    throw new Error(errorResponse.message || "Failed to update status");
+    return response.json();
+  } catch (error) {
+    console.error("requestUpdateStatusList error", error);
   }
-  return response.json();
-};
-
-export const requestUpdateStatusList = async ({ statusList, accessToken }) => {
-  const response = await fetch(`${process.env.REACT_APP_API_URL}/status`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-    body: JSON.stringify(statusList),
-  });
-  if (!response.ok) {
-    const errorResponse = await response.json();
-    throw new Error(errorResponse.message || "Failed to update status list");
-  }
-  return response.json();
 };

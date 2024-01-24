@@ -1,68 +1,83 @@
-export const requestGetUserList = async ({ accessToken }) => {
-  const response = await fetch(`${process.env.REACT_APP_API_URL}/user`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-  if (!response.ok) {
-    const errorResponse = await response.json();
-    throw new Error(errorResponse.message || "Failed to fetch user list");
-  }
-  return response.json();
-};
-
-export const requestGetOneUser = async ({ id, accessToken }) => {
-  const response = await fetch(`${process.env.REACT_APP_API_URL}/user/${id}`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-  if (!response.ok) {
-    const errorResponse = await response.json();
-    throw new Error(errorResponse.message || "Failed to fetch user");
-  }
-  return response.json();
-};
-
-export const requestUpdateUser = async ({ body, userId, accessToken }) => {
-  const response = await fetch(
-    `${process.env.REACT_APP_API_URL}/user/${userId}`,
-    {
-      method: "PUT",
+export const requestGetUserList = async ({ token }) => {
+  try {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/user`, {
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(body),
+    });
+    if (!response.ok) {
+      const errorResponse = await response.json();
+      throw new Error(errorResponse.message || "Failed to fetch user list");
     }
-  );
-
-  if (!response.ok) {
-    const errorResponse = await response.json();
-    throw new Error(errorResponse.message || "Failed to update user");
+    return response.json();
+  } catch (error) {
+    console.error("requestGetUserList error", error);
   }
-  return response.json();
 };
 
-export const requestUpdateUserRoles = async ({
-  roles,
-  userId,
-  accessToken,
-}) => {
-  const response = await fetch(
-    `${process.env.REACT_APP_API_URL}/user/${userId}/role`,
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify({ roleIds: roles }),
+export const requestGetOneUser = async ({ data, token }) => {
+  try {
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}/user/${data.id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (!response.ok) {
+      const errorResponse = await response.json();
+      throw new Error(errorResponse.message || "Failed to fetch user");
     }
-  );
-  if (!response.ok) {
-    const errorResponse = await response.json();
-    throw new Error(errorResponse.message || "Failed to update user roles");
+    return response.json();
+  } catch (error) {
+    console.error("requestGetOneUser error", error);
   }
-  return response.json();
+};
+
+export const requestUpdateUser = async ({ data, token }) => {
+  try {
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}/user/${data.userId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data.body),
+      }
+    );
+
+    if (!response.ok) {
+      const errorResponse = await response.json();
+      throw new Error(errorResponse.message || "Failed to update user");
+    }
+    return response.json();
+  } catch (error) {
+    console.error("requestUpdateUser error", error);
+  }
+};
+
+export const requestUpdateUserRole = async ({ data, token }) => {
+  try {
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}/user/${data.userId}/role`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ role: data.role }),
+      }
+    );
+    if (!response.ok) {
+      const errorResponse = await response.json();
+      throw new Error(errorResponse.message || "Failed to update user role");
+    }
+    return response.json();
+  } catch (error) {
+    console.error("requestUpdateUserRole error", error);
+  }
 };

@@ -4,8 +4,7 @@ import ToDoFormDialog from "../components/ToDoFormDialog";
 import ProjectSettingsDialog from "../components/ProjectSettingsDialog";
 import { useGetStatusList } from "../hooks/status";
 import DeleteConfirmationDialog from "../components/DeleteConfirmationDialog";
-import { useAuth0 } from "@auth0/auth0-react";
-import { set } from "date-fns";
+import { useUser } from "@clerk/clerk-react";
 
 const ToDoContext = createContext();
 export default ToDoContext;
@@ -19,14 +18,23 @@ export const ToDoProvider = ({ children }) => {
 
   const [statusFormData, setStatusFormData] = useState(defaultNewStatus);
 
-  const { data: statusList } = useGetStatusList();
+  const { data: statusList, isSuccess: isStatusListSuccess } =
+    useGetStatusList();
 
   const [isProjectSettingsDialogOpen, setIsProjectSettingsDialogOpen] =
     useState(false);
 
-  const { user } = useAuth0();
+  const { user } = useUser();
 
   const [isToDoFormDialogOpen, setIsToDoFormDialogOpen] = useState(false);
+
+  const firstStatus = useMemo(
+    () =>
+      statusList?.length > 0
+        ? statusList?.find((status) => status.position === 1)
+        : null,
+    [statusList]
+  );
 
   const defaultNewToDo = useMemo(
     () => ({
@@ -34,7 +42,7 @@ export const ToDoProvider = ({ children }) => {
       description: "",
       dueDate: null,
       priority: "low",
-      statusId: statusList && statusList.length > 0 ? statusList[0]?.id : 1,
+      statusId: firstStatus?.id || "",
       authorUserId: null,
       assigneeUserId: null,
     }),
@@ -42,9 +50,18 @@ export const ToDoProvider = ({ children }) => {
   );
 
   useEffect(() => {
+    if (statusList?.length > 0) {
+      setToDoFormData((prev) => ({
+        ...prev,
+        statusId: firstStatus?.id,
+      }));
+    }
+  }, [statusList]);
+
+  useEffect(() => {
     setToDoFormData((prev) => ({
       ...prev,
-      authorUserId: user?.sub,
+      authorUserId: user?.id,
     }));
   }, [user]);
 

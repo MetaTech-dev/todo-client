@@ -1,5 +1,4 @@
-import { useAuth0 } from "@auth0/auth0-react";
-import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   requestCreateToDo,
   requestGetOneToDo,
@@ -10,54 +9,37 @@ import {
 } from "../api/toDo";
 import { enqueueSnackbar } from "notistack";
 import { v4 as uuid } from "uuid";
+import { useAuthMutation, useAuthQuery } from "./auth";
 
-export const useGetToDoList = () => {
-  const { getAccessTokenSilently } = useAuth0();
-
-  return useQuery({
+export const useGetToDoList = () =>
+  useAuthQuery({
     queryKey: ["toDoList"],
-    queryFn: async () => {
-      const accessToken = await getAccessTokenSilently({ cacheMode: "off" });
-      return requestGetToDoList({ accessToken });
-    },
+    queryFn: requestGetToDoList,
     onError: (error) => {
       enqueueSnackbar(error.message || "An error occurred fetching toDos", {
         variant: "error",
       });
     },
   });
-};
 
-export const useGetOneToDo = (id) => {
-  const { getAccessTokenSilently } = useAuth0();
-
-  return useQuery({
-    queryKey: ["toDo", id],
-    queryFn: async () => {
-      const accessToken = await getAccessTokenSilently({ cacheMode: "off" });
-      return requestGetOneToDo({
-        id,
-        accessToken,
-      });
-    },
+export const useGetOneToDo = (data) =>
+  useAuthQuery({
+    data,
+    queryKey: ["toDo", data.id],
+    queryFn: requestGetOneToDo,
     onError: (error) => {
       enqueueSnackbar(error.message || "An error occurred fetching toDo", {
         variant: "error",
       });
     },
-    enabled: Boolean(id),
+    enabled: Boolean(data.id),
   });
-};
 
 export const useCreateToDo = () => {
   const queryClient = useQueryClient();
-  const { getAccessTokenSilently } = useAuth0();
 
-  return useMutation({
-    mutationFn: async (toDo) => {
-      const accessToken = await getAccessTokenSilently({ cacheMode: "off" });
-      return requestCreateToDo({ accessToken, toDo });
-    },
+  return useAuthMutation({
+    mutationFn: async (params) => requestCreateToDo(params),
     onMutate: async (toDo) => {
       await queryClient.cancelQueries({ queryKey: ["toDoList"] });
       const previousToDoList = queryClient.getQueryData(["toDoList"]);
@@ -81,13 +63,9 @@ export const useCreateToDo = () => {
 
 export const useRemoveToDo = () => {
   const queryClient = useQueryClient();
-  const { getAccessTokenSilently } = useAuth0();
 
-  return useMutation({
-    mutationFn: async (id) => {
-      const accessToken = await getAccessTokenSilently({ cacheMode: "off" });
-      return requestRemoveToDo({ accessToken, id });
-    },
+  return useAuthMutation({
+    mutationFn: async (params) => requestRemoveToDo(params),
     onMutate: async (id) => {
       await queryClient.cancelQueries({ queryKey: ["toDoList"] });
       const previousToDoList = queryClient.getQueryData(["toDoList"]);
@@ -112,13 +90,9 @@ export const useRemoveToDo = () => {
 
 export const useUpdateToDo = () => {
   const queryClient = useQueryClient();
-  const { getAccessTokenSilently } = useAuth0();
 
-  return useMutation({
-    mutationFn: async (toDo) => {
-      const accessToken = await getAccessTokenSilently({ cacheMode: "off" });
-      return requestUpdateToDo({ accessToken, toDo });
-    },
+  return useAuthMutation({
+    mutationFn: async (params) => requestUpdateToDo(params),
     onMutate: async (updatedToDo) => {
       // Cancel ongoing refetches for the queries
       await queryClient.cancelQueries(["toDoList"]);
@@ -161,13 +135,9 @@ export const useUpdateToDo = () => {
 
 export const useUpdateToDoList = () => {
   const queryClient = useQueryClient();
-  const { getAccessTokenSilently } = useAuth0();
 
-  return useMutation({
-    mutationFn: async (toDoList) => {
-      const accessToken = await getAccessTokenSilently({ cacheMode: "off" });
-      return requestUpdateToDoList({ accessToken, toDoList });
-    },
+  return useAuthMutation({
+    mutationFn: async (params) => requestUpdateToDoList(params),
     onMutate: async (updatedToDoList) => {
       await queryClient.cancelQueries({ queryKey: ["toDoList"] });
       const previousToDoList = queryClient.getQueryData(["toDoList"]);
