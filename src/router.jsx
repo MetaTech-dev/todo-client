@@ -29,12 +29,12 @@ export const routerChildren = [
     isInNavMenu: true,
     icon: <PeopleAltOutlinedIcon />,
   },
-  {
-    path: "organizations",
-    element: <Organizations />,
-    name: "Organizations",
-    isInNavMenu: true,
-  },
+  // {
+  //   path: "organizations",
+  //   element: <Organizations />,
+  //   name: "Organizations",
+  //   isInNavMenu: true,
+  // },
 ];
 
 const router = createBrowserRouter([
