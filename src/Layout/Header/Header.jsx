@@ -3,7 +3,6 @@ import AppBar from "@mui/material/AppBar";
 import { useMemo } from "react";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 import { Typography } from "@mui/material";
-
 import AccountMenu from "./AccountMenu";
 import NavMenu from "./NavMenu";
 import { OrganizationSwitcher } from "@clerk/clerk-react";
@@ -18,7 +17,7 @@ const Header = () => {
       <Toolbar>
         <NavMenu />
         {isHome ? (
-          <Typography variant="h6" sx={{ mr: 1 }}>
+          <Typography variant="h6" sx={{ mr: 3 }}>
             ToDo
           </Typography>
         ) : (
@@ -28,7 +27,7 @@ const Header = () => {
             sx={{
               textDecoration: "none",
               color: "inherit",
-              mr: 1,
+              mr: 3,
             }}
           >
             <Typography variant="h6">ToDo</Typography>
@@ -39,7 +38,7 @@ const Header = () => {
             elements: {
               rootBox: {
                 display: "flex",
-                border: "1px solid gray",
+                // border: "1px solid gray",
                 borderRadius: "0.25rem",
                 "&:hover": {
                   border: "1px solid white",

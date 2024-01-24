@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import {
   AppBar,
   Box,
@@ -17,6 +17,8 @@ import { useGetStatusList } from "../../hooks/status";
 import { useGetToDoList } from "../../hooks/toDo";
 import { useDebounce } from "../../utils/useDebounce";
 import { useGetCurrentUser } from "../../hooks/user";
+import { useOrganization } from "@clerk/clerk-react";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Dashboard = () => {
   const { setIsProjectSettingsDialogOpen, setIsToDoFormDialogOpen } =
@@ -26,7 +28,20 @@ const Dashboard = () => {
   const { data: statusList, isPending: isStatusListPending } =
     useGetStatusList();
 
-  const isAdmin = useMemo(() => user?.role === "org:admin", [user]);
+  const { organization } = useOrganization();
+
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ["user"] });
+    queryClient.invalidateQueries({ queryKey: ["statusList"] });
+    queryClient.invalidateQueries({ queryKey: ["toDoList"] });
+  }, [organization]);
+
+  const isAdmin = useMemo(
+    () => (organization ? user?.role === "org:admin" : true),
+    [user]
+  );
 
   const { data: toDoList, isPending: isToDoListPending } = useGetToDoList();
 

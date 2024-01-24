@@ -1,20 +1,17 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useAuth, useOrganization } from "@clerk/clerk-react";
+import { useAuth } from "@clerk/clerk-react";
 
 export function useAuthQuery({ queryFn, data, ...restOptions }) {
   const { getToken } = useAuth();
-  const { organization } = useOrganization();
 
   return useQuery({
     ...restOptions,
-    queryFn: async () =>
-      queryFn({ data, token: await getToken(), orgId: organization?.id }),
+    queryFn: async () => queryFn({ data, token: await getToken() }),
   });
 }
 
 export function useAuthMutation({ mutationFn, ...restOptions }) {
   const { getToken } = useAuth();
-  const { organization } = useOrganization();
 
   return useMutation({
     ...restOptions,
@@ -22,7 +19,6 @@ export function useAuthMutation({ mutationFn, ...restOptions }) {
       mutationFn({
         data,
         token: await getToken(),
-        orgId: organization?.id,
       }),
   });
 }

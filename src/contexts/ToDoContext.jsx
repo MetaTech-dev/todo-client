@@ -18,7 +18,8 @@ export const ToDoProvider = ({ children }) => {
 
   const [statusFormData, setStatusFormData] = useState(defaultNewStatus);
 
-  const { data: statusList } = useGetStatusList();
+  const { data: statusList, isSuccess: isStatusListSuccess } =
+    useGetStatusList();
 
   const [isProjectSettingsDialogOpen, setIsProjectSettingsDialogOpen] =
     useState(false);
@@ -27,18 +28,35 @@ export const ToDoProvider = ({ children }) => {
 
   const [isToDoFormDialogOpen, setIsToDoFormDialogOpen] = useState(false);
 
+  const firstStatus = useMemo(
+    () =>
+      statusList?.length > 0
+        ? statusList?.find((status) => status.position === 1)
+        : null,
+    [statusList]
+  );
+
   const defaultNewToDo = useMemo(
     () => ({
       title: "",
       description: "",
       dueDate: null,
       priority: "low",
-      statusId: statusList && statusList.length > 0 ? statusList[0]?.id : 1,
+      statusId: firstStatus?.id || "",
       authorUserId: null,
       assigneeUserId: null,
     }),
     [statusList, user]
   );
+
+  useEffect(() => {
+    if (statusList?.length > 0) {
+      setToDoFormData((prev) => ({
+        ...prev,
+        statusId: firstStatus?.id,
+      }));
+    }
+  }, [statusList]);
 
   useEffect(() => {
     setToDoFormData((prev) => ({

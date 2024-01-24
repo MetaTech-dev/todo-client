@@ -1,15 +1,10 @@
-export const requestGetStatusList = async ({ token, orgId }) => {
+export const requestGetStatusList = async ({ token }) => {
   try {
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/status${
-        orgId ? `?orgId=${orgId}` : ""
-      }`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/status`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     if (!response.ok) {
       const errorResponse = await response.json();
       throw new Error(errorResponse.message || "Failed to fetch status list");
@@ -23,9 +18,7 @@ export const requestGetStatusList = async ({ token, orgId }) => {
 export const requestGetOneStatus = async ({ data, token }) => {
   try {
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/status/${data.id}${
-        data.orgId ? `?orgId=${data.orgId}` : ""
-      }}`,
+      `${process.env.REACT_APP_API_URL}/status/${data.id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -42,21 +35,16 @@ export const requestGetOneStatus = async ({ data, token }) => {
   }
 };
 
-export const requestCreateStatus = async ({ data, token, orgId }) => {
+export const requestCreateStatus = async ({ data, token }) => {
   try {
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/status${
-        orgId ? `?orgId=${orgId}` : ""
-      }`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(data),
-      }
-    );
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/status`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    });
     if (!response.ok) {
       const errorResponse = await response.json();
       throw new Error(errorResponse.message || "Failed to create status");

@@ -25,6 +25,7 @@ import dayjs from "dayjs";
 import { useCreateToDo, useUpdateToDo } from "../hooks/toDo";
 import { useGetStatusList } from "../hooks/status";
 import { useGetUserList } from "../hooks/user";
+import { useOrganization } from "@clerk/clerk-react";
 
 const ToDoForm = () => {
   const {
@@ -34,6 +35,8 @@ const ToDoForm = () => {
     isToDoFormDialogOpen,
     setIsToDoFormDialogOpen,
   } = useContext(ToDoContext);
+
+  const { organization } = useOrganization();
 
   const [showWarning, setShowWarning] = useState("");
 
@@ -174,66 +177,70 @@ const ToDoForm = () => {
               }
               disablePast
             />
-            <Autocomplete
-              autoHighlight
-              id="assignee-autocomplete"
-              options={userList || []}
-              value={
-                userList?.length > 0
-                  ? userList?.find(
-                      (user) => user.id === toDoFormData.assigneeUserId
-                    )
-                  : null
-              }
-              getOptionLabel={(option) => option.id}
-              sx={{ pb: "1rem", width: "17rem" }}
-              renderOption={(props, option) => (
-                <ListItem {...props} key={option.id}>
-                  <ListItemAvatar>
-                    <Avatar
-                      src={option.imageUrl}
-                      sx={{ height: 30, width: 30 }}
-                    />
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={`${option.firstName} ${option.lastName}`}
-                  />
-                </ListItem>
-              )}
-              onChange={handleAssigneeChange}
-              renderInput={({
-                inputProps: { value, ...restInputProps },
-                InputProps,
-                ...restParams
-              }) => {
-                const user =
+            {organization && (
+              <Autocomplete
+                autoHighlight
+                id="assignee-autocomplete"
+                options={userList || []}
+                value={
                   userList?.length > 0
-                    ? userList.find((user) => user.id === value)
-                    : [];
-                return (
-                  <TextField
-                    {...restParams}
-                    value={user ? `${user?.firstName} ${user?.lastName}` : ""}
-                    label="Assignee"
-                    InputProps={{
-                      ...InputProps,
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <Avatar
-                            src={user?.imageUrl}
-                            sx={{ height: 30, width: 30 }}
-                          />
-                        </InputAdornment>
-                      ),
-                    }}
-                    inputProps={{
-                      ...restInputProps,
-                      value: user ? `${user?.firstName} ${user?.lastName}` : "",
-                    }}
-                  />
-                );
-              }}
-            />
+                    ? userList?.find(
+                        (user) => user.id === toDoFormData.assigneeUserId
+                      )
+                    : null
+                }
+                getOptionLabel={(option) => option.id}
+                sx={{ pb: "1rem", width: "17rem" }}
+                renderOption={(props, option) => (
+                  <ListItem {...props} key={option.id}>
+                    <ListItemAvatar>
+                      <Avatar
+                        src={option.imageUrl}
+                        sx={{ height: 30, width: 30 }}
+                      />
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={`${option.firstName} ${option.lastName}`}
+                    />
+                  </ListItem>
+                )}
+                onChange={handleAssigneeChange}
+                renderInput={({
+                  inputProps: { value, ...restInputProps },
+                  InputProps,
+                  ...restParams
+                }) => {
+                  const user =
+                    userList?.length > 0
+                      ? userList.find((user) => user.id === value)
+                      : [];
+                  return (
+                    <TextField
+                      {...restParams}
+                      value={user ? `${user?.firstName} ${user?.lastName}` : ""}
+                      label="Assignee"
+                      InputProps={{
+                        ...InputProps,
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <Avatar
+                              src={user?.imageUrl}
+                              sx={{ height: 30, width: 30 }}
+                            />
+                          </InputAdornment>
+                        ),
+                      }}
+                      inputProps={{
+                        ...restInputProps,
+                        value: user
+                          ? `${user?.firstName} ${user?.lastName}`
+                          : "",
+                      }}
+                    />
+                  );
+                }}
+              />
+            )}
           </Box>
           {/* TODO: look into double labels */}
           <FormControl fullWidth size="small" sx={{ pb: "1rem" }}>

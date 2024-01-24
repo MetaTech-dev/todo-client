@@ -5,6 +5,7 @@ import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import DetailedToDo from "./Views/DetailedToDo";
 import { OrganizationProfile } from "@clerk/clerk-react";
+import { Organizations } from "./Views/Organizations";
 
 export const routerChildren = [
   {
@@ -28,6 +29,12 @@ export const routerChildren = [
     isInNavMenu: true,
     icon: <PeopleAltOutlinedIcon />,
   },
+  // {
+  //   path: "organizations",
+  //   element: <Organizations />,
+  //   name: "Organizations",
+  //   isInNavMenu: true,
+  // },
 ];
 
 const router = createBrowserRouter([

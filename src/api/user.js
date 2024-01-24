@@ -1,13 +1,10 @@
-export const requestGetUserList = async ({ token, orgId }) => {
+export const requestGetUserList = async ({ token }) => {
   try {
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/user${orgId ? `?orgId=${orgId}` : ""}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/user`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     if (!response.ok) {
       const errorResponse = await response.json();
       throw new Error(errorResponse.message || "Failed to fetch user list");
@@ -18,12 +15,10 @@ export const requestGetUserList = async ({ token, orgId }) => {
   }
 };
 
-export const requestGetOneUser = async ({ data, token, orgId }) => {
+export const requestGetOneUser = async ({ data, token }) => {
   try {
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/user/${data.id}${
-        orgId ? `?orgId=${orgId}` : ""
-      }`,
+      `${process.env.REACT_APP_API_URL}/user/${data.id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -64,12 +59,10 @@ export const requestUpdateUser = async ({ data, token }) => {
   }
 };
 
-export const requestUpdateUserRole = async ({ data, token, orgId }) => {
+export const requestUpdateUserRole = async ({ data, token }) => {
   try {
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/user/${data.userId}/role${
-        orgId ? `?orgId=${orgId}` : ""
-      }`,
+      `${process.env.REACT_APP_API_URL}/user/${data.userId}/role`,
       {
         method: "PUT",
         headers: {

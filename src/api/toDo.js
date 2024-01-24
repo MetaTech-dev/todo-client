@@ -1,13 +1,10 @@
-export const requestGetToDoList = async ({ token, orgId }) => {
+export const requestGetToDoList = async ({ token }) => {
   try {
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/toDo${orgId ? `?orgId=${orgId}` : ""}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/toDo`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     if (!response.ok) {
       const errorResponse = await response.json();
       throw new Error(errorResponse.message || "Failed to fetch toDo list");
@@ -38,19 +35,16 @@ export const requestGetOneToDo = async ({ data, token }) => {
   }
 };
 
-export const requestCreateToDo = async ({ data, token, orgId }) => {
+export const requestCreateToDo = async ({ data, token }) => {
   try {
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/toDo${orgId ? `?orgId=${orgId}` : ""}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(data),
-      }
-    );
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/toDo`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    });
     if (!response.ok) {
       const errorResponse = await response.json();
       throw new Error(errorResponse.message || "Failed to create toDo");
