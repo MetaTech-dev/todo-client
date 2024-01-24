@@ -5,7 +5,6 @@ import ProjectSettingsDialog from "../components/ProjectSettingsDialog";
 import { useGetStatusList } from "../hooks/status";
 import DeleteConfirmationDialog from "../components/DeleteConfirmationDialog";
 import { useUser } from "@clerk/clerk-react";
-import { set } from "date-fns";
 
 const ToDoContext = createContext();
 export default ToDoContext;
@@ -29,13 +28,18 @@ export const ToDoProvider = ({ children }) => {
 
   const [isToDoFormDialogOpen, setIsToDoFormDialogOpen] = useState(false);
 
+  const firstStatus = useMemo(
+    () => statusList?.find((status) => status.position === 1),
+    [statusList]
+  );
+
   const defaultNewToDo = useMemo(
     () => ({
       title: "",
       description: "",
       dueDate: null,
       priority: "low",
-      statusId: "",
+      statusId: firstStatus?.id || "",
       authorUserId: null,
       assigneeUserId: null,
     }),
@@ -43,12 +47,13 @@ export const ToDoProvider = ({ children }) => {
   );
 
   useEffect(() => {
-    const firstStatus = statusList?.find((status) => status.position === 1);
-    setToDoFormData((prev) => ({
-      ...prev,
-      statusId: firstStatus?.id,
-    }));
-  }, [isStatusListSuccess, statusList]);
+    if (statusList?.length > 0) {
+      setToDoFormData((prev) => ({
+        ...prev,
+        statusId: firstStatus?.id,
+      }));
+    }
+  }, [statusList]);
 
   useEffect(() => {
     setToDoFormData((prev) => ({
