@@ -43,7 +43,7 @@ export const ToDoProvider = ({ children }) => {
       dueDate: null,
       priority: "low",
       statusId: firstStatus?.id || "",
-      authorUserId: null,
+      authorUserId: user?.id || "",
       assigneeUserId: null,
     }),
     [statusList, user]

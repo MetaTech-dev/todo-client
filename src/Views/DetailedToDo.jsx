@@ -73,7 +73,7 @@ const DetailedToDo = () => {
     description: "",
     dueDate: null,
     priority: "low",
-    statusId: 1,
+    statusId: "",
     assigneeUserId: null,
     id: null,
   });
@@ -88,7 +88,7 @@ const DetailedToDo = () => {
         dueDate: toDo.dueDate,
         priority: toDo.priority,
         statusId: toDo.statusId,
-        assigneeUserId: toDo.assigneeUserId,
+        assigneeUserId: toDo.assigneeUserId || null,
         id: toDo.id,
       });
     }
@@ -289,7 +289,9 @@ const DetailedToDo = () => {
                         }}
                         inputProps={{
                           ...restInputProps,
-                          value: `${user?.firstName} ${user?.lastName}`,
+                          value: user
+                            ? `${user?.firstName} ${user?.lastName}`
+                            : "",
                         }}
                       />
                     );
