@@ -1,3 +1,4 @@
+import { useMediaQuery } from "@mui/material";
 import { createContext, useCallback, useMemo, useState } from "react";
 
 const AppContext = createContext();
@@ -13,10 +14,13 @@ export const AppSettingsProvider = ({ children }) => {
 
   const toggleDarkMode = useCallback(() => setIsDarkMode((prev) => !prev), []);
 
+  const isMobile = useMediaQuery("(max-width:600px)");
+
   const providerValue = {
     isDarkMode,
     setIsDarkMode,
     toggleDarkMode,
+    isMobile,
   };
 
   return (
