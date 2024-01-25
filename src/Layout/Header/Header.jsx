@@ -1,11 +1,12 @@
 import { Toolbar, Box, Link } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
-import { useMemo } from "react";
+import { useContext, useMemo } from "react";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 import { Typography } from "@mui/material";
 import AccountMenu from "./AccountMenu";
 import NavMenu from "./NavMenu";
 import { OrganizationSwitcher } from "@clerk/clerk-react";
+import AppContext from "../../contexts/AppContext";
 
 const Header = () => {
   const { pathname } = useLocation();
@@ -13,6 +14,8 @@ const Header = () => {
   const isHome = useMemo(() => pathname === "/", [pathname]);
 
   const inDetailView = useMemo(() => pathname.includes("/todos/"), [pathname]);
+
+  const { isMobile } = useContext(AppContext);
 
   return (
     <AppBar position="static" elevation={2}>
@@ -35,7 +38,7 @@ const Header = () => {
             <Typography variant="h6">ToDo</Typography>
           </Link>
         )}
-        {!inDetailView && (
+        {!inDetailView && !isMobile && (
           <OrganizationSwitcher
             appearance={{
               elements: {
