@@ -1,18 +1,23 @@
-import { Box, CardHeader, Card } from "@mui/material";
+import { Box, CardHeader, Card, Fab } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import ToDoCard from "../../components/ToDoCard";
 import LoadingStatusBoardView from "../../components/loading/LoadingStatusBoardView";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { useUpdateToDoList } from "../../hooks/toDo";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import AddIcon from "@mui/icons-material/Add";
+import AppContext from "../../contexts/AppContext";
 
 const BoardView = ({
   statusList,
   isStatusListPending,
   filteredToDoList,
   toDoList,
+  handleToDoFormOpen,
 }) => {
   const theme = useTheme();
+  const { isMobile } = useContext(AppContext);
+  console.log("isMobile", isMobile);
 
   const { mutate: updateToDoList } = useUpdateToDoList();
 
@@ -124,6 +129,15 @@ const BoardView = ({
             </Card>
           );
         })}
+      {isMobile && (
+        <Fab
+          onClick={handleToDoFormOpen}
+          color="primary"
+          sx={{ position: "fixed", bottom: 0, right: 0, m: 1 }}
+        >
+          <AddIcon />
+        </Fab>
+      )}
       {(isStatusListPending || !filteredToDoList) && (
         <>
           <LoadingStatusBoardView key={1} />

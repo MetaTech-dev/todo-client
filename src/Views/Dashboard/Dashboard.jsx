@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import {
   AppBar,
   Box,
@@ -18,8 +18,11 @@ import { useGetToDoList } from "../../hooks/toDo";
 import { useDebounce } from "../../utils/useDebounce";
 import { useGetCurrentUser } from "../../hooks/user";
 import { useOrganization } from "@clerk/clerk-react";
+import AppContext from "../../contexts/AppContext";
 
 const Dashboard = () => {
+  const { isMobile } = useContext(AppContext);
+
   const { setIsProjectSettingsDialogOpen, setIsToDoFormDialogOpen } =
     useContext(ToDoContext);
   const { user } = useGetCurrentUser();
@@ -84,6 +87,7 @@ const Dashboard = () => {
             isStatusListPending={isStatusListPending}
             filteredToDoList={filteredToDoList}
             toDoList={toDoList}
+            handleToDoFormOpen={handleToDoFormOpen}
           />
         );
       case "list":
@@ -104,6 +108,12 @@ const Dashboard = () => {
     }
   };
 
+  useEffect(() => {
+    if (isMobile) {
+      setViewState("board");
+    }
+  }, [isMobile]);
+
   return (
     <>
       <AppBar
@@ -112,13 +122,15 @@ const Dashboard = () => {
         elevation={4}
       >
         <Toolbar id="dashboard-toolbar" variant="dense" color="inherit">
-          <Button
-            variant="contained"
-            size="small"
-            onClick={() => handleToDoFormOpen()}
-          >
-            New ToDo
-          </Button>
+          {!isMobile && (
+            <Button
+              variant="contained"
+              size="small"
+              onClick={() => handleToDoFormOpen()}
+            >
+              New ToDo
+            </Button>
+          )}
           <Box sx={{ flexGrow: 0.03 }} />
           <TextField
             id="outlined-search"
@@ -130,17 +142,19 @@ const Dashboard = () => {
             inputProps={{ style: { padding: "0.33rem" } }}
           />
           <Box sx={{ flexGrow: 1 }} />
-          <ToggleButtonGroup
-            size="small"
-            value={viewState}
-            exclusive
-            onChange={handleViewState}
-            aria-label="View Option Buttons"
-            disabled={isToDoListPending || isStatusListPending}
-          >
-            <ToggleButton value="board">Board</ToggleButton>
-            <ToggleButton value="list">List</ToggleButton>
-          </ToggleButtonGroup>
+          {!isMobile && (
+            <ToggleButtonGroup
+              size="small"
+              value={viewState}
+              exclusive
+              onChange={handleViewState}
+              aria-label="View Option Buttons"
+              disabled={isToDoListPending || isStatusListPending}
+            >
+              <ToggleButton value="board">Board</ToggleButton>
+              <ToggleButton value="list">List</ToggleButton>
+            </ToggleButtonGroup>
+          )}
           {isAdmin && (
             <IconButton
               aria-label="Open Project Settings"
