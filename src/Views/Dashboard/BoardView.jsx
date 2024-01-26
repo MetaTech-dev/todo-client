@@ -17,7 +17,6 @@ const BoardView = ({
 }) => {
   const theme = useTheme();
   const { isMobile } = useContext(AppContext);
-  console.log("isMobile", isMobile);
 
   const { mutate: updateToDoList } = useUpdateToDoList();
 
