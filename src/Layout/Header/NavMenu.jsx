@@ -1,5 +1,5 @@
 import MenuIcon from "@mui/icons-material/Menu";
-import { useCallback, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import {
   IconButton,
   ListItemIcon,
@@ -11,6 +11,7 @@ import {
 import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 import { routerChildren } from "../../router";
 import { SignedIn, useOrganization } from "@clerk/clerk-react";
+import AppContext from "../../contexts/AppContext";
 
 const NavMenu = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -25,6 +26,8 @@ const NavMenu = () => {
   if (!organization && pathname === "/organization") {
     navigate("/");
   }
+
+  const { isMobile } = useContext(AppContext);
 
   return (
     <>
@@ -51,7 +54,7 @@ const NavMenu = () => {
             .filter((child) =>
               child.path === "organization"
                 ? Boolean(organization)
-                : child.isInNavMenu
+                : child.isInNavMenu && (child.isMobileOnly ? isMobile : true)
             )
             .map((child) => (
               <MenuItem component={RouterLink} to={child.path} key={child.path}>
