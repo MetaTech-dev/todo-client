@@ -134,6 +134,7 @@ const BoardView = ({
           onClick={handleToDoFormOpen}
           color="primary"
           sx={{ position: "fixed", bottom: 0, right: 0, m: 1 }}
+          aria-label="Add ToDo"
         >
           <AddIcon />
         </Fab>
