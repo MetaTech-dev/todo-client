@@ -47,6 +47,7 @@ function App() {
         styleOverrides: (theme) => ({
           "&::-webkit-scrollbar": {
             width: "5px",
+            height: "5px",
           },
           "&::-webkit-scrollbar-thumb": {
             backgroundColor: theme.palette.primary.main,
@@ -71,7 +72,7 @@ function App() {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <SnackbarProvider maxSnack={1}>
                 <RouterProvider router={router} />
-                <ReactQueryDevtools initialIsOpen={false} />
+                {/* <ReactQueryDevtools initialIsOpen={false} /> */}
               </SnackbarProvider>
             </LocalizationProvider>
           </CssBaseline>

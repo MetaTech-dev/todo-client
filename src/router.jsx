@@ -3,6 +3,7 @@ import Layout from "./Layout";
 import Dashboard from "./Views/Dashboard";
 import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
+import Groups2OutlinedIcon from "@mui/icons-material/Groups2Outlined";
 import DetailedToDo from "./Views/DetailedToDo";
 import { OrganizationProfile } from "@clerk/clerk-react";
 import { Organizations } from "./Views/Organizations";
@@ -14,6 +15,7 @@ export const routerChildren = [
     element: <Dashboard />,
     name: "Dashboard",
     isInNavMenu: true,
+    isMobileOnly: false,
     icon: <DashboardOutlinedIcon />,
   },
   {
@@ -21,20 +23,24 @@ export const routerChildren = [
     element: <DetailedToDo />,
     name: "Detailed ToDo",
     isInNavMenu: false,
+    isMobileOnly: false,
   },
   {
     path: "organization",
     element: <OrganizationProfile />,
     name: "Organization",
     isInNavMenu: true,
+    isMobileOnly: false,
     icon: <PeopleAltOutlinedIcon />,
   },
-  // {
-  //   path: "organizations",
-  //   element: <Organizations />,
-  //   name: "Organizations",
-  //   isInNavMenu: true,
-  // },
+  {
+    path: "organizations",
+    element: <Organizations />,
+    name: "Organizations",
+    isInNavMenu: true,
+    isMobileOnly: true,
+    icon: <Groups2OutlinedIcon />,
+  },
 ];
 
 const router = createBrowserRouter([

@@ -26,6 +26,7 @@ import { useCreateToDo, useUpdateToDo } from "../hooks/toDo";
 import { useGetStatusList } from "../hooks/status";
 import { useGetUserList } from "../hooks/user";
 import { useOrganization } from "@clerk/clerk-react";
+import AppContext from "../contexts/AppContext";
 
 const ToDoForm = () => {
   const {
@@ -35,6 +36,8 @@ const ToDoForm = () => {
     isToDoFormDialogOpen,
     setIsToDoFormDialogOpen,
   } = useContext(ToDoContext);
+
+  const { isMobile } = useContext(AppContext);
 
   const { organization } = useOrganization();
 
@@ -192,7 +195,10 @@ const ToDoForm = () => {
                   ) || null
                 }
                 getOptionLabel={(option) => option.id}
-                sx={{ width: "17rem" }}
+                sx={{
+                  width: isMobile ? "100% " : "17rem",
+                  pb: isMobile ? 2 : 0,
+                }}
                 renderOption={(props, option) => {
                   return (
                     <ListItem {...props} key={option.id}>

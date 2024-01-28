@@ -11,6 +11,9 @@ export const Organizations = () => (
       alignItems: "center",
     }}
   >
-    <OrganizationList />
+    <OrganizationList
+      afterSelectOrganizationUrl={() => `/`}
+      afterSelectPersonalUrl={() => `/`}
+    />
   </Box>
 );

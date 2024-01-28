@@ -18,9 +18,6 @@ const Layout = () => {
 
   useEffect(() => {
     queryClient.invalidateQueries();
-    // queryClient.invalidateQueries({ queryKey: ["user"] });
-    // queryClient.invalidateQueries({ queryKey: ["statusList"] });
-    // queryClient.invalidateQueries({ queryKey: ["toDoList"] });
   }, [organization]);
   return (
     <Box
