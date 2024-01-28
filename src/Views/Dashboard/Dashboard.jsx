@@ -109,7 +109,7 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    if (isMobile) {
+    if (isMobile && viewState !== "board") {
       setViewState("board");
     }
   }, [isMobile]);
