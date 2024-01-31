@@ -72,7 +72,7 @@ function App() {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <SnackbarProvider maxSnack={1}>
                 <RouterProvider router={router} />
-                {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+                <ReactQueryDevtools initialIsOpen={false} />
               </SnackbarProvider>
             </LocalizationProvider>
           </CssBaseline>

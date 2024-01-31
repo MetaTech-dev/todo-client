@@ -7,8 +7,16 @@ import Groups2OutlinedIcon from "@mui/icons-material/Groups2Outlined";
 import DetailedToDo from "./Views/DetailedToDo";
 import { OrganizationProfile } from "@clerk/clerk-react";
 import { Organizations } from "./Views/Organizations";
+import NotFound from "./Views/NotFound";
 
 export const routerChildren = [
+  {
+    path: "*",
+    element: <NotFound />,
+    name: "Not Found",
+    isInNavMenu: false,
+    isMobileOnly: false,
+  },
   {
     index: true,
     path: "",
