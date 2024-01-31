@@ -11,6 +11,13 @@ import NotFound from "./Views/NotFound";
 
 export const routerChildren = [
   {
+    path: "*",
+    element: <NotFound />,
+    name: "Not Found",
+    isInNavMenu: false,
+    isMobileOnly: false,
+  },
+  {
     index: true,
     path: "",
     element: <Dashboard />,
@@ -45,13 +52,6 @@ export const routerChildren = [
 ];
 
 const router = createBrowserRouter([
-  {
-    path: "*",
-    element: <NotFound />,
-    name: "Not Found",
-    isInNavMenu: false,
-    isMobileOnly: false,
-  },
   {
     path: "/*",
     element: <Layout />,
