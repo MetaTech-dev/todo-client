@@ -37,6 +37,7 @@ export const requestGetOneUser = async ({ data, token }) => {
 
 export const requestUpdateUser = async ({ data, token }) => {
   try {
+    console.log("data", data);
     const response = await fetch(
       `${process.env.REACT_APP_API_URL}/user/${data.userId}`,
       {

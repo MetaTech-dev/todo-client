@@ -5,6 +5,7 @@ import ProjectSettingsDialog from "../components/ProjectSettingsDialog";
 import { useGetStatusList } from "../hooks/status";
 import DeleteConfirmationDialog from "../components/DeleteConfirmationDialog";
 import { useUser } from "@clerk/clerk-react";
+import UserDialog from "../components/UserDialog";
 
 const ToDoContext = createContext();
 export default ToDoContext;
@@ -75,6 +76,27 @@ export const ToDoProvider = ({ children }) => {
   const [deleteConfirmationItemType, setDeleteConfirmationItemType] =
     useState("");
 
+  // USER DIALOG SECTION
+
+  const [isUserDialogOpen, setIsUserDialogOpen] = useState(false);
+
+  const currentUserData = useMemo(
+    () => ({
+      firstName: user?.firstName || "",
+      lastName: user?.lastName || "",
+      userId: user?.id || "",
+    }),
+    [user]
+  );
+
+  const [userData, setUserData] = useState({ currentUserData });
+
+  useEffect(() => {
+    if (user) {
+      setUserData(currentUserData);
+    }
+  }, [user]);
+
   const providerValue = {
     isToDoFormDialogOpen,
     setIsToDoFormDialogOpen,
@@ -94,6 +116,10 @@ export const ToDoProvider = ({ children }) => {
     setDeleteConfirmationItem,
     deleteConfirmationItemType,
     setDeleteConfirmationItemType,
+    isUserDialogOpen,
+    setIsUserDialogOpen,
+    userData,
+    setUserData,
   };
 
   return (
@@ -103,6 +129,7 @@ export const ToDoProvider = ({ children }) => {
       <StatusFormDialog />
       <ProjectSettingsDialog />
       <DeleteConfirmationDialog />
+      <UserDialog />
     </ToDoContext.Provider>
   );
 };

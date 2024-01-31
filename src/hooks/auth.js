@@ -15,10 +15,11 @@ export function useAuthMutation({ mutationFn, ...restOptions }) {
 
   return useMutation({
     ...restOptions,
-    mutationFn: async (data) =>
+    mutationFn: async (data) => {
       mutationFn({
         data,
         token: await getToken(),
-      }),
+      });
+    },
   });
 }
