@@ -51,6 +51,9 @@ const Header = () => {
                   },
                 },
                 organizationSwitcherTriggerIcon: { marginLeft: 0 },
+                organizationPreviewMainIdentifier: {
+                  color: "white",
+                },
               },
             }}
           />
