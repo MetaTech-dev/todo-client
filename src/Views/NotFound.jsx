@@ -1,16 +1,20 @@
 import {
+  Alert,
   Box,
   Button,
   Card,
   CardActionArea,
   CardContent,
   CardHeader,
-  Typography,
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import Header from "../Layout/Header";
+import AppContext from "../contexts/AppContext";
+import { useContext } from "react";
 
 const NotFound = () => {
+  const { isDarkMode } = useContext(AppContext);
+
   return (
     <Box
       id="not-found-container"
@@ -33,11 +37,14 @@ const NotFound = () => {
         }}
       >
         <Card elevation={2} sx={{ width: "fit-content" }}>
-          <CardHeader title="Oops! ...Page Not Found" />
+          <CardHeader title="Oops! ... Page Not Found" />
           <CardContent>
-            <Typography>
+            <Alert
+              severity="warning"
+              sx={{ backgroundColor: isDarkMode ? "transparent" : "" }}
+            >
               The page you are looking for does not exist.
-            </Typography>
+            </Alert>
           </CardContent>
           <CardActionArea sx={{ display: "flex" }}>
             <Button component={RouterLink} to={"/"}>
