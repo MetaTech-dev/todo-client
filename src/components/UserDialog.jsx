@@ -10,10 +10,12 @@ import ToDoContext from "../contexts/ToDoContext";
 import { useContext } from "react";
 import { LoadingButton } from "@mui/lab";
 import { useUpdateUser } from "../hooks/user";
+import { useUser } from "@clerk/clerk-react";
 
 const UserDialog = () => {
   const { isUserDialogOpen, setIsUserDialogOpen, userData, setUserData } =
     useContext(ToDoContext);
+  const { user } = useUser();
 
   const {
     mutate: updateUser,
@@ -25,7 +27,7 @@ const UserDialog = () => {
     setIsUserDialogOpen(false);
   };
 
-  const handleSubmit = (userData) => {
+  const handleSubmit = async (userData) => {
     const userId = userData.userId;
     const body = {
       firstName: userData.firstName,
@@ -33,6 +35,10 @@ const UserDialog = () => {
     };
     const updatedUser = { userId, body };
     updateUser(updatedUser);
+    console.log("user before reload", user);
+    await user?.reload();
+
+    console.log("user after reload", user);
     setIsUserDialogOpen(false);
   };
 

@@ -23,8 +23,11 @@ import AppContext from "../../contexts/AppContext";
 const Dashboard = () => {
   const { isMobile } = useContext(AppContext);
 
-  const { setIsProjectSettingsDialogOpen, setIsToDoFormDialogOpen } =
-    useContext(ToDoContext);
+  const {
+    setIsProjectSettingsDialogOpen,
+    setIsToDoFormDialogOpen,
+    setIsUserDialogOpen,
+  } = useContext(ToDoContext);
   const { user } = useGetCurrentUser();
 
   const { data: statusList, isPending: isStatusListPending } =
@@ -131,6 +134,7 @@ const Dashboard = () => {
               New ToDo
             </Button>
           )}
+          <Button onClick={() => setIsUserDialogOpen(true)}>Open</Button>
           <Box sx={{ flexGrow: 0.03 }} />
           <TextField
             id="outlined-search"
