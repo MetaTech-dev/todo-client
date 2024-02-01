@@ -9,7 +9,7 @@ import {
 import ToDoContext from "../contexts/ToDoContext";
 import { useContext } from "react";
 import { LoadingButton } from "@mui/lab";
-import { useUpdateUser } from "../hooks/user";
+import { useGetCurrentUser, useUpdateUser } from "../hooks/user";
 import { useUser } from "@clerk/clerk-react";
 
 const UserDialog = () => {
@@ -34,13 +34,18 @@ const UserDialog = () => {
       lastName: userData.lastName,
     };
     const updatedUser = { userId, body };
-    updateUser(updatedUser);
+    await updateUser(updatedUser);
     console.log("user before reload", user);
     await user?.reload();
-
     console.log("user after reload", user);
     setIsUserDialogOpen(false);
   };
+  if (isUpdateUserPending) {
+    console.log("user update is pending");
+  }
+  if (isUpdateUserSuccess) {
+    console.log("user update is successful");
+  }
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
