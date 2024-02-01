@@ -7,20 +7,21 @@ import {
   TextField,
 } from "@mui/material";
 import ToDoContext from "../contexts/ToDoContext";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { LoadingButton } from "@mui/lab";
-import { useGetCurrentUser, useUpdateUser } from "../hooks/user";
+import { useUpdateUser } from "../hooks/user";
 import { useUser } from "@clerk/clerk-react";
 
 const UserDialog = () => {
   const { isUserDialogOpen, setIsUserDialogOpen, userData, setUserData } =
     useContext(ToDoContext);
   const { user } = useUser();
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     mutate: updateUser,
     isPending: isUpdateUserPending,
-    onSuccess: isUpdateUserSuccess,
+    isSuccess: isUpdateUserSuccess,
   } = useUpdateUser();
 
   const handleClose = () => {
@@ -28,24 +29,34 @@ const UserDialog = () => {
   };
 
   const handleSubmit = async (userData) => {
+    setIsLoading(true);
     const userId = userData.userId;
     const body = {
       firstName: userData.firstName,
       lastName: userData.lastName,
     };
     const updatedUser = { userId, body };
-    await updateUser(updatedUser);
-    console.log("user before reload", user);
-    await user?.reload();
-    console.log("user after reload", user);
-    setIsUserDialogOpen(false);
+    updateUser(updatedUser);
   };
+
   if (isUpdateUserPending) {
-    console.log("user update is pending");
+    // TODO: Why isn't this being called?
+    console.log("updating user...");
   }
-  if (isUpdateUserSuccess) {
-    console.log("user update is successful");
-  }
+
+  useEffect(() => {
+    const handleUpdateUserSuccess = async () => {
+      if (isUpdateUserSuccess) {
+        // TODO: remove this when we figure out why we need to wait and fix the root problem
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await user?.reload();
+        setIsUserDialogOpen(false);
+        setIsLoading(false);
+      }
+    };
+
+    handleUpdateUserSuccess();
+  }, [isUpdateUserSuccess]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -97,7 +108,7 @@ const UserDialog = () => {
           />
         </DialogContent>
         <DialogActions>
-          <LoadingButton loading={isUpdateUserPending} type="submit">
+          <LoadingButton loading={isLoading} type="submit">
             Submit
           </LoadingButton>
         </DialogActions>
