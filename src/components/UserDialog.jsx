@@ -16,7 +16,6 @@ const UserDialog = () => {
   const { isUserDialogOpen, setIsUserDialogOpen, userData, setUserData } =
     useContext(ToDoContext);
   const { user } = useUser();
-  const [isLoading, setIsLoading] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
 
   const {
@@ -25,7 +24,10 @@ const UserDialog = () => {
     isSuccess: isUpdateUserSuccess,
   } = useUpdateUser();
 
-  const handleClose = () => {
+  const handleClose = (_event, reason) => {
+    if (reason && (reason === "backdropClick" || reason === "escapeKeyDown")) {
+      return;
+    }
     setIsUserDialogOpen(false);
   };
 
@@ -33,7 +35,6 @@ const UserDialog = () => {
     const trimmedFirstName = userData.firstName.trim();
     const trimmedLastName = userData.lastName.trim();
     if (trimmedFirstName && trimmedLastName) {
-      setIsLoading(true);
       const userId = userData.userId;
       const body = {
         firstName: userData.firstName,
@@ -46,19 +47,11 @@ const UserDialog = () => {
     }
   };
 
-  //   if (isUpdateUserPending) {
-  //     // TODO: Why isn't this being called?
-  //     console.log("updating user...");
-  //   }
-
   useEffect(() => {
     const handleUpdateUserSuccess = async () => {
       if (isUpdateUserSuccess) {
-        // TODO: remove this when we figure out why we need to wait and fix the root problem
-        await new Promise((resolve) => setTimeout(resolve, 1000));
         await user?.reload();
         setIsUserDialogOpen(false);
-        setIsLoading(false);
       }
     };
 
@@ -104,7 +97,6 @@ const UserDialog = () => {
             required
           />
           <TextField
-            autoFocus
             margin="dense"
             id="lastName"
             label="Last Name"
@@ -121,7 +113,7 @@ const UserDialog = () => {
           />
         </DialogContent>
         <DialogActions>
-          <LoadingButton loading={isLoading} type="submit">
+          <LoadingButton loading={isUpdateUserPending} type="submit">
             Submit
           </LoadingButton>
         </DialogActions>
