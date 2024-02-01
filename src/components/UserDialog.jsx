@@ -17,6 +17,7 @@ const UserDialog = () => {
     useContext(ToDoContext);
   const { user } = useUser();
   const [isLoading, setIsLoading] = useState(false);
+  const [showWarning, setShowWarning] = useState(false);
 
   const {
     mutate: updateUser,
@@ -29,20 +30,26 @@ const UserDialog = () => {
   };
 
   const handleSubmit = async (userData) => {
-    setIsLoading(true);
-    const userId = userData.userId;
-    const body = {
-      firstName: userData.firstName,
-      lastName: userData.lastName,
-    };
-    const updatedUser = { userId, body };
-    updateUser(updatedUser);
+    const trimmedFirstName = userData.firstName.trim();
+    const trimmedLastName = userData.lastName.trim();
+    if (trimmedFirstName && trimmedLastName) {
+      setIsLoading(true);
+      const userId = userData.userId;
+      const body = {
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+      };
+      const updatedUser = { userId, body };
+      updateUser(updatedUser);
+    } else if (!trimmedFirstName || !trimmedLastName) {
+      setShowWarning(true);
+    }
   };
 
-  if (isUpdateUserPending) {
-    // TODO: Why isn't this being called?
-    console.log("updating user...");
-  }
+  //   if (isUpdateUserPending) {
+  //     // TODO: Why isn't this being called?
+  //     console.log("updating user...");
+  //   }
 
   useEffect(() => {
     const handleUpdateUserSuccess = async () => {
@@ -88,9 +95,12 @@ const UserDialog = () => {
             name="firstName"
             type="text"
             fullWidth
-            variant="standard"
             value={userData.firstName}
             onChange={handleInputChange}
+            error={showWarning && !userData.firstName}
+            helperText={
+              showWarning && !userData.firstName ? "First Name is required" : ""
+            }
             required
           />
           <TextField
@@ -101,9 +111,12 @@ const UserDialog = () => {
             name="lastName"
             type="text"
             fullWidth
-            variant="standard"
             value={userData.lastName}
             onChange={handleInputChange}
+            error={showWarning && !userData.lastName}
+            helperText={
+              showWarning && !userData.lastName ? "Last Name is required" : ""
+            }
             required
           />
         </DialogContent>
