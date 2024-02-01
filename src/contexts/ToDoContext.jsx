@@ -98,10 +98,7 @@ export const ToDoProvider = ({ children }) => {
   }, [user]);
 
   useEffect(() => {
-    const noFirstName = user?.firstName === null;
-    const noLastName = user?.lastName === null;
-
-    if ((noFirstName || noLastName) && !isUserDialogOpen) {
+    if ((!user?.firstName || !user?.lastName) && !isUserDialogOpen) {
       setIsUserDialogOpen(true);
     }
   }, [user]);
