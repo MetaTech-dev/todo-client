@@ -80,7 +80,7 @@ export const ToDoProvider = ({ children }) => {
 
   const [isUserDialogOpen, setIsUserDialogOpen] = useState(false);
 
-  const currentUserData = useMemo(
+  const currentUserFormData = useMemo(
     () => ({
       firstName: user?.firstName || "",
       lastName: user?.lastName || "",
@@ -89,11 +89,11 @@ export const ToDoProvider = ({ children }) => {
     [user]
   );
 
-  const [userData, setUserData] = useState({ currentUserData });
+  const [userFormData, setUserFormData] = useState({ currentUserFormData });
 
   useEffect(() => {
     if (user) {
-      setUserData(currentUserData);
+      setUserFormData(currentUserFormData);
     }
   }, [user]);
 
@@ -124,8 +124,8 @@ export const ToDoProvider = ({ children }) => {
     setDeleteConfirmationItemType,
     isUserDialogOpen,
     setIsUserDialogOpen,
-    userData,
-    setUserData,
+    userFormData,
+    setUserFormData,
   };
 
   return (

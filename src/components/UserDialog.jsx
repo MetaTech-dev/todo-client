@@ -13,8 +13,12 @@ import { useUpdateUser } from "../hooks/user";
 import { useUser } from "@clerk/clerk-react";
 
 const UserDialog = () => {
-  const { isUserDialogOpen, setIsUserDialogOpen, userData, setUserData } =
-    useContext(ToDoContext);
+  const {
+    isUserDialogOpen,
+    setIsUserDialogOpen,
+    userFormData,
+    setUserFormData,
+  } = useContext(ToDoContext);
   const { user } = useUser();
   const [showWarning, setShowWarning] = useState(false);
 
@@ -31,14 +35,14 @@ const UserDialog = () => {
     setIsUserDialogOpen(false);
   };
 
-  const handleSubmit = async (userData) => {
-    const trimmedFirstName = userData.firstName.trim();
-    const trimmedLastName = userData.lastName.trim();
+  const handleSubmit = async (userFormData) => {
+    const trimmedFirstName = userFormData.firstName.trim();
+    const trimmedLastName = userFormData.lastName.trim();
     if (trimmedFirstName && trimmedLastName) {
-      const userId = userData.userId;
+      const userId = userFormData.userId;
       const body = {
-        firstName: userData.firstName,
-        lastName: userData.lastName,
+        firstName: userFormData.firstName,
+        lastName: userFormData.lastName,
       };
       const updatedUser = { userId, body };
       updateUser(updatedUser);
@@ -61,7 +65,7 @@ const UserDialog = () => {
   const handleInputChange = (event) => {
     const { name, value } = event.target;
 
-    setUserData((prev) => ({
+    setUserFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
@@ -76,7 +80,7 @@ const UserDialog = () => {
         autoComplete="off"
         onSubmit={(event) => {
           event.preventDefault();
-          handleSubmit(userData);
+          handleSubmit(userFormData);
         }}
       >
         <DialogContent>
@@ -88,11 +92,13 @@ const UserDialog = () => {
             name="firstName"
             type="text"
             fullWidth
-            value={userData.firstName}
+            value={userFormData.firstName}
             onChange={handleInputChange}
-            error={showWarning && !userData.firstName}
+            error={showWarning && !userFormData.firstName}
             helperText={
-              showWarning && !userData.firstName ? "First Name is required" : ""
+              showWarning && !userFormData.firstName
+                ? "First Name is required"
+                : ""
             }
             required
           />
@@ -103,11 +109,13 @@ const UserDialog = () => {
             name="lastName"
             type="text"
             fullWidth
-            value={userData.lastName}
+            value={userFormData.lastName}
             onChange={handleInputChange}
-            error={showWarning && !userData.lastName}
+            error={showWarning && !userFormData.lastName}
             helperText={
-              showWarning && !userData.lastName ? "Last Name is required" : ""
+              showWarning && !userFormData.lastName
+                ? "Last Name is required"
+                : ""
             }
             required
           />
