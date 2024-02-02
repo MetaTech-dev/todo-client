@@ -7,10 +7,10 @@ import DeleteConfirmationDialog from "../components/DeleteConfirmationDialog";
 import { useUser } from "@clerk/clerk-react";
 import UserDialog from "../components/UserDialog";
 
-const ToDoContext = createContext();
-export default ToDoContext;
+const DialogContext = createContext();
+export default DialogContext;
 
-export const ToDoProvider = ({ children }) => {
+export const DialogProvider = ({ children }) => {
   // STATUS SECTION
 
   const [isStatusFormDialogOpen, setIsStatusFormDialogOpen] = useState(false);
@@ -129,13 +129,13 @@ export const ToDoProvider = ({ children }) => {
   };
 
   return (
-    <ToDoContext.Provider value={providerValue}>
+    <DialogContext.Provider value={providerValue}>
       {children}
       <ToDoFormDialog />
       <StatusFormDialog />
       <ProjectSettingsDialog />
       <DeleteConfirmationDialog />
       <UserDialog />
-    </ToDoContext.Provider>
+    </DialogContext.Provider>
   );
 };

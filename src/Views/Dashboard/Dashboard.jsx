@@ -10,7 +10,7 @@ import {
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import BoardView from "./BoardView";
-import ToDoContext from "../../contexts/ToDoContext";
+import DialogContext from "../../contexts/DialogContext";
 import ListView from "./ListView";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useGetStatusList } from "../../hooks/status";
@@ -24,7 +24,7 @@ const Dashboard = () => {
   const { isMobile } = useContext(AppContext);
 
   const { setIsProjectSettingsDialogOpen, setIsToDoFormDialogOpen } =
-    useContext(ToDoContext);
+    useContext(DialogContext);
   const { user } = useGetCurrentUser();
 
   const { data: statusList, isPending: isStatusListPending } =

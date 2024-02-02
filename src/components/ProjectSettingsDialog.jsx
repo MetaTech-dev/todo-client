@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useContext, forwardRef, useState } from "react";
-import ToDoContext from "../contexts/ToDoContext";
+import DialogContext from "../contexts/DialogContext";
 import Slide from "@mui/material/Slide";
 import CloseIcon from "@mui/icons-material/Close";
 import StatusCard from "./StatusCard";
@@ -30,7 +30,7 @@ const ProjectSettingsDialog = () => {
     setDeleteConfirmationItemType,
     setDeleteConfirmationItem,
     setIsDeleteConfirmationDialogOpen,
-  } = useContext(ToDoContext);
+  } = useContext(DialogContext);
 
   const { data: statusList, isSuccess: isStatusListSuccess } =
     useGetStatusList();

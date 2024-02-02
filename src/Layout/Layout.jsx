@@ -7,7 +7,7 @@ import {
   SignedOut,
   useOrganization,
 } from "@clerk/clerk-react";
-import { ToDoProvider } from "../contexts/ToDoContext";
+import { ToDoProvider } from "../contexts/DialogContext";
 import { useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 

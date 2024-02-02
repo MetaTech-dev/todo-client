@@ -6,7 +6,7 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
-import ToDoContext from "../contexts/ToDoContext";
+import DialogContext from "../contexts/DialogContext";
 import { useContext, useEffect, useState } from "react";
 import { LoadingButton } from "@mui/lab";
 import { useUpdateUser } from "../hooks/user";
@@ -18,7 +18,7 @@ const UserDialog = () => {
     setIsUserDialogOpen,
     userFormData,
     setUserFormData,
-  } = useContext(ToDoContext);
+  } = useContext(DialogContext);
   const { user } = useUser();
   const [showWarning, setShowWarning] = useState(false);
 

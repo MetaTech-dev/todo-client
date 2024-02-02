@@ -2,7 +2,7 @@ import { Box } from "@mui/system";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import { useContext } from "react";
 import dayjs from "dayjs";
-import ToDoContext from "../../contexts/ToDoContext";
+import DialogContext from "../../contexts/DialogContext";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
@@ -16,7 +16,7 @@ const ListView = ({ statusList, filteredToDoList }) => {
     setDeleteConfirmationItemType,
     setDeleteConfirmationItem,
     setIsDeleteConfirmationDialogOpen,
-  } = useContext(ToDoContext);
+  } = useContext(DialogContext);
 
   const getStatusTitle = (statusId) => {
     const status =
