@@ -16,6 +16,7 @@ const BoardView = ({
   handleToDoFormOpen,
 }) => {
   const theme = useTheme();
+
   const { isMobile } = useContext(AppContext);
 
   const { mutate: updateToDoList } = useUpdateToDoList();
@@ -138,7 +139,7 @@ const BoardView = ({
           <AddIcon />
         </Fab>
       )}
-      {(isStatusListPending || !filteredToDoList) && (
+      {(isStatusListPending || !filteredToDoList || !statusList?.length) && (
         <>
           <LoadingStatusBoardView key={1} />
           <LoadingStatusBoardView key={2} />
