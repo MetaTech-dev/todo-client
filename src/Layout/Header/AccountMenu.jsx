@@ -3,6 +3,7 @@ import { useContext } from "react";
 import AppContext from "../../contexts/AppContext";
 import BedtimeOutlinedIcon from "@mui/icons-material/BedtimeOutlined";
 import BedtimeOffOutlinedIcon from "@mui/icons-material/BedtimeOffOutlined";
+import Person2OutlinedIcon from "@mui/icons-material/Person2Outlined";
 import {
   ClerkLoading,
   SignInButton,
@@ -10,7 +11,6 @@ import {
   SignedOut,
   UserButton,
 } from "@clerk/clerk-react";
-import { Person2Outlined } from "@mui/icons-material";
 
 const AccountMenu = () => {
   const { isDarkMode, toggleDarkMode } = useContext(AppContext);
@@ -33,7 +33,7 @@ const AccountMenu = () => {
             color: "inherit",
           }}
         >
-          <Person2Outlined fontSize="small" />
+          <Person2OutlinedIcon fontSize="small" />
         </Avatar>
       </ClerkLoading>
       <SignedIn>
@@ -51,7 +51,7 @@ const AccountMenu = () => {
       <SignedOut>
         <SignInButton mode="modal">
           <IconButton>
-            <Person2Outlined fontSize="small" />
+            <Person2OutlinedIcon fontSize="small" />
           </IconButton>
         </SignInButton>
       </SignedOut>

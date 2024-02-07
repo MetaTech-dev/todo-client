@@ -22,6 +22,7 @@ const NavMenu = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
+  // TODO: find a better place to put this if possible
   const { organization } = useOrganization();
   if (!organization && pathname === "/organization") {
     navigate("/");
