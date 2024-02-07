@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import ToDoContext from "../contexts/ToDoContext";
+import DialogContext from "../contexts/DialogContext";
 import {
   Alert,
   Box,
@@ -19,7 +19,7 @@ const StatusFormDialog = () => {
     statusFormData,
     setStatusFormData,
     defaultNewStatus,
-  } = useContext(ToDoContext);
+  } = useContext(DialogContext);
 
   const [showWarning, setShowWarning] = useState("");
 

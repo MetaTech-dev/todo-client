@@ -6,7 +6,7 @@ import {
   DialogContentText,
 } from "@mui/material";
 import { useContext, useEffect } from "react";
-import ToDoContext from "../contexts/ToDoContext";
+import DialogContext from "../contexts/DialogContext";
 import { useRemoveToDo } from "../hooks/toDo";
 import { LoadingButton } from "@mui/lab";
 import { useRemoveStatus } from "../hooks/status";
@@ -20,7 +20,7 @@ const DeleteConfirmationDialog = () => {
     setDeleteConfirmationItemType,
     deleteConfirmationItem,
     setDeleteConfirmationItem,
-  } = useContext(ToDoContext);
+  } = useContext(DialogContext);
 
   const {
     mutate: removeToDo,

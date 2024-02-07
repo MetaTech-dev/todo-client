@@ -68,11 +68,9 @@ export const useUpdateUser = () => {
   const queryClient = useQueryClient();
 
   return useAuthMutation({
-    mutationFn: async ({ userId, body }) =>
-      requestUpdateUser({
-        userId,
-        body,
-      }),
+    mutationFn: async (data) => {
+      return requestUpdateUser(data);
+    },
     onMutate: async (updatedUser) => {
       await queryClient.cancelQueries({
         queryKey: ["user", updatedUser.userId],

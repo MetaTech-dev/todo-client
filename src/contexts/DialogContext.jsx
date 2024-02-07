@@ -5,11 +5,12 @@ import ProjectSettingsDialog from "../components/ProjectSettingsDialog";
 import { useGetStatusList } from "../hooks/status";
 import DeleteConfirmationDialog from "../components/DeleteConfirmationDialog";
 import { useUser } from "@clerk/clerk-react";
+import UserDialog from "../components/UserDialog";
 
-const ToDoContext = createContext();
-export default ToDoContext;
+const DialogContext = createContext();
+export default DialogContext;
 
-export const ToDoProvider = ({ children }) => {
+export const DialogProvider = ({ children }) => {
   // STATUS SECTION
 
   const [isStatusFormDialogOpen, setIsStatusFormDialogOpen] = useState(false);
@@ -75,6 +76,33 @@ export const ToDoProvider = ({ children }) => {
   const [deleteConfirmationItemType, setDeleteConfirmationItemType] =
     useState("");
 
+  // USER DIALOG SECTION
+
+  const [isUserDialogOpen, setIsUserDialogOpen] = useState(false);
+
+  const currentUserFormData = useMemo(
+    () => ({
+      firstName: user?.firstName || "",
+      lastName: user?.lastName || "",
+      userId: user?.id || "",
+    }),
+    [user]
+  );
+
+  const [userFormData, setUserFormData] = useState({ currentUserFormData });
+
+  useEffect(() => {
+    if (user) {
+      setUserFormData(currentUserFormData);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if ((!user?.firstName || !user?.lastName) && !isUserDialogOpen) {
+      setIsUserDialogOpen(true);
+    }
+  }, [user]);
+
   const providerValue = {
     isToDoFormDialogOpen,
     setIsToDoFormDialogOpen,
@@ -94,15 +122,20 @@ export const ToDoProvider = ({ children }) => {
     setDeleteConfirmationItem,
     deleteConfirmationItemType,
     setDeleteConfirmationItemType,
+    isUserDialogOpen,
+    setIsUserDialogOpen,
+    userFormData,
+    setUserFormData,
   };
 
   return (
-    <ToDoContext.Provider value={providerValue}>
+    <DialogContext.Provider value={providerValue}>
       {children}
       <ToDoFormDialog />
       <StatusFormDialog />
       <ProjectSettingsDialog />
       <DeleteConfirmationDialog />
-    </ToDoContext.Provider>
+      <UserDialog />
+    </DialogContext.Provider>
   );
 };

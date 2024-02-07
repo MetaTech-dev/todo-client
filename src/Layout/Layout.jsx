@@ -7,7 +7,7 @@ import {
   SignedOut,
   useOrganization,
 } from "@clerk/clerk-react";
-import { ToDoProvider } from "../contexts/ToDoContext";
+import { DialogProvider } from "../contexts/DialogContext";
 import { useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -44,9 +44,9 @@ const Layout = () => {
         }}
       >
         <SignedIn>
-          <ToDoProvider>
+          <DialogProvider>
             <Outlet />
-          </ToDoProvider>
+          </DialogProvider>
         </SignedIn>
         <SignedOut>
           <Box

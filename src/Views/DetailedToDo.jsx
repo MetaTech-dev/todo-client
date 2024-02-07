@@ -1,5 +1,5 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
-import ToDoContext from "../contexts/ToDoContext";
+import DialogContext from "../contexts/DialogContext";
 import dayjs from "dayjs";
 import { useGetOneUser, useGetUserList } from "../hooks/user";
 import { useGetOneToDo, useUpdateToDo } from "../hooks/toDo";
@@ -38,7 +38,7 @@ const DetailedToDo = () => {
     setIsDeleteConfirmationDialogOpen,
     setDeleteConfirmationItem,
     setDeleteConfirmationItemType,
-  } = useContext(ToDoContext);
+  } = useContext(DialogContext);
 
   const { pathname } = useLocation();
   const toDoId = useMemo(

@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import ToDoContext from "../contexts/ToDoContext";
+import DialogContext from "../contexts/DialogContext";
 import {
   Box,
   Dialog,
@@ -35,7 +35,7 @@ const ToDoForm = () => {
     setToDoFormData,
     isToDoFormDialogOpen,
     setIsToDoFormDialogOpen,
-  } = useContext(ToDoContext);
+  } = useContext(DialogContext);
 
   const { isMobile } = useContext(AppContext);
 
