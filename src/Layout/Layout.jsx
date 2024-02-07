@@ -16,9 +16,11 @@ const Layout = () => {
 
   const { organization } = useOrganization();
 
+  // if the user switches organizations we need to clear the cache
   useEffect(() => {
     queryClient.invalidateQueries();
   }, [organization]);
+
   return (
     <Box
       sx={{
