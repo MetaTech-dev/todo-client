@@ -32,6 +32,7 @@ import { enqueueSnackbar } from "notistack";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useTimeSince } from "../utils/useTimeSince";
 import { useOrganization } from "@clerk/clerk-react";
+import PrioritySelect from "../components/toDo/PrioritySelect";
 
 const DetailedToDo = () => {
   const {
@@ -344,27 +345,11 @@ const DetailedToDo = () => {
                     })}
                   </Select>
                 </FormControl>
-                <FormControl size="small" sx={{ ml: 1 }}>
-                  <InputLabel id="toDo-priority-label">Priority</InputLabel>
-                  <Select
-                    labelId="toDo-priority-label"
-                    id="toDo-priority-select"
-                    name="priority"
-                    value={updateToDoData.priority}
-                    onChange={handleSelectChange}
-                    label="status"
-                  >
-                    <MenuItem value="low">
-                      <Chip label="Low" color="success" size="small" />
-                    </MenuItem>
-                    <MenuItem value="medium">
-                      <Chip label="Medium" color="warning" size="small" />
-                    </MenuItem>
-                    <MenuItem value="high">
-                      <Chip label="High" color="error" size="small" />
-                    </MenuItem>
-                  </Select>
-                </FormControl>
+                <PrioritySelect
+                  value={updateToDoData.priority}
+                  onChange={handleSelectChange}
+                  sx={{ ml: 1 }}
+                />
               </Box>
             </Box>
           </CardContent>

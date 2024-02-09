@@ -27,6 +27,7 @@ import { useGetStatusList } from "../hooks/status";
 import { useGetUserList } from "../hooks/user";
 import { useOrganization } from "@clerk/clerk-react";
 import AppContext from "../contexts/AppContext";
+import PrioritySelect from "../components/toDo/PrioritySelect";
 
 const ToDoForm = () => {
   const {
@@ -250,22 +251,12 @@ const ToDoForm = () => {
               />
             )}
           </Box>
-          {/* TODO: look into double labels */}
-          <FormControl fullWidth size="small" sx={{ pb: "1rem" }}>
-            <InputLabel id="toDo-priority-label">Priority</InputLabel>
-            <Select
-              labelId="toDo-priority-label"
-              id="toDo-priority-select"
-              name="priority"
-              value={toDoFormData.priority}
-              onChange={handleInputChange}
-              label="priority"
-            >
-              <MenuItem value="low">Low</MenuItem>
-              <MenuItem value="medium">Medium</MenuItem>
-              <MenuItem value="high">High</MenuItem>
-            </Select>
-          </FormControl>
+          <PrioritySelect
+            value={toDoFormData.priority}
+            onChange={handleInputChange}
+            sx={{ pb: "1rem" }}
+            fullWidth={true}
+          />
           <FormControl fullWidth size="small">
             <InputLabel id="toDo-status-label">Status</InputLabel>
             <Select
