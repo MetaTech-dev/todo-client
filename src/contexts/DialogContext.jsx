@@ -19,8 +19,7 @@ export const DialogProvider = ({ children }) => {
 
   const [statusFormData, setStatusFormData] = useState(defaultNewStatus);
 
-  const { data: statusList, isSuccess: isStatusListSuccess } =
-    useGetStatusList();
+  const { data: statusList } = useGetStatusList();
 
   const [isProjectSettingsDialogOpen, setIsProjectSettingsDialogOpen] =
     useState(false);

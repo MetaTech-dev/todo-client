@@ -51,6 +51,7 @@ export const useGetUserList = () => {
     enabled: Boolean(organization?.id),
   });
 };
+
 export const useGetOneUser = (data) =>
   useAuthQuery({
     data,
@@ -98,6 +99,7 @@ export const useUpdateUser = () => {
   });
 };
 
+// deprecated
 export const useUpdateUserRole = () => {
   const queryClient = useQueryClient();
 
