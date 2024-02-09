@@ -12,27 +12,22 @@ import {
   CardActions,
   CardContent,
   CardHeader,
-  Chip,
-  FormControl,
   InputAdornment,
-  InputLabel,
   ListItem,
   ListItemAvatar,
   ListItemText,
-  MenuItem,
-  Select,
   TextField,
   Typography,
 } from "@mui/material";
 import { useLocation } from "react-router-dom";
-import { useGetStatusList } from "../hooks/status";
 import LoadingDetailedToDo from "../components/loading/LoadingDetailedToDo";
 import { LoadingButton } from "@mui/lab";
 import { enqueueSnackbar } from "notistack";
-import { DatePicker } from "@mui/x-date-pickers";
 import { useTimeSince } from "../utils/useTimeSince";
 import { useOrganization } from "@clerk/clerk-react";
-import PrioritySelect from "../components/toDo/PrioritySelect";
+import PrioritySelect from "../components/toDoForms/PrioritySelect";
+import StatusSelect from "../components/toDoForms/StatusSelect";
+import DateSelector from "../components/toDoForms/DateSelector";
 
 const DetailedToDo = () => {
   const {
@@ -58,8 +53,6 @@ const DetailedToDo = () => {
     isPending: isUpdateToDoPending,
     isSuccess: isUpdateToDoSuccess,
   } = useUpdateToDo();
-
-  const { data: statusList } = useGetStatusList();
 
   const { data: userList } = useGetUserList();
 
@@ -301,50 +294,23 @@ const DetailedToDo = () => {
                 />
               )}
               <Box sx={{ pt: 1 }}>
-                <DatePicker
-                  slotProps={{
-                    actionBar: {
-                      actions: ["clear"],
-                    },
-                    textField: {
-                      size: "small",
-                      InputLabelProps: { shrink: true },
-                    },
-                  }}
-                  sx={{
-                    width: "12rem",
-                  }}
-                  label="Date Due"
+                <DateSelector
                   value={
                     updateToDoData.dueDate
                       ? dayjs(updateToDoData.dueDate)
                       : null
                   }
                   onChange={handleDueDateChange}
-                  size="small"
-                  disablePast
+                  sx={{
+                    width: "12rem",
+                  }}
                 />
               </Box>
               <Box sx={{ pt: 1 }}>
-                <FormControl size="small" sx={{}}>
-                  <InputLabel id="toDo-status-label">Status</InputLabel>
-                  <Select
-                    labelId="toDo-status-label"
-                    id="toDo-status-select"
-                    name="statusId"
-                    value={updateToDoData.statusId}
-                    onChange={handleSelectChange}
-                    label="status"
-                  >
-                    {statusList?.map((status) => {
-                      return (
-                        <MenuItem value={status.id} key={status.id}>
-                          <Chip label={status.title} size="small" />
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </FormControl>
+                <StatusSelect
+                  value={updateToDoData.statusId}
+                  onChange={handleSelectChange}
+                />
                 <PrioritySelect
                   value={updateToDoData.priority}
                   onChange={handleSelectChange}

@@ -6,10 +6,6 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  InputLabel,
-  FormControl,
-  MenuItem,
-  Select,
   TextField,
   Alert,
   Autocomplete,
@@ -23,11 +19,12 @@ import { DatePicker } from "@mui/x-date-pickers";
 import LoadingButton from "@mui/lab/LoadingButton";
 import dayjs from "dayjs";
 import { useCreateToDo, useUpdateToDo } from "../hooks/toDo";
-import { useGetStatusList } from "../hooks/status";
 import { useGetUserList } from "../hooks/user";
 import { useOrganization } from "@clerk/clerk-react";
 import AppContext from "../contexts/AppContext";
-import PrioritySelect from "../components/toDo/PrioritySelect";
+import PrioritySelect from "./toDoForms/PrioritySelect";
+import StatusSelect from "./toDoForms/StatusSelect";
+import DateSelector from "./toDoForms/DateSelector";
 
 const ToDoForm = () => {
   const {
@@ -45,8 +42,6 @@ const ToDoForm = () => {
   const [showWarning, setShowWarning] = useState("");
 
   const { data: userList } = useGetUserList();
-
-  const { data: statusList } = useGetStatusList();
 
   const {
     mutate: createToDo,
@@ -185,6 +180,16 @@ const ToDoForm = () => {
               }
               disablePast
             />
+            <DateSelector
+              value={toDoFormData.dueDate ? dayjs(toDoFormData.dueDate) : null}
+              onChange={(newDate) =>
+                setToDoFormData((prev) => ({
+                  ...prev,
+                  dueDate: newDate,
+                }))
+              }
+              sx={{ pb: "1rem", pr: "1rem" }}
+            />
             {organization && (
               <Autocomplete
                 autoHighlight
@@ -254,30 +259,14 @@ const ToDoForm = () => {
           <PrioritySelect
             value={toDoFormData.priority}
             onChange={handleInputChange}
-            sx={{ pb: "1rem" }}
+            sx={{ py: "1rem" }}
             fullWidth={true}
           />
-          <FormControl fullWidth size="small">
-            <InputLabel id="toDo-status-label">Status</InputLabel>
-            <Select
-              labelId="toDo-status-label"
-              id="toDo-status-select"
-              name="statusId"
-              value={toDoFormData.statusId}
-              onChange={handleInputChange}
-              label="status"
-            >
-              {statusList?.length > 0
-                ? statusList.map((status) => {
-                    return (
-                      <MenuItem value={status.id} key={status.id}>
-                        {status.title}
-                      </MenuItem>
-                    );
-                  })
-                : null}
-            </Select>
-          </FormControl>
+          <StatusSelect
+            value={toDoFormData.statusId}
+            onChange={handleInputChange}
+            fullWidth={true}
+          />
         </DialogContent>
         <DialogActions>
           <LoadingButton
