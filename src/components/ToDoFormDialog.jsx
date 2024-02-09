@@ -9,7 +9,6 @@ import {
   TextField,
   Alert,
 } from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers";
 import LoadingButton from "@mui/lab/LoadingButton";
 import dayjs from "dayjs";
 import { useCreateToDo, useUpdateToDo } from "../hooks/toDo";
@@ -144,7 +143,7 @@ const ToDoForm = () => {
           />
           <TextField
             margin="dense"
-            id="taskDescription"
+            id="toDoDescription"
             label="Description"
             name="description"
             type="text"
@@ -157,27 +156,6 @@ const ToDoForm = () => {
             multiline
           />
           <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-            <DatePicker
-              slotProps={{
-                actionBar: {
-                  actions: ["clear"],
-                },
-                textField: {
-                  size: "small",
-                  InputLabelProps: { shrink: true },
-                },
-              }}
-              sx={{ pb: "1rem", pr: "1rem" }}
-              label="Date Due"
-              value={toDoFormData.dueDate ? dayjs(toDoFormData.dueDate) : null}
-              onChange={(newDate) =>
-                setToDoFormData((prev) => ({
-                  ...prev,
-                  dueDate: newDate,
-                }))
-              }
-              disablePast
-            />
             <DateSelector
               value={toDoFormData.dueDate ? dayjs(toDoFormData.dueDate) : null}
               onChange={(newDate) =>
