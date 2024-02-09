@@ -8,12 +8,6 @@ import {
   DialogTitle,
   TextField,
   Alert,
-  Autocomplete,
-  ListItem,
-  Avatar,
-  ListItemText,
-  ListItemAvatar,
-  InputAdornment,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -25,6 +19,7 @@ import AppContext from "../contexts/AppContext";
 import PrioritySelect from "./toDoForms/PrioritySelect";
 import StatusSelect from "./toDoForms/StatusSelect";
 import DateSelector from "./toDoForms/DateSelector";
+import AssigneeSelect from "./toDoForms/AssigneeSelect";
 
 const ToDoForm = () => {
   const {
@@ -191,68 +186,17 @@ const ToDoForm = () => {
               sx={{ pb: "1rem", pr: "1rem" }}
             />
             {organization && (
-              <Autocomplete
-                autoHighlight
-                id="assignee-autocomplete"
-                options={userList || []}
+              <AssigneeSelect
                 value={
                   userList?.find(
                     (user) => user.id === toDoFormData.assigneeUserId
                   ) || null
                 }
-                getOptionLabel={(option) => option.id}
+                onChange={handleAssigneeChange}
                 sx={{
                   width: isMobile ? "100% " : "17rem",
                   pb: isMobile ? 2 : 0,
                 }}
-                renderOption={(props, option) => {
-                  return (
-                    <ListItem {...props} key={option.id}>
-                      <ListItemAvatar>
-                        <Avatar
-                          src={option.imageUrl}
-                          sx={{ height: 24, width: 24 }}
-                        />
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={`${option?.firstName} ${option?.lastName}`}
-                      />
-                    </ListItem>
-                  );
-                }}
-                onChange={handleAssigneeChange}
-                renderInput={({
-                  inputProps: { value, ...restInputProps },
-                  InputProps,
-                  ...restParams
-                }) => {
-                  const user = userList?.find((user) => user.id === value);
-                  return (
-                    <TextField
-                      {...restParams}
-                      value={`${user?.firstName} ${user?.lastName}`}
-                      label="Assignee"
-                      InputProps={{
-                        ...InputProps,
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <Avatar
-                              src={user?.imageUrl}
-                              sx={{ height: 24, width: 24 }}
-                            />
-                          </InputAdornment>
-                        ),
-                      }}
-                      inputProps={{
-                        ...restInputProps,
-                        value: user
-                          ? `${user?.firstName} ${user?.lastName}`
-                          : "",
-                      }}
-                    />
-                  );
-                }}
-                size="small"
               />
             )}
           </Box>

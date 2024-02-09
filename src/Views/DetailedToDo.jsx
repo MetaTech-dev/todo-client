@@ -4,7 +4,6 @@ import dayjs from "dayjs";
 import { useGetOneUser, useGetUserList } from "../hooks/user";
 import { useGetOneToDo, useUpdateToDo } from "../hooks/toDo";
 import {
-  Autocomplete,
   Avatar,
   Box,
   Button,
@@ -12,10 +11,6 @@ import {
   CardActions,
   CardContent,
   CardHeader,
-  InputAdornment,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
   TextField,
   Typography,
 } from "@mui/material";
@@ -28,6 +23,7 @@ import { useOrganization } from "@clerk/clerk-react";
 import PrioritySelect from "../components/toDoForms/PrioritySelect";
 import StatusSelect from "../components/toDoForms/StatusSelect";
 import DateSelector from "../components/toDoForms/DateSelector";
+import AssigneeSelect from "../components/toDoForms/AssigneeSelect";
 
 const DetailedToDo = () => {
   const {
@@ -232,65 +228,14 @@ const DetailedToDo = () => {
               }}
             >
               {organization && (
-                <Autocomplete
-                  autoHighlight
-                  id="assignee-autocomplete"
-                  options={userList || []}
+                <AssigneeSelect
                   value={
                     userList?.find(
                       (user) => user.id === updateToDoData.assigneeUserId
                     ) || null
                   }
-                  getOptionLabel={(option) => option.id}
-                  sx={{ width: "17rem", pt: 1 }}
-                  renderOption={(props, option) => {
-                    return (
-                      <ListItem {...props} key={option.id}>
-                        <ListItemAvatar>
-                          <Avatar
-                            src={option.imageUrl}
-                            sx={{ height: 24, width: 24 }}
-                          />
-                        </ListItemAvatar>
-                        <ListItemText
-                          primary={`${option?.firstName} ${option?.lastName}`}
-                        />
-                      </ListItem>
-                    );
-                  }}
                   onChange={handleAssigneeChange}
-                  renderInput={({
-                    inputProps: { value, ...restInputProps },
-                    InputProps,
-                    ...restParams
-                  }) => {
-                    const user = userList?.find((user) => user.id === value);
-                    return (
-                      <TextField
-                        {...restParams}
-                        value={`${user?.firstName} ${user?.lastName}`}
-                        label="Assignee"
-                        InputProps={{
-                          ...InputProps,
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <Avatar
-                                src={user?.imageUrl}
-                                sx={{ height: 24, width: 24 }}
-                              />
-                            </InputAdornment>
-                          ),
-                        }}
-                        inputProps={{
-                          ...restInputProps,
-                          value: user
-                            ? `${user?.firstName} ${user?.lastName}`
-                            : "",
-                        }}
-                      />
-                    );
-                  }}
-                  size="small"
+                  sx={{ width: "17rem", pt: 1 }}
                 />
               )}
               <Box sx={{ pt: 1 }}>
