@@ -24,6 +24,7 @@ import PrioritySelect from "../components/toDoForms/PrioritySelect";
 import StatusSelect from "../components/toDoForms/StatusSelect";
 import DateSelector from "../components/toDoForms/DateSelector";
 import AssigneeSelect from "../components/toDoForms/AssigneeSelect";
+import { useGetStatusList } from "../hooks/status";
 
 const DetailedToDo = () => {
   const {
@@ -43,6 +44,8 @@ const DetailedToDo = () => {
   const { data: toDo, isPending: isToDoPending } = useGetOneToDo({
     id: toDoId,
   });
+
+  const { data: statusList } = useGetStatusList();
 
   const {
     mutate: updateToDo,
@@ -252,10 +255,13 @@ const DetailedToDo = () => {
                 />
               </Box>
               <Box sx={{ pt: 1 }}>
-                <StatusSelect
-                  value={updateToDoData.statusId}
-                  onChange={handleSelectChange}
-                />
+                {statusList && (
+                  <StatusSelect
+                    value={updateToDoData.statusId}
+                    onChange={handleSelectChange}
+                    statusList={statusList}
+                  />
+                )}
                 <PrioritySelect
                   value={updateToDoData.priority}
                   onChange={handleSelectChange}

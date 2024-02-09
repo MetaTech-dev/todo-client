@@ -1,9 +1,7 @@
 import { Chip, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { useGetStatusList } from "../../hooks/status";
 
-const StatusSelect = ({ value, onChange, fullWidth }) => {
-  const { data: statusList } = useGetStatusList();
-
+const StatusSelect = ({ value, onChange, fullWidth, statusList }) => {
   return (
     <FormControl size="small" fullWidth={fullWidth}>
       <InputLabel id="toDo-status-label">Status</InputLabel>
