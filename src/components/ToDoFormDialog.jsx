@@ -20,6 +20,7 @@ import PrioritySelect from "./toDoForms/PrioritySelect";
 import StatusSelect from "./toDoForms/StatusSelect";
 import DateSelector from "./toDoForms/DateSelector";
 import AssigneeSelect from "./toDoForms/AssigneeSelect";
+import { useGetStatusList } from "../hooks/status";
 
 const ToDoForm = () => {
   const {
@@ -37,6 +38,8 @@ const ToDoForm = () => {
   const [showWarning, setShowWarning] = useState("");
 
   const { data: userList } = useGetUserList();
+
+  const { data: statusList } = useGetStatusList();
 
   const {
     mutate: createToDo,
@@ -195,7 +198,7 @@ const ToDoForm = () => {
                 onChange={handleAssigneeChange}
                 sx={{
                   width: isMobile ? "100% " : "17rem",
-                  pb: isMobile ? 2 : 0,
+                  pb: 2,
                 }}
               />
             )}
@@ -203,14 +206,17 @@ const ToDoForm = () => {
           <PrioritySelect
             value={toDoFormData.priority}
             onChange={handleInputChange}
-            sx={{ py: "1rem" }}
+            sx={{ pb: "1rem" }}
             fullWidth={true}
           />
-          <StatusSelect
-            value={toDoFormData.statusId}
-            onChange={handleInputChange}
-            fullWidth={true}
-          />
+          {statusList && (
+            <StatusSelect
+              value={toDoFormData.statusId}
+              onChange={handleInputChange}
+              fullWidth={true}
+              statusList={statusList}
+            />
+          )}
         </DialogContent>
         <DialogActions>
           <LoadingButton

@@ -1,5 +1,4 @@
 import { Chip, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import { useGetStatusList } from "../../hooks/status";
 
 const StatusSelect = ({ value, onChange, fullWidth, statusList }) => {
   return (
