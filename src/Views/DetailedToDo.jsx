@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import DialogContext from "../contexts/DialogContext";
 import dayjs from "dayjs";
 import { useGetOneUser, useGetUserList } from "../hooks/user";
@@ -31,6 +31,7 @@ const DetailedToDo = () => {
     setIsDeleteConfirmationDialogOpen,
     setDeleteConfirmationItem,
     setDeleteConfirmationItemType,
+    defaultUpdateToDoData,
   } = useContext(DialogContext);
 
   const { pathname } = useLocation();
@@ -44,7 +45,8 @@ const DetailedToDo = () => {
   const { data: toDo, isPending: isToDoPending } = useGetOneToDo({
     id: toDoId,
   });
-
+  const { data: userList } = useGetUserList();
+  const { data: toDoAuthor } = useGetOneUser({ id: toDo?.authorUserId });
   const { data: statusList } = useGetStatusList();
 
   const {
@@ -53,23 +55,11 @@ const DetailedToDo = () => {
     isSuccess: isUpdateToDoSuccess,
   } = useUpdateToDo();
 
-  const { data: userList } = useGetUserList();
-
-  const { data: toDoAuthor } = useGetOneUser({ id: toDo?.authorUserId });
-
   const timeSince = useTimeSince(toDo?.createdDate);
 
   const [isEditing, setIsEditing] = useState(false);
 
-  const [updateToDoData, setUpdateToDoData] = useState({
-    title: "",
-    description: "",
-    dueDate: null,
-    priority: "low",
-    statusId: "",
-    assigneeUserId: null,
-    id: null,
-  });
+  const [updateToDoData, setUpdateToDoData] = useState(defaultUpdateToDoData);
 
   useEffect(() => {
     if (toDo) {
@@ -86,14 +76,6 @@ const DetailedToDo = () => {
       });
     }
   }, [toDo]);
-
-  const handleTextChange = useCallback((event) => {
-    setIsEditing(true);
-    setUpdateToDoData((prev) => ({
-      ...prev,
-      [event.target.name]: event.target.value,
-    }));
-  }, []);
 
   const handleSave = () => {
     updateToDo(updateToDoData);
@@ -130,9 +112,10 @@ const DetailedToDo = () => {
     }));
   };
 
-  const handleSelectChange = (event) => {
+  const handleChange = (event, value) => {
     setIsEditing(true);
-    const { name, value } = event.target;
+    const { name } = event.target;
+    value = event.target.value;
 
     setUpdateToDoData((prev) => ({
       ...prev,
@@ -195,7 +178,7 @@ const DetailedToDo = () => {
                 inputProps={{
                   sx: { fontSize: "1.5rem", pt: 1 },
                 }}
-                onChange={handleTextChange}
+                onChange={handleChange}
                 fullWidth
                 required
               />
@@ -210,7 +193,7 @@ const DetailedToDo = () => {
               name="description"
               placeholder="Description"
               value={updateToDoData?.description}
-              onChange={handleTextChange}
+              onChange={handleChange}
               multiline
               maxRows={15}
               minRows={3}
@@ -258,13 +241,13 @@ const DetailedToDo = () => {
                 {statusList && (
                   <StatusSelect
                     value={updateToDoData.statusId}
-                    onChange={handleSelectChange}
+                    onChange={handleChange}
                     statusList={statusList}
                   />
                 )}
                 <PrioritySelect
                   value={updateToDoData.priority}
-                  onChange={handleSelectChange}
+                  onChange={handleChange}
                   sx={{ ml: 1 }}
                 />
               </Box>
@@ -313,9 +296,7 @@ const DetailedToDo = () => {
               <Button
                 variant="outlined"
                 onClick={(event) => handleDeleteClick(event, toDo, "toDo")}
-                sx={{
-                  color: "error.main",
-                }}
+                sx={{ color: "error.main" }}
               >
                 Delete
               </Button>

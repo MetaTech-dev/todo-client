@@ -49,6 +49,19 @@ export const DialogProvider = ({ children }) => {
     [statusList, user]
   );
 
+  const defaultUpdateToDoData = useMemo(
+    () => ({
+      title: "",
+      description: "",
+      dueDate: null,
+      priority: "low",
+      statusId: "",
+      assigneeUserId: null,
+      id: null,
+    }),
+    []
+  );
+
   useEffect(() => {
     if (statusList?.length > 0) {
       setToDoFormData((prev) => ({
@@ -125,6 +138,7 @@ export const DialogProvider = ({ children }) => {
     setIsUserDialogOpen,
     userFormData,
     setUserFormData,
+    defaultUpdateToDoData,
   };
 
   return (

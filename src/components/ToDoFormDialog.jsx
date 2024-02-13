@@ -31,13 +31,10 @@ const ToDoForm = () => {
   } = useContext(DialogContext);
 
   const { isMobile } = useContext(AppContext);
-
   const { organization } = useOrganization();
-
   const [showWarning, setShowWarning] = useState("");
 
   const { data: userList } = useGetUserList();
-
   const { data: statusList } = useGetStatusList();
 
   const {
@@ -58,7 +55,7 @@ const ToDoForm = () => {
     setToDoFormData(defaultNewToDo);
   };
 
-  const handleInputChange = (event) => {
+  const handleChange = (event) => {
     const { name, value } = event.target;
 
     setToDoFormData((prev) => ({
@@ -82,9 +79,7 @@ const ToDoForm = () => {
     }
   };
 
-  const toDoFormTitle = (toDo) => {
-    return !toDo.id ? "New ToDo:" : "Update ToDo:";
-  };
+  const toDoFormTitle = (toDo) => (!toDo.id ? "New ToDo:" : "Update ToDo:");
 
   useEffect(() => {
     if (isCreateToDoSuccess || isUpdateToDoSuccess) {
@@ -138,7 +133,7 @@ const ToDoForm = () => {
             fullWidth
             variant="standard"
             value={toDoFormData.title}
-            onChange={handleInputChange}
+            onChange={handleChange}
             required
           />
           <TextField
@@ -150,7 +145,7 @@ const ToDoForm = () => {
             fullWidth
             variant="standard"
             value={toDoFormData.description}
-            onChange={handleInputChange}
+            onChange={handleChange}
             sx={{ pb: "1rem" }}
             required
             multiline
@@ -183,14 +178,14 @@ const ToDoForm = () => {
           </Box>
           <PrioritySelect
             value={toDoFormData.priority}
-            onChange={handleInputChange}
+            onChange={handleChange}
             sx={{ pb: "1rem" }}
             fullWidth={true}
           />
           {statusList && (
             <StatusSelect
               value={toDoFormData.statusId}
-              onChange={handleInputChange}
+              onChange={handleChange}
               fullWidth={true}
               statusList={statusList}
             />
