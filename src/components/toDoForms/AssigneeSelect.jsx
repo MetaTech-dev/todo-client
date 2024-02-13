@@ -32,7 +32,9 @@ const AssigneeSelect = ({ onChange, value, sx }) => {
           </ListItem>
         );
       }}
-      onChange={onChange}
+      onChange={(_event, value) =>
+        onChange({ target: { name: "assigneeUserId", value: value?.id } })
+      }
       renderInput={({
         inputProps: { value, ...restInputProps },
         InputProps,

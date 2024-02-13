@@ -1,6 +1,5 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import DialogContext from "../contexts/DialogContext";
-import dayjs from "dayjs";
 import { useGetOneUser, useGetUserList } from "../hooks/user";
 import { useGetOneToDo, useUpdateToDo } from "../hooks/toDo";
 import {
@@ -58,21 +57,13 @@ const DetailedToDo = () => {
   const timeSince = useTimeSince(toDo?.createdDate);
 
   const [isEditing, setIsEditing] = useState(false);
-
   const [updateToDoData, setUpdateToDoData] = useState(defaultUpdateToDoData);
 
   useEffect(() => {
     if (toDo) {
       setUpdateToDoData({
-        title: toDo.title,
-        description: toDo.description,
-        createdDate: toDo.createdDate,
-        authorUserId: toDo.authorUserId,
-        dueDate: toDo.dueDate,
-        priority: toDo.priority,
-        statusId: toDo.statusId,
-        assigneeUserId: toDo.assigneeUserId || null,
-        id: toDo.id,
+        ...toDo,
+        assigneeUserId: toDo.assigneeUserId ?? null,
       });
     }
   }, [toDo]);
@@ -88,51 +79,18 @@ const DetailedToDo = () => {
     }
   }, [isUpdateToDoSuccess]);
 
-  const handleAssigneeChange = (event, value) => {
+  const handleChange = (event) => {
     setIsEditing(true);
-    if (value) {
-      const { id } = value;
-      setUpdateToDoData((prev) => ({
-        ...prev,
-        assigneeUserId: id,
-      }));
-    } else {
-      setUpdateToDoData((prev) => ({
-        ...prev,
-        assigneeUserId: null,
-      }));
-    }
-  };
-
-  const handleDueDateChange = (newDate) => {
-    setIsEditing(true);
-    setUpdateToDoData((prev) => ({
-      ...prev,
-      dueDate: newDate,
-    }));
-  };
-
-  const handleChange = (event, value) => {
-    setIsEditing(true);
-    const { name } = event.target;
-    value = event.target.value;
+    const { name, value } = event.target;
 
     setUpdateToDoData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: value ?? null,
     }));
   };
 
   const handleCancel = () => {
-    setUpdateToDoData({
-      title: toDo.title,
-      description: toDo.description,
-      dueDate: toDo.dueDate,
-      priority: toDo.priority,
-      statusId: toDo.statusId,
-      assigneeUserId: toDo.assigneeUserId,
-      id: toDo.id,
-    });
+    setUpdateToDoData(toDo);
     setIsEditing(false);
   };
 
@@ -220,18 +178,14 @@ const DetailedToDo = () => {
                       (user) => user.id === updateToDoData.assigneeUserId
                     ) || null
                   }
-                  onChange={handleAssigneeChange}
+                  onChange={handleChange}
                   sx={{ width: "17rem", pt: 1 }}
                 />
               )}
               <Box sx={{ pt: 1 }}>
                 <DateSelector
-                  value={
-                    updateToDoData.dueDate
-                      ? dayjs(updateToDoData.dueDate)
-                      : null
-                  }
-                  onChange={handleDueDateChange}
+                  value={updateToDoData.dueDate}
+                  onChange={handleChange}
                   sx={{
                     width: "12rem",
                   }}

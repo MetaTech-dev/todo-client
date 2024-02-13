@@ -1,4 +1,5 @@
 import { DatePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
 
 const DateSelector = ({ onChange, value, sx }) => {
   return (
@@ -10,12 +11,17 @@ const DateSelector = ({ onChange, value, sx }) => {
         textField: {
           size: "small",
           InputLabelProps: { shrink: true },
+          error: false,
         },
       }}
       sx={sx}
       label="Date Due"
-      value={value}
-      onChange={onChange}
+      value={dayjs(value)}
+      onChange={(dateObj) =>
+        onChange({
+          target: { name: "dueDate", value: dateObj ? dayjs(dateObj) : null },
+        })
+      }
       size="small"
       disablePast
     />
