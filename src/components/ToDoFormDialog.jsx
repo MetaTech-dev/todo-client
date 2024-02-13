@@ -10,7 +10,6 @@ import {
   Alert,
 } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
-import dayjs from "dayjs";
 import { useCreateToDo, useUpdateToDo } from "../hooks/toDo";
 import { useGetUserList } from "../hooks/user";
 import { useOrganization } from "@clerk/clerk-react";
@@ -64,21 +63,6 @@ const ToDoForm = () => {
     }));
   };
 
-  const handleAssigneeChange = (event, value) => {
-    if (value) {
-      const { id } = value;
-      setToDoFormData((prev) => ({
-        ...prev,
-        assigneeUserId: id,
-      }));
-    } else {
-      setToDoFormData((prev) => ({
-        ...prev,
-        assigneeUserId: null,
-      }));
-    }
-  };
-
   const toDoFormTitle = (toDo) => (!toDo.id ? "New ToDo:" : "Update ToDo:");
 
   useEffect(() => {
@@ -126,7 +110,7 @@ const ToDoForm = () => {
           <TextField
             autoFocus
             margin="dense"
-            id="taskTitle"
+            id="toDoTitle"
             label="Title"
             name="title"
             type="text"
@@ -152,13 +136,8 @@ const ToDoForm = () => {
           />
           <Box sx={{ display: "flex", flexWrap: "wrap" }}>
             <DateSelector
-              value={toDoFormData.dueDate ? dayjs(toDoFormData.dueDate) : null}
-              onChange={(newDate) =>
-                setToDoFormData((prev) => ({
-                  ...prev,
-                  dueDate: newDate,
-                }))
-              }
+              value={toDoFormData.dueDate}
+              onChange={handleChange}
               sx={{ pb: "1rem", pr: "1rem" }}
             />
             {organization && (
@@ -168,7 +147,7 @@ const ToDoForm = () => {
                     (user) => user.id === toDoFormData.assigneeUserId
                   ) || null
                 }
-                onChange={handleAssigneeChange}
+                onChange={handleChange}
                 sx={{
                   width: isMobile ? "100% " : "17rem",
                   pb: 2,

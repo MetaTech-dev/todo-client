@@ -58,6 +58,12 @@ const DetailedToDo = () => {
 
   const [isEditing, setIsEditing] = useState(false);
   const [updateToDoData, setUpdateToDoData] = useState(defaultUpdateToDoData);
+  const assigneeValue = useMemo(
+    () =>
+      userList?.find((user) => user.id === updateToDoData.assigneeUserId) ||
+      null,
+    [updateToDoData.assigneeUserId, userList]
+  );
 
   useEffect(() => {
     if (toDo) {
@@ -173,11 +179,7 @@ const DetailedToDo = () => {
             >
               {organization && (
                 <AssigneeSelect
-                  value={
-                    userList?.find(
-                      (user) => user.id === updateToDoData.assigneeUserId
-                    ) || null
-                  }
+                  value={assigneeValue}
                   onChange={handleChange}
                   sx={{ width: "17rem", pt: 1 }}
                 />
@@ -186,9 +188,7 @@ const DetailedToDo = () => {
                 <DateSelector
                   value={updateToDoData.dueDate}
                   onChange={handleChange}
-                  sx={{
-                    width: "12rem",
-                  }}
+                  sx={{ width: "12rem" }}
                 />
               </Box>
               <Box sx={{ pt: 1 }}>
