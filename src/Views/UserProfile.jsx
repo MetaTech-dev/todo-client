@@ -21,8 +21,8 @@ import { useGetRoleList } from "../hooks/role";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { formatDate } from "../utils/formatDate";
-// import { useOrganization } from "@clerk/clerk-react";
 
+// Deprecated, may have a use for this in the future.
 const UserProfile = () => {
   const { pathname } = useLocation();
   const profileId = useMemo(

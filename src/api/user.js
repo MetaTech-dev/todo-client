@@ -59,6 +59,7 @@ export const requestUpdateUser = async ({ data, token }) => {
   }
 };
 
+// deprecated
 export const requestUpdateUserRole = async ({ data, token }) => {
   try {
     const response = await fetch(

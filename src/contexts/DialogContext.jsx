@@ -19,8 +19,7 @@ export const DialogProvider = ({ children }) => {
 
   const [statusFormData, setStatusFormData] = useState(defaultNewStatus);
 
-  const { data: statusList, isSuccess: isStatusListSuccess } =
-    useGetStatusList();
+  const { data: statusList } = useGetStatusList();
 
   const [isProjectSettingsDialogOpen, setIsProjectSettingsDialogOpen] =
     useState(false);
@@ -48,6 +47,19 @@ export const DialogProvider = ({ children }) => {
       assigneeUserId: null,
     }),
     [statusList, user]
+  );
+
+  const defaultUpdateToDoData = useMemo(
+    () => ({
+      title: "",
+      description: "",
+      dueDate: null,
+      priority: "low",
+      statusId: "",
+      assigneeUserId: null,
+      id: null,
+    }),
+    []
   );
 
   useEffect(() => {
@@ -126,6 +138,7 @@ export const DialogProvider = ({ children }) => {
     setIsUserDialogOpen,
     userFormData,
     setUserFormData,
+    defaultUpdateToDoData,
   };
 
   return (

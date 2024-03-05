@@ -55,6 +55,7 @@ const ListView = ({ statusList, filteredToDoList }) => {
   };
 
   const rows = filteredToDoList;
+
   const columns = [
     { field: "title", headerName: "Title", flex: 0.75, editable: false },
     {

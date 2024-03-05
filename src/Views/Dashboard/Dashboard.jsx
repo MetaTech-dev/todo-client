@@ -25,6 +25,7 @@ const Dashboard = () => {
 
   const { setIsProjectSettingsDialogOpen, setIsToDoFormDialogOpen } =
     useContext(DialogContext);
+
   const { user } = useGetCurrentUser();
 
   const { data: statusList, isPending: isStatusListPending } =
@@ -78,18 +79,8 @@ const Dashboard = () => {
   const handleViewState = (event, newViewState) => {
     setViewState(newViewState);
   };
-  const getViewState = () => {
+  const getView = () => {
     switch (viewState) {
-      case "board":
-        return (
-          <BoardView
-            statusList={statusList}
-            isStatusListPending={isStatusListPending}
-            filteredToDoList={filteredToDoList}
-            toDoList={toDoList}
-            handleToDoFormOpen={handleToDoFormOpen}
-          />
-        );
       case "list":
         return (
           <ListView
@@ -103,6 +94,8 @@ const Dashboard = () => {
             statusList={statusList}
             isStatusListPending={isStatusListPending}
             filteredToDoList={filteredToDoList}
+            toDoList={toDoList}
+            handleToDoFormOpen={handleToDoFormOpen}
           />
         );
     }
@@ -180,7 +173,7 @@ const Dashboard = () => {
           height: "100%",
         }}
       >
-        {getViewState()}
+        {getView()}
       </Box>
     </>
   );

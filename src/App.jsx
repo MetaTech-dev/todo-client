@@ -8,7 +8,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { RouterProvider } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { blueGrey, grey } from "@mui/material/colors";
+import { blueGrey } from "@mui/material/colors";
 import router from "./router";
 import AppContext from "./contexts/AppContext";
 import { SnackbarProvider } from "notistack";
@@ -26,7 +26,6 @@ function App() {
     palette: {
       mode: isDarkMode ? "dark" : "light",
       primary: blueGrey,
-      secondary: grey,
       neutral: {
         main: "#90A4AE66",
         contrastText: isDarkMode ? "#fff" : "#000",

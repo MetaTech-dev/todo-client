@@ -1,10 +1,8 @@
-import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import DialogContext from "../contexts/DialogContext";
-import dayjs from "dayjs";
 import { useGetOneUser, useGetUserList } from "../hooks/user";
 import { useGetOneToDo, useUpdateToDo } from "../hooks/toDo";
 import {
-  Autocomplete,
   Avatar,
   Box,
   Button,
@@ -12,32 +10,27 @@ import {
   CardActions,
   CardContent,
   CardHeader,
-  Chip,
-  FormControl,
-  InputAdornment,
-  InputLabel,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-  MenuItem,
-  Select,
   TextField,
   Typography,
 } from "@mui/material";
 import { useLocation } from "react-router-dom";
-import { useGetStatusList } from "../hooks/status";
 import LoadingDetailedToDo from "../components/loading/LoadingDetailedToDo";
 import { LoadingButton } from "@mui/lab";
 import { enqueueSnackbar } from "notistack";
-import { DatePicker } from "@mui/x-date-pickers";
 import { useTimeSince } from "../utils/useTimeSince";
 import { useOrganization } from "@clerk/clerk-react";
+import PrioritySelect from "../components/toDoForms/PrioritySelect";
+import StatusSelect from "../components/toDoForms/StatusSelect";
+import DateSelector from "../components/toDoForms/DateSelector";
+import AssigneeSelect from "../components/toDoForms/AssigneeSelect";
+import { useGetStatusList } from "../hooks/status";
 
 const DetailedToDo = () => {
   const {
     setIsDeleteConfirmationDialogOpen,
     setDeleteConfirmationItem,
     setDeleteConfirmationItemType,
+    defaultUpdateToDoData,
   } = useContext(DialogContext);
 
   const { pathname } = useLocation();
@@ -51,6 +44,9 @@ const DetailedToDo = () => {
   const { data: toDo, isPending: isToDoPending } = useGetOneToDo({
     id: toDoId,
   });
+  const { data: userList } = useGetUserList();
+  const { data: toDoAuthor } = useGetOneUser({ id: toDo?.authorUserId });
+  const { data: statusList } = useGetStatusList();
 
   const {
     mutate: updateToDo,
@@ -58,49 +54,25 @@ const DetailedToDo = () => {
     isSuccess: isUpdateToDoSuccess,
   } = useUpdateToDo();
 
-  const { data: statusList } = useGetStatusList();
-
-  const { data: userList } = useGetUserList();
-
-  const { data: toDoAuthor } = useGetOneUser({ id: toDo?.authorUserId });
-
   const timeSince = useTimeSince(toDo?.createdDate);
 
   const [isEditing, setIsEditing] = useState(false);
-
-  const [updateToDoData, setUpdateToDoData] = useState({
-    title: "",
-    description: "",
-    dueDate: null,
-    priority: "low",
-    statusId: "",
-    assigneeUserId: null,
-    id: null,
-  });
+  const [updateToDoData, setUpdateToDoData] = useState(defaultUpdateToDoData);
+  const assigneeValue = useMemo(
+    () =>
+      userList?.find((user) => user.id === updateToDoData.assigneeUserId) ||
+      null,
+    [updateToDoData.assigneeUserId, userList]
+  );
 
   useEffect(() => {
     if (toDo) {
       setUpdateToDoData({
-        title: toDo.title,
-        description: toDo.description,
-        createdDate: toDo.createdDate,
-        authorUserId: toDo.authorUserId,
-        dueDate: toDo.dueDate,
-        priority: toDo.priority,
-        statusId: toDo.statusId,
-        assigneeUserId: toDo.assigneeUserId || null,
-        id: toDo.id,
+        ...toDo,
+        assigneeUserId: toDo.assigneeUserId ?? null,
       });
     }
   }, [toDo]);
-
-  const handleTextChange = useCallback((event) => {
-    setIsEditing(true);
-    setUpdateToDoData((prev) => ({
-      ...prev,
-      [event.target.name]: event.target.value,
-    }));
-  }, []);
 
   const handleSave = () => {
     updateToDo(updateToDoData);
@@ -113,50 +85,18 @@ const DetailedToDo = () => {
     }
   }, [isUpdateToDoSuccess]);
 
-  const handleAssigneeChange = (event, value) => {
-    setIsEditing(true);
-    if (value) {
-      const { id } = value;
-      setUpdateToDoData((prev) => ({
-        ...prev,
-        assigneeUserId: id,
-      }));
-    } else {
-      setUpdateToDoData((prev) => ({
-        ...prev,
-        assigneeUserId: null,
-      }));
-    }
-  };
-
-  const handleDueDateChange = (newDate) => {
-    setIsEditing(true);
-    setUpdateToDoData((prev) => ({
-      ...prev,
-      dueDate: newDate,
-    }));
-  };
-
-  const handleSelectChange = (event) => {
+  const handleChange = (event) => {
     setIsEditing(true);
     const { name, value } = event.target;
 
     setUpdateToDoData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: value ?? null,
     }));
   };
 
   const handleCancel = () => {
-    setUpdateToDoData({
-      title: toDo.title,
-      description: toDo.description,
-      dueDate: toDo.dueDate,
-      priority: toDo.priority,
-      statusId: toDo.statusId,
-      assigneeUserId: toDo.assigneeUserId,
-      id: toDo.id,
-    });
+    setUpdateToDoData(toDo);
     setIsEditing(false);
   };
 
@@ -202,7 +142,7 @@ const DetailedToDo = () => {
                 inputProps={{
                   sx: { fontSize: "1.5rem", pt: 1 },
                 }}
-                onChange={handleTextChange}
+                onChange={handleChange}
                 fullWidth
                 required
               />
@@ -217,7 +157,7 @@ const DetailedToDo = () => {
               name="description"
               placeholder="Description"
               value={updateToDoData?.description}
-              onChange={handleTextChange}
+              onChange={handleChange}
               multiline
               maxRows={15}
               minRows={3}
@@ -238,133 +178,32 @@ const DetailedToDo = () => {
               }}
             >
               {organization && (
-                <Autocomplete
-                  autoHighlight
-                  id="assignee-autocomplete"
-                  options={userList || []}
-                  value={
-                    userList?.find(
-                      (user) => user.id === updateToDoData.assigneeUserId
-                    ) || null
-                  }
-                  getOptionLabel={(option) => option.id}
+                <AssigneeSelect
+                  value={assigneeValue}
+                  onChange={handleChange}
                   sx={{ width: "17rem", pt: 1 }}
-                  renderOption={(props, option) => {
-                    return (
-                      <ListItem {...props} key={option.id}>
-                        <ListItemAvatar>
-                          <Avatar
-                            src={option.imageUrl}
-                            sx={{ height: 24, width: 24 }}
-                          />
-                        </ListItemAvatar>
-                        <ListItemText
-                          primary={`${option?.firstName} ${option?.lastName}`}
-                        />
-                      </ListItem>
-                    );
-                  }}
-                  onChange={handleAssigneeChange}
-                  renderInput={({
-                    inputProps: { value, ...restInputProps },
-                    InputProps,
-                    ...restParams
-                  }) => {
-                    const user = userList?.find((user) => user.id === value);
-                    return (
-                      <TextField
-                        {...restParams}
-                        value={`${user?.firstName} ${user?.lastName}`}
-                        label="Assignee"
-                        InputProps={{
-                          ...InputProps,
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <Avatar
-                                src={user?.imageUrl}
-                                sx={{ height: 24, width: 24 }}
-                              />
-                            </InputAdornment>
-                          ),
-                        }}
-                        inputProps={{
-                          ...restInputProps,
-                          value: user
-                            ? `${user?.firstName} ${user?.lastName}`
-                            : "",
-                        }}
-                      />
-                    );
-                  }}
-                  size="small"
                 />
               )}
               <Box sx={{ pt: 1 }}>
-                <DatePicker
-                  slotProps={{
-                    actionBar: {
-                      actions: ["clear"],
-                    },
-                    textField: {
-                      size: "small",
-                      InputLabelProps: { shrink: true },
-                    },
-                  }}
-                  sx={{
-                    width: "12rem",
-                  }}
-                  label="Date Due"
-                  value={
-                    updateToDoData.dueDate
-                      ? dayjs(updateToDoData.dueDate)
-                      : null
-                  }
-                  onChange={handleDueDateChange}
-                  size="small"
-                  disablePast
+                <DateSelector
+                  value={updateToDoData.dueDate}
+                  onChange={handleChange}
+                  sx={{ width: "12rem" }}
                 />
               </Box>
               <Box sx={{ pt: 1 }}>
-                <FormControl size="small" sx={{}}>
-                  <InputLabel id="toDo-status-label">Status</InputLabel>
-                  <Select
-                    labelId="toDo-status-label"
-                    id="toDo-status-select"
-                    name="statusId"
+                {statusList && (
+                  <StatusSelect
                     value={updateToDoData.statusId}
-                    onChange={handleSelectChange}
-                    label="status"
-                  >
-                    {statusList?.map((status) => {
-                      return (
-                        <MenuItem value={status.id} key={status.id}>
-                          <Chip label={status.title} size="small" />
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </FormControl>
-                <FormControl size="small" sx={{ ml: 1 }}>
-                  <InputLabel id="toDo-priority-label">Priority</InputLabel>
-                  <Select
-                    labelId="toDo-priority-label"
-                    id="toDo-priority-select"
-                    name="priority"
-                    value={updateToDoData.priority}
-                    onChange={handleSelectChange}
-                    label="status"
-                  >
-                    <MenuItem value="low">
-                      <Chip label="Low" color="success" size="small" />
-                    </MenuItem>
-                    <MenuItem value="medium">
-                      <Chip label="Medium" color="warning" size="small" />
-                    </MenuItem>
-                    <MenuItem value="high">
-                      <Chip label="High" color="error" size="small" />
-                    </MenuItem>
-                  </Select>
-                </FormControl>
+                    onChange={handleChange}
+                    statusList={statusList}
+                  />
+                )}
+                <PrioritySelect
+                  value={updateToDoData.priority}
+                  onChange={handleChange}
+                  sx={{ ml: 1 }}
+                />
               </Box>
             </Box>
           </CardContent>
@@ -411,9 +250,7 @@ const DetailedToDo = () => {
               <Button
                 variant="outlined"
                 onClick={(event) => handleDeleteClick(event, toDo, "toDo")}
-                sx={{
-                  color: "error.main",
-                }}
+                sx={{ color: "error.main" }}
               >
                 Delete
               </Button>

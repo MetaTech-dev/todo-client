@@ -6,27 +6,19 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  InputLabel,
-  FormControl,
-  MenuItem,
-  Select,
   TextField,
   Alert,
-  Autocomplete,
-  ListItem,
-  Avatar,
-  ListItemText,
-  ListItemAvatar,
-  InputAdornment,
 } from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers";
 import LoadingButton from "@mui/lab/LoadingButton";
-import dayjs from "dayjs";
 import { useCreateToDo, useUpdateToDo } from "../hooks/toDo";
-import { useGetStatusList } from "../hooks/status";
 import { useGetUserList } from "../hooks/user";
 import { useOrganization } from "@clerk/clerk-react";
 import AppContext from "../contexts/AppContext";
+import PrioritySelect from "./toDoForms/PrioritySelect";
+import StatusSelect from "./toDoForms/StatusSelect";
+import DateSelector from "./toDoForms/DateSelector";
+import AssigneeSelect from "./toDoForms/AssigneeSelect";
+import { useGetStatusList } from "../hooks/status";
 
 const ToDoForm = () => {
   const {
@@ -38,13 +30,10 @@ const ToDoForm = () => {
   } = useContext(DialogContext);
 
   const { isMobile } = useContext(AppContext);
-
   const { organization } = useOrganization();
-
   const [showWarning, setShowWarning] = useState("");
 
   const { data: userList } = useGetUserList();
-
   const { data: statusList } = useGetStatusList();
 
   const {
@@ -65,7 +54,7 @@ const ToDoForm = () => {
     setToDoFormData(defaultNewToDo);
   };
 
-  const handleInputChange = (event) => {
+  const handleChange = (event) => {
     const { name, value } = event.target;
 
     setToDoFormData((prev) => ({
@@ -74,24 +63,7 @@ const ToDoForm = () => {
     }));
   };
 
-  const handleAssigneeChange = (event, value) => {
-    if (value) {
-      const { id } = value;
-      setToDoFormData((prev) => ({
-        ...prev,
-        assigneeUserId: id,
-      }));
-    } else {
-      setToDoFormData((prev) => ({
-        ...prev,
-        assigneeUserId: null,
-      }));
-    }
-  };
-
-  const toDoFormTitle = (toDo) => {
-    return !toDo.id ? "New ToDo:" : "Update ToDo:";
-  };
+  const toDoFormTitle = (toDo) => (!toDo.id ? "New ToDo:" : "Update ToDo:");
 
   useEffect(() => {
     if (isCreateToDoSuccess || isUpdateToDoSuccess) {
@@ -138,155 +110,65 @@ const ToDoForm = () => {
           <TextField
             autoFocus
             margin="dense"
-            id="taskTitle"
+            id="toDoTitle"
             label="Title"
             name="title"
             type="text"
             fullWidth
             variant="standard"
             value={toDoFormData.title}
-            onChange={handleInputChange}
+            onChange={handleChange}
             required
           />
           <TextField
             margin="dense"
-            id="taskDescription"
+            id="toDoDescription"
             label="Description"
             name="description"
             type="text"
             fullWidth
             variant="standard"
             value={toDoFormData.description}
-            onChange={handleInputChange}
+            onChange={handleChange}
             sx={{ pb: "1rem" }}
             required
             multiline
           />
           <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-            <DatePicker
-              slotProps={{
-                actionBar: {
-                  actions: ["clear"],
-                },
-                textField: {
-                  size: "small",
-                  InputLabelProps: { shrink: true },
-                },
-              }}
+            <DateSelector
+              value={toDoFormData.dueDate}
+              onChange={handleChange}
               sx={{ pb: "1rem", pr: "1rem" }}
-              label="Date Due"
-              value={toDoFormData.dueDate ? dayjs(toDoFormData.dueDate) : null}
-              onChange={(newDate) =>
-                setToDoFormData((prev) => ({
-                  ...prev,
-                  dueDate: newDate,
-                }))
-              }
-              disablePast
             />
             {organization && (
-              <Autocomplete
-                autoHighlight
-                id="assignee-autocomplete"
-                options={userList || []}
+              <AssigneeSelect
                 value={
                   userList?.find(
                     (user) => user.id === toDoFormData.assigneeUserId
                   ) || null
                 }
-                getOptionLabel={(option) => option.id}
+                onChange={handleChange}
                 sx={{
                   width: isMobile ? "100% " : "17rem",
-                  pb: isMobile ? 2 : 0,
+                  pb: 2,
                 }}
-                renderOption={(props, option) => {
-                  return (
-                    <ListItem {...props} key={option.id}>
-                      <ListItemAvatar>
-                        <Avatar
-                          src={option.imageUrl}
-                          sx={{ height: 24, width: 24 }}
-                        />
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={`${option?.firstName} ${option?.lastName}`}
-                      />
-                    </ListItem>
-                  );
-                }}
-                onChange={handleAssigneeChange}
-                renderInput={({
-                  inputProps: { value, ...restInputProps },
-                  InputProps,
-                  ...restParams
-                }) => {
-                  const user = userList?.find((user) => user.id === value);
-                  return (
-                    <TextField
-                      {...restParams}
-                      value={`${user?.firstName} ${user?.lastName}`}
-                      label="Assignee"
-                      InputProps={{
-                        ...InputProps,
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <Avatar
-                              src={user?.imageUrl}
-                              sx={{ height: 24, width: 24 }}
-                            />
-                          </InputAdornment>
-                        ),
-                      }}
-                      inputProps={{
-                        ...restInputProps,
-                        value: user
-                          ? `${user?.firstName} ${user?.lastName}`
-                          : "",
-                      }}
-                    />
-                  );
-                }}
-                size="small"
               />
             )}
           </Box>
-          {/* TODO: look into double labels */}
-          <FormControl fullWidth size="small" sx={{ pb: "1rem" }}>
-            <InputLabel id="toDo-priority-label">Priority</InputLabel>
-            <Select
-              labelId="toDo-priority-label"
-              id="toDo-priority-select"
-              name="priority"
-              value={toDoFormData.priority}
-              onChange={handleInputChange}
-              label="priority"
-            >
-              <MenuItem value="low">Low</MenuItem>
-              <MenuItem value="medium">Medium</MenuItem>
-              <MenuItem value="high">High</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl fullWidth size="small">
-            <InputLabel id="toDo-status-label">Status</InputLabel>
-            <Select
-              labelId="toDo-status-label"
-              id="toDo-status-select"
-              name="statusId"
+          <PrioritySelect
+            value={toDoFormData.priority}
+            onChange={handleChange}
+            sx={{ pb: "1rem" }}
+            fullWidth={true}
+          />
+          {statusList && (
+            <StatusSelect
               value={toDoFormData.statusId}
-              onChange={handleInputChange}
-              label="status"
-            >
-              {statusList?.length > 0
-                ? statusList.map((status) => {
-                    return (
-                      <MenuItem value={status.id} key={status.id}>
-                        {status.title}
-                      </MenuItem>
-                    );
-                  })
-                : null}
-            </Select>
-          </FormControl>
+              onChange={handleChange}
+              fullWidth={true}
+              statusList={statusList}
+            />
+          )}
         </DialogContent>
         <DialogActions>
           <LoadingButton

@@ -2,7 +2,7 @@ import { requestGetRoleList } from "../api/role";
 import { enqueueSnackbar } from "notistack";
 import { useAuthQuery } from "./auth";
 
-// TODO: probably don't need this once using Clerk
+// deprecated
 export const useGetRoleList = () =>
   useAuthQuery({
     queryKey: ["roleList"],
