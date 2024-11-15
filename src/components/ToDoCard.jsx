@@ -70,12 +70,19 @@ const ToDoCard = ({ toDo, index, activeCard, isDragging }) => {
                   justifyContent: "space-between",
                 }}
               >
-                <Typography variant="h6">{toDo.title}</Typography>
-                {toDoAssignee && (
+                <Avatar sx={{ height: 25, width: 25, mr: 1, color: "inherit" }}>
+                  <Typography variant="body1">{toDo.id}</Typography>
+                </Avatar>
+                <Box sx={{ flexGrow: 1 }}>
+                  <Typography variant="h6">{toDo.title}</Typography>
+                </Box>
+                {toDoAssignee ? (
                   <Avatar
                     src={toDoAssignee?.imageUrl}
                     sx={{ height: 25, width: 25, ml: 1 }}
                   />
+                ) : (
+                  <Box sx={{ height: 25, width: 25, ml: 1 }} />
                 )}
               </Box>
               <Box

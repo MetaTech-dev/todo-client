@@ -147,6 +147,11 @@ const DetailedToDo = () => {
                 required
               />
             }
+            avatar={
+              <Avatar sx={{ height: 50, width: 50, color: "inherit" }}>
+                {toDo.id}
+              </Avatar>
+            }
             sx={{ backgroundColor: "transparent" }}
           />
           <CardContent sx={{ pt: 0 }}>
